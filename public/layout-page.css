@@ -1,0 +1,2800 @@
+/**
+ * @license MIT, https://opensource.org/license/MIT
+ */
+
+:root {
+    --pico-block-spacing-vertical: 0;
+    --pico-block-spacing-horizontal: 0;
+}
+
+.type-page main .cms-content > * {
+    margin-block: 0;
+}
+
+.cms-content .container {
+    padding: 4.5rem min(5%, 2rem);
+}
+
+main .cms-content > :nth-child(odd) {
+    background-color: var(--pico-background-color);
+}
+
+main .cms-content > :nth-child(even) {
+    background-color: var(--pico-muted-background-color);
+}
+
+/* The Features page starts with a restrained title band and continues with
+   alternating product highlights followed by grouped feature accordions. */
+.type-page main .cms-content:has(.aimeos-feature-list) > .heading:first-child {
+    border-bottom: 0.4rem solid #D2C5AB;
+    background: linear-gradient(135deg, #103050, #082039);
+}
+
+.type-page main .cms-content:has(.aimeos-feature-list) > .heading:first-child h1 {
+    color: #FFFFFF;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 400;
+}
+
+.type-page main .cms-content:has(.aimeos-feature-list) > :nth-child(odd) {
+    background-color: #F4F6F7;
+}
+
+.type-page main .cms-content:has(.aimeos-feature-list) > :nth-child(even) {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(.aimeos-feature-list) > .aimeos-feature-list {
+    border-top: 1px solid #E5E9EC;
+}
+
+/* The standalone showcase gallery is one white source block containing its
+   heading and two-column screenshot grid. */
+.type-page main .cms-content:has(.aimeos-showcases) > * {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(.aimeos-showcases) > .heading:first-child > .container {
+    padding-top: 2rem;
+    padding-bottom: 0;
+}
+
+.type-page main .cms-content:has(.aimeos-showcases) > .heading:first-child h1 {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+}
+
+.type-page main .cms-content:has(.aimeos-showcases) > .aimeos-showcases > .container {
+    max-width: 1176px !important;
+    padding-top: 5.75rem;
+    padding-bottom: 6rem;
+}
+
+main .heading h1,
+main .heading h2,
+main .heading h3 {
+    margin: 0;
+}
+
+main .heading h1,
+main .heading h2 {
+    text-align: center;
+}
+
+.container h1:first-child,
+.container h2:first-child,
+.container h3:first-child {
+    margin-top: 0;
+}
+
+.text p:last-of-type {
+    margin-bottom: 0;
+}
+
+.text {
+    font-weight: 400;
+    color: var(--pico-muted-color);
+    font-size: var(--pico-font-size);
+    line-height: 1.625;
+}
+
+.cms-content .text .container {
+    max-width: 50rem;
+    margin: auto;
+}
+
+@media screen and (min-width: 768px) {
+    .cms-content .container {
+        padding: 6rem min(5%, 2rem);
+    }
+}
+
+/* Standalone update links page */
+.type-page main .cms-content:has(.welcome-box) > * {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(.welcome-box) > * > .container {
+    max-width: 1140px !important;
+    padding-inline: 20px;
+    text-align: center;
+}
+
+.type-page main .cms-content:has(.welcome-box) > .html:first-child > .container {
+    padding-top: 155px;
+    padding-bottom: 64px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.type-page main .cms-content:has(.welcome-box) > .html:first-child h1.text-center {
+    margin-bottom: 0.5em;
+    font-size: clamp(40px, 5vw, 56px);
+    font-weight: 400;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.type-page main .cms-content:has(.welcome-box) > .html:first-child p.lead {
+    margin: 16px auto;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.type-page main .cms-content:has(.welcome-box) > .html:first-child ul {
+    width: 15em !important;
+    margin: 0 auto !important;
+    padding-inline-start: 40px;
+    list-style: disc;
+}
+
+.type-page main .cms-content:has(.welcome-box) > .html:first-child li {
+    margin: 0;
+    text-align: start;
+}
+
+.type-page main .cms-content:has(.welcome-box) > .html:first-child p.text-center {
+    margin: 8px auto;
+    text-align: center;
+}
+
+.type-page main .cms-content:has(.welcome-box) > .html:has(.welcome-box) > .container {
+    padding-top: 64px;
+    padding-bottom: 64px;
+}
+
+.welcome-box {
+    text-align: center;
+}
+
+.welcome-box .box-detail {
+    display: inline-block;
+    width: 15em;
+    margin: 3em 3.5%;
+    color: #907040;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: top;
+}
+
+.welcome-box .box-detail:hover,
+.welcome-box .box-detail:focus {
+    color: #6F5227;
+    text-decoration: none;
+}
+
+.welcome-box .box-detail .detail-image {
+    display: block;
+    width: auto;
+    height: 5em;
+    margin: 0 auto;
+}
+
+.welcome-box .box-detail .detail-header {
+    display: block;
+    margin: 0.5em 0;
+    color: inherit;
+    font-size: 250%;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.welcome-box .box-detail .detail-text {
+    display: block;
+    line-height: 1.5;
+}
+
+/* Release roadmap and support periods */
+.type-page main .cms-content:has(table.roadmap) > * {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(table.roadmap) > * > .container {
+    width: min(100%, 71.25rem);
+    max-width: 71.25rem !important;
+    margin-inline: auto;
+}
+
+.type-page main .cms-content:has(table.roadmap) > .heading:first-child > .container {
+    padding-top: 2.5rem;
+    padding-bottom: 4.5rem;
+}
+
+.type-page main .cms-content:has(table.roadmap) > .heading:first-child h1 {
+    color: #103050;
+    font-size: clamp(2.25rem, 4vw, 3.25rem);
+    font-weight: 400;
+}
+
+.type-page main .cms-content:has(table.roadmap) > .html:has(.text-justify) > .container {
+    padding-top: 0;
+    padding-bottom: 0;
+    color: #103050;
+    line-height: 1.55;
+}
+
+.type-page main .cms-content:has(table.roadmap) > .html:has(.text-justify) p {
+    margin-bottom: 1rem;
+    text-align: start;
+}
+
+.type-page main .cms-content:has(table.roadmap) > .html:has(.text-justify) ul {
+    margin: 0 0 1rem;
+}
+
+.type-page main .cms-content:has(table.roadmap) > .html:has(.head) > .container {
+    padding-top: 6rem;
+    padding-bottom: 0;
+}
+
+.type-page main .cms-content:has(table.roadmap) .head {
+    text-align: center;
+}
+
+.type-page main .cms-content:has(table.roadmap) .head .headicon {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    margin-inline: auto;
+    color: #B09050;
+    filter: drop-shadow(-4px 3px #C2E0FF);
+    font-style: normal;
+    font-size: 0;
+}
+
+.type-page main .cms-content:has(table.roadmap) .head .headicon::before {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: currentColor;
+    content: "";
+    -webkit-mask: var(--aimeos-roadmap-icon) center / contain no-repeat;
+    mask: var(--aimeos-roadmap-icon) center / contain no-repeat;
+}
+
+.type-page main .cms-content:has(table.roadmap) .head .fa-calendar {
+    --aimeos-roadmap-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 2h2v2h6V2h2v2h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3V2Zm13 8H4v10h16V10ZM4 8h16V6h-3v1h-2V6H9v1H7V6H4v2Zm3 5h3v3H7v-3Zm5 0h3v3h-3v-3Z'/%3E%3C/svg%3E");
+}
+
+.type-page main .cms-content:has(table.roadmap) .head .fa-list-alt {
+    --aimeos-roadmap-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 4h3v3H4V4Zm5 0h11v2H9V4ZM4 10h3v3H4v-3Zm5 0h11v2H9v-2ZM4 16h3v3H4v-3Zm5 0h11v2H9v-2Z'/%3E%3C/svg%3E");
+}
+
+.type-page main .cms-content:has(table.roadmap) .head .headlines {
+    display: block;
+    width: 7rem;
+    height: 0.7rem;
+    margin: 0.75rem auto 0;
+    object-fit: contain;
+}
+
+.type-page main .cms-content:has(table.roadmap) .head h2 {
+    margin: 2rem 0 0;
+    color: #103050;
+    font-size: calc(var(--pico-font-size) * 1.1);
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.type-page main .cms-content:has(table.roadmap) > .html:has(table.roadmap) > .container {
+    padding-top: 3rem;
+    padding-bottom: 0;
+    overflow-x: auto;
+}
+
+.type-page main .cms-content table.roadmap,
+.type-page main .cms-content table.legend {
+    border: 0;
+    border-collapse: separate;
+    border-spacing: 0 1rem;
+    background: transparent;
+    color: #103050;
+    font-size: calc(var(--pico-font-size) * 0.72);
+    line-height: 1;
+    text-align: start;
+}
+
+.type-page main .cms-content table.roadmap {
+    min-width: 55rem;
+    margin: 0;
+}
+
+.type-page main .cms-content table.roadmap th,
+.type-page main .cms-content table.roadmap td,
+.type-page main .cms-content table.legend th,
+.type-page main .cms-content table.legend td {
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+    color: inherit;
+    text-align: center;
+}
+
+.type-page main .cms-content table.roadmap .year th,
+.type-page main .cms-content table.roadmap .month th {
+    border-inline-start: 1px solid #808080;
+}
+
+.type-page main .cms-content table.roadmap .year th:first-child,
+.type-page main .cms-content table.roadmap .year th:nth-of-type(2),
+.type-page main .cms-content table.roadmap .month th:first-child,
+.type-page main .cms-content table.roadmap .month th:nth-of-type(2) {
+    border-inline-start: 0;
+}
+
+.type-page main .cms-content table.roadmap .month th {
+    width: 4.5%;
+}
+
+.type-page main .cms-content table.roadmap .version {
+    width: 10%;
+    text-align: start;
+}
+
+.type-page main .cms-content table.roadmap tbody td {
+    height: 1rem;
+}
+
+.type-page main .cms-content table.roadmap td.beta,
+.type-page main .cms-content table.legend td.beta { background-color: #FF753C; }
+.type-page main .cms-content table.roadmap td.stable,
+.type-page main .cms-content table.legend td.stable { background-color: #62B1FF; }
+.type-page main .cms-content table.roadmap td.lts,
+.type-page main .cms-content table.legend td.lts { background-color: #4090E0; }
+.type-page main .cms-content table.roadmap td.elts,
+.type-page main .cms-content table.legend td.elts { background-color: #3C75AD; }
+
+.type-page main .cms-content:has(table.roadmap) > .html:has(table.legend) > .container {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.type-page main .cms-content table.legend {
+    width: auto;
+    margin: 0;
+}
+
+.type-page main .cms-content table.legend .color,
+.type-page main .cms-content table.legend td:first-child {
+    width: 2rem;
+    min-width: 2rem;
+}
+
+.type-page main .cms-content table.legend .type {
+    padding-inline-start: 1rem;
+    text-align: start;
+}
+
+.type-page main .cms-content:has(table.roadmap) > .html:has(ul.highlight) > .container {
+    padding-top: 3rem;
+    padding-bottom: 6rem;
+}
+
+.type-page main .cms-content:has(table.roadmap) ul.highlight {
+    width: fit-content;
+    max-width: 47rem;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+}
+
+.type-page main .cms-content:has(table.roadmap) ul.highlight li {
+    position: relative;
+    padding: 0.3rem 0 0.3rem 2rem;
+    list-style: none;
+    text-align: start;
+}
+
+.type-page main .cms-content:has(table.roadmap) ul.highlight li::marker {
+    content: "";
+}
+
+.type-page main .cms-content:has(table.roadmap) ul.highlight li::before {
+    position: absolute;
+    top: 0.3rem;
+    inset-inline-start: 0;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 1px solid #B09050;
+    border-radius: 50%;
+    color: #B09050;
+    content: "✓";
+    font-size: 0.7rem;
+    line-height: 1rem;
+    text-align: center;
+}
+
+.type-page main .cms-content:has(table.roadmap) > :has(.partnering) > .container {
+    padding-top: 2rem;
+    padding-bottom: 5rem;
+}
+
+@media screen and (max-width: 767px) {
+    .type-page main .cms-content:has(table.roadmap) > .heading:first-child > .container {
+        padding-bottom: 3rem;
+    }
+
+    .type-page main .cms-content:has(table.roadmap) > .html:has(.head) > .container {
+        padding-top: 4rem;
+    }
+}
+
+/* Recommended partner directory */
+.type-page main .cms-content:has(.row > .partner) {
+    margin-bottom: -78px;
+    transform: translateY(-78px);
+}
+
+.type-page main .cms-content:has(.row > .partner) > * {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(.row > .partner) > * > .container {
+    width: 100%;
+    max-width: 1140px !important;
+    margin-inline: auto;
+    padding: 4em 20px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.type-page main .cms-content:has(.row > .partner) > .html:has(.row > .partner) > .container {
+    padding-top: calc(4em - 13px);
+}
+
+.type-page main .cms-content:has(.row > .partner) > .heading:first-child h1 {
+    margin: 0.5em 0;
+    color: #103050;
+    font-size: clamp(2.5em, 4vw, 3.5em);
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.type-page main .cms-content:has(.row > .partner) .row {
+    align-items: flex-start;
+    margin-inline: -20px;
+}
+
+.type-page main .cms-content:has(.row > .partner) .row > .partner {
+    width: 100%;
+    padding: 1em 2.5em;
+    color: #103050;
+    font-size: 1em;
+    line-height: 1.5;
+    text-align: start;
+}
+
+.type-page main .cms-content:has(.row > .partner) .partner a.logo {
+    display: block;
+    max-width: 100%;
+    height: 15em;
+    margin: 0;
+    border: 1px solid #BA9A5A;
+    text-decoration: none;
+}
+
+.type-page main .cms-content:has(.row > .partner) .partner img.logo {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 90%;
+    max-width: 100%;
+    max-height: 10em;
+    margin: 0;
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+}
+
+.type-page main .cms-content:has(.row > .partner) .partner h3 {
+    margin: 1em 0;
+    color: #103050;
+    font-size: 1.5em;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.type-page main .cms-content:has(.row > .partner) .partner .website,
+.type-page main .cms-content:has(.row > .partner) .partner .platforms {
+    text-align: start;
+}
+
+.type-page main .cms-content:has(.row > .partner) .partner p.description {
+    margin: 0.5em 0;
+}
+
+.type-page main .cms-content:has(.row > .partner) .partner a:not(.logo) {
+    color: #907040;
+}
+
+.type-page main .cms-content:has(.row > .partner) > .html:has(p.lead) p.lead {
+    max-width: 34em;
+    margin: 1em auto;
+    color: #103050;
+    font-size: 1.75em;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+}
+
+.type-page main .cms-content:has(.row > .partner) > .html:has(p.lead) .btn {
+    width: 100%;
+    min-width: 16em;
+    max-width: 20em;
+    margin: 1em auto;
+    padding: 0.75em;
+    border: 1px solid #103050;
+    color: #FFFFFF;
+    background-color: #103050;
+    font-size: 1em;
+    font-weight: 700;
+    line-height: 1.5;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.type-page main .cms-content:has(.row > .partner) > .html:has(p.lead) .btn:hover,
+.type-page main .cms-content:has(.row > .partner) > .html:has(p.lead) .btn:focus {
+    border-color: #103050;
+    color: #103050;
+    background-color: transparent;
+}
+
+@media screen and (min-width: 576px) {
+    .type-page main .cms-content:has(.row > .partner) .row > .partner.col-sm-6 {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .type-page main .cms-content:has(.row > .partner) > * > .container {
+        padding-inline: 1rem;
+    }
+
+    .type-page main .cms-content:has(.row > .partner) .row {
+        margin-inline: 0;
+    }
+
+    .type-page main .cms-content:has(.row > .partner) .row > .partner {
+        padding-inline: 0;
+    }
+}
+
+/* Imported aimeos.org landing blocks */
+
+.cms-content .landing {
+    position: relative;
+    width: 100%;
+    margin-inline: auto;
+    text-align: center;
+}
+
+.cms-content .landing h2,
+.cms-content .landing .header {
+    margin: 1.5rem 0;
+    color: var(--pico-contrast);
+    font-size: calc(var(--pico-font-size) * 1.1);
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+.cms-content .landing img.screen,
+.cms-content .landing > .screen {
+    width: 100%;
+    max-width: 50rem;
+}
+
+.cms-content .landing .headicon {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    margin-inline: auto;
+    color: #B09050;
+    filter: drop-shadow(-4px 3px #C2E0FF);
+    font-style: normal;
+    font-size: 0;
+}
+
+.cms-content .landing .headicon::before {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: currentColor;
+    content: "";
+    -webkit-mask-image: var(--aimeos-headicon);
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-image: var(--aimeos-headicon);
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+}
+
+.cms-content .landing .fa-rocket {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M 25.90625 4 C 25.210938 4 24.242188 4.03125 23.21875 4.125 C 21.171875 4.316406 18.808594 4.660156 17.34375 6.125 C 16.113281 7.355469 13.570313 10.621094 11.21875 13.6875 C 10.753906 14.292969 10.773438 14.28125 10.34375 14.84375 L 8.625 14.75 C 7.347656 14.683594 6.117188 15.222656 5.3125 16.21875 L 3.21875 18.78125 L 2.1875 20.09375 L 3.8125 20.40625 L 7.09375 21.0625 L 10.9375 24.90625 L 11.59375 28.1875 L 11.9375 29.8125 L 13.21875 28.78125 L 15.78125 26.6875 C 16.777344 25.882813 17.316406 24.652344 17.25 23.375 L 17.15625 21.6875 C 17.738281 21.246094 17.71875 21.257813 18.34375 20.78125 C 21.417969 18.425781 24.695313 15.898438 25.90625 14.6875 C 27.359375 13.234375 27.683594 10.835938 27.875 8.78125 C 28.066406 6.726563 27.96875 4.96875 27.96875 4.96875 L 27.9375 4.0625 L 27.03125 4.03125 C 27.03125 4.03125 26.601563 4 25.90625 4 Z M 25 6 C 25.398438 6 25.679688 6.023438 25.96875 6.03125 C 25.980469 6.613281 26.003906 7.21875 25.875 8.59375 C 25.699219 10.488281 25.121094 12.597656 24.46875 13.25 C 23.578125 14.140625 20.1875 16.839844 17.125 19.1875 C 14.417969 21.261719 12.511719 22.71875 11.96875 23.125 L 8.90625 20.0625 C 9.316406 19.511719 10.71875 17.597656 12.78125 14.90625 C 15.125 11.851563 17.832031 8.449219 18.75 7.53125 C 19.433594 6.847656 21.519531 6.269531 23.40625 6.09375 C 24.089844 6.03125 24.601563 6 25 6 Z M 20.4375 9.53125 C 19.320313 9.53125 18.4375 10.445313 18.4375 11.5625 C 18.4375 12.679688 19.320313 13.59375 20.4375 13.59375 C 21.554688 13.59375 22.46875 12.679688 22.46875 11.5625 C 22.46875 10.445313 21.554688 9.53125 20.4375 9.53125 Z M 8.5 16.75 L 8.875 16.78125 C 8.273438 17.578125 7.289063 18.855469 7.15625 19.03125 L 5.8125 18.75 L 6.84375 17.5 C 7.246094 17.003906 7.859375 16.714844 8.5 16.75 Z M 6.21875 21.9375 C 5.363281 22.792969 4.875 23.976563 4.53125 24.96875 C 4.1875 25.960938 4.03125 26.78125 4.03125 26.78125 L 3.71875 28.25 L 5.1875 27.96875 C 5.1875 27.96875 5.984375 27.832031 6.96875 27.5 C 7.953125 27.167969 9.136719 26.675781 10.03125 25.78125 L 8.625 24.375 C 8.179688 24.820313 7.296875 25.210938 6.5 25.5 C 6.804688 24.667969 7.25 23.722656 7.625 23.34375 Z M 15.21875 23.125 L 15.25 23.5 C 15.285156 24.140625 15.03125 24.753906 14.53125 25.15625 L 13.25 26.1875 L 12.96875 24.84375 C 13.144531 24.714844 14.421875 23.722656 15.21875 23.125 Z'/%3E%3C/svg%3E");
+}
+
+.cms-content .landing .fa-cloud-download {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 18a5 5 0 0 1-.8-9.9A7 7 0 0 1 19.7 10 4 4 0 0 1 19 18h-4v-2h4a2 2 0 1 0-.5-3.9l-1.1.3.1-1.1A5 5 0 0 0 7.7 10l-.3.2-.4-.1A3 3 0 1 0 7 16h3v2H7Zm6-7v7.2l2.1-2.1 1.4 1.4-4.5 4.5-4.5-4.5 1.4-1.4 2.1 2.1V11h2Z'/%3E%3C/svg%3E");
+}
+
+.cms-content .landing .fa-lightbulb-o {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M 16 4 C 11.042969 4 7 8.042969 7 13 C 7 14.917969 7.84375 16.90625 9 18.6875 C 9.859375 20.011719 10.886719 21.230469 12 22.15625 L 12 25 C 12 26.09375 12.90625 27 14 27 L 15 28 L 17 28 L 18 27 C 19.09375 27 20 26.09375 20 25 L 20 22.15625 C 21.113281 21.230469 22.140625 20.011719 23 18.6875 C 24.15625 16.90625 25 14.917969 25 13 C 25 8.042969 20.957031 4 16 4 Z M 16 6 C 19.878906 6 23 9.121094 23 13 C 23 14.308594 22.355469 16.035156 21.34375 17.59375 C 20.441406 18.984375 19.253906 20.222656 18.15625 21 L 13.84375 21 C 12.746094 20.222656 11.558594 18.984375 10.65625 17.59375 C 9.644531 16.035156 9 14.308594 9 13 C 9 9.121094 12.121094 6 16 6 Z M 14.25 23 L 17.75 23 C 17.828125 23.054688 17.910156 23.09375 18 23.125 L 18 25 L 14 25 L 14 23.125 C 14.089844 23.09375 14.171875 23.054688 14.25 23 Z'/%3E%3C/svg%3E");
+}
+
+.cms-content .landing .fa-sun-o {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M11 1h2v3h-2V1Zm0 19h2v3h-2v-3ZM3.5 2.1l2.1 2.1-1.4 1.4-2.1-2.1 1.4-1.4Zm16.3 16.3 2.1 2.1-1.4 1.4-2.1-2.1 1.4-1.4ZM1 11h3v2H1v-2Zm19 0h3v2h-3v-2ZM4.2 18.4l1.4 1.4-2.1 2.1-1.4-1.4 2.1-2.1ZM20.5 2.1l1.4 1.4-2.1 2.1-1.4-1.4 2.1-2.1ZM12 6a6 6 0 1 1 0 12 6 6 0 0 1 0-12Zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z'/%3E%3C/svg%3E");
+}
+
+.cms-content .landing .fa-puzzle-piece {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M 17 3 C 14.789063 3 13 4.789063 13 7 L 7 7 L 7 12 C 4.789063 12 3 13.789063 3 16 C 3 18.210938 4.789063 20 7 20 L 7 25 L 13 25 C 13 27.210938 14.789063 29 17 29 C 19.210938 29 21 27.210938 21 25 L 27 25 L 27 18 L 25 18 C 23.808594 18 23 17.191406 23 16 C 23 14.808594 23.808594 14 25 14 L 27 14 L 27 7 L 21 7 C 21 4.789063 19.210938 3 17 3 Z M 17 5 C 18.191406 5 19 5.808594 19 7 L 19 9 L 25 9 L 25 12 C 22.789063 12 21 13.789063 21 16 C 21 18.210938 22.789063 20 25 20 L 25 23 L 19 23 L 19 25 C 19 26.191406 18.191406 27 17 27 C 15.808594 27 15 26.191406 15 25 L 15 23 L 9 23 L 9 18 L 7 18 C 5.808594 18 5 17.191406 5 16 C 5 14.808594 5.808594 14 7 14 L 9 14 L 9 9 L 15 9 L 15 7 C 15 5.808594 15.808594 5 17 5 Z'/%3E%3C/svg%3E");
+}
+
+.cms-content .landing .fa-diamond {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M 9.53125 6 L 4.21875 12.375 L 3.71875 12.96875 L 4.21875 13.625 L 15.21875 27.625 L 16 28.625 L 16.78125 27.625 L 27.78125 13.625 L 28.28125 12.96875 L 27.78125 12.375 L 22.46875 6 Z M 10.46875 8 L 14.125 8 L 11.4375 12 L 7.125 12 Z M 17.875 8 L 21.53125 8 L 24.875 12 L 20.5625 12 Z M 16 8.84375 L 18.125 12 L 13.875 12 Z M 7.03125 14 L 11.25 14 L 13.625 22.40625 Z M 13.3125 14 L 18.65625 14 L 16 23.3125 Z M 20.75 14 L 24.96875 14 L 18.375 22.375 Z'/%3E%3C/svg%3E");
+}
+
+.cms-content .landing .fa-comment {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M 3 6 L 3 26 L 12.585938 26 L 16 29.414063 L 19.414063 26 L 29 26 L 29 6 Z M 5 8 L 27 8 L 27 24 L 18.585938 24 L 16 26.585938 L 13.414063 24 L 5 24 Z M 9 11 L 9 13 L 23 13 L 23 11 Z M 9 15 L 9 17 L 23 17 L 23 15 Z M 9 19 L 9 21 L 19 21 L 19 19 Z'/%3E%3C/svg%3E");
+}
+
+.cms-content .landing .fa-comments {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M 2 5 L 2 21 L 6 21 L 6 26.09375 L 7.625 24.78125 L 12.34375 21 L 22 21 L 22 5 Z M 4 7 L 20 7 L 20 19 L 11.65625 19 L 11.375 19.21875 L 8 21.90625 L 8 19 L 4 19 Z M 24 9 L 24 11 L 28 11 L 28 23 L 24 23 L 24 25.90625 L 20.34375 23 L 12.84375 23 L 10.34375 25 L 19.65625 25 L 26 30.09375 L 26 25 L 30 25 L 30 9 Z'/%3E%3C/svg%3E");
+}
+
+.cms-content .landing .headlines {
+    display: block;
+    width: 7rem;
+    height: 0.7rem;
+    margin: 0.5rem auto 0;
+    object-fit: contain;
+}
+
+.cms-content .block-text {
+    max-width: 47rem;
+    margin: 1rem auto;
+    text-align: start;
+    font-size: calc(var(--pico-font-size) * 0.95);
+    line-height: 1.65;
+}
+
+.cms-content .landing ul {
+    margin-inline: auto;
+}
+
+.cms-content .row,
+.cms-content .partnering.row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-inline: -0.75rem;
+}
+
+.cms-content .row > [class*="col-"],
+.cms-content .partnering.row > [class*="col-"] {
+    width: 100%;
+    padding-inline: 0.75rem;
+}
+
+/* Landing records are already stored in TYPO3 frontend order by the importer. */
+.type-page main .cms-content:has(.landing.welcome) {
+    display: flex;
+    flex-direction: column;
+}
+
+.type-page main .cms-content:has(.landing.welcome) > * {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(.landing.welcome) > :has(.landing.explain) {
+    background-color: #F4F0EA;
+}
+
+/* Welcome */
+.cms-content > .html:has(.landing.welcome) {
+    overflow: hidden;
+    border-bottom: 0.55rem solid #D2C5AB;
+    background-color: #103050;
+    background-image: url("background-dark-small.jpg");
+    background-size: cover;
+}
+
+.cms-content > .html:has(.landing.welcome) > .container {
+    max-width: none !important;
+    padding: 0 min(5%, 2rem);
+}
+
+.landing.welcome {
+    isolation: isolate;
+    display: flex;
+    min-height: 44rem;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2.95rem 0 19.5rem;
+    color: #FFFFFF;
+}
+
+.landing.welcome .logo {
+    width: min(21rem, 75vw);
+    height: auto;
+    max-height: 6rem;
+    margin: 0 auto 2.5rem;
+    object-fit: contain;
+}
+
+.landing.welcome h1 {
+    max-width: 58rem;
+    margin: 0;
+    color: #FFFFFF;
+    font-size: clamp(2rem, 3.1vw, 3rem);
+    font-weight: 400;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.landing.welcome h1 strong {
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.landing.welcome h2.claim {
+    margin: 2.5rem 0 0;
+    color: #FFFFFF;
+    font-size: clamp(1.05rem, 1.7vw, 1.4rem);
+    font-weight: 700;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.landing.welcome .screens {
+    position: absolute;
+    z-index: -1;
+    inset-inline: 0;
+    bottom: 0;
+    display: grid;
+    width: min(64rem, 96vw);
+    height: 22rem;
+    margin-inline: auto;
+    place-items: end center;
+}
+
+.landing.welcome .screen {
+    display: none;
+    width: 100%;
+    max-height: 22rem;
+    object-fit: contain;
+    filter: drop-shadow(0 1.25rem 1.5rem #020D1780);
+}
+
+.landing.welcome .screen.active {
+    display: block;
+}
+
+.landing.welcome:has(.logo[src*="symfony"]) {
+    min-height: 0;
+    padding-bottom: 3rem;
+}
+
+.landing.welcome:has(.logo[src*="symfony"]) h2.claim {
+    margin-bottom: 2.5rem;
+}
+
+.landing.welcome:has(.logo[src*="symfony"]) > img.screen {
+    width: min(37.5rem, 100%);
+    max-width: 37.5rem;
+    max-height: 21.875rem;
+    margin: 0 auto;
+}
+
+/* Customer and trust strips */
+.cms-content > .html:has(.landing.users) > .container {
+    max-width: none !important;
+    padding: 0;
+}
+
+.landing.users {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    min-height: 4.75rem;
+    padding-inline: 4%;
+    background-color: #EAedef;
+}
+
+.landing.users .userlogo {
+    display: grid;
+    width: 20%;
+    min-height: 4.75rem;
+    place-items: center;
+    padding: 0.75rem;
+    color: #7D858B;
+    text-decoration: none;
+}
+
+.landing.users .userlogo::before {
+    content: attr(title);
+    font-size: calc(var(--pico-font-size) * 0.72);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+}
+
+.landing.users .userlogo:has(img)::before { display: none; }
+.landing.users .userlogo img { max-height: 3rem; }
+
+.landing.qualities .row {
+    align-items: stretch;
+}
+
+.cms-content > .html:has(.landing.qualities) {
+    background-color: #FFFFFF;
+}
+
+.landing.qualities .quality {
+    position: relative;
+    padding-block: 1.5rem;
+}
+
+.landing.qualities .quality > span,
+.landing.qualities .quality > img {
+    display: none;
+}
+
+.landing.qualities .quality::before {
+    display: grid;
+    width: 4.25rem;
+    height: 4.25rem;
+    margin: 0 auto 0.75rem;
+    place-items: center;
+    color: var(--pico-contrast);
+    border: 0.16rem solid currentColor;
+    border-radius: 50%;
+    font-size: 1.75rem;
+    font-weight: 700;
+}
+
+.landing.qualities .github::before { content: "<>"; }
+.landing.qualities .capterra::before { content: "★"; }
+.landing.qualities .downloads::before { content: "↓"; }
+
+.landing.qualities .header {
+    max-width: 18rem;
+    margin: 1rem auto;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #B09050;
+}
+
+.landing.qualities .stars {
+    color: #907040;
+    font-weight: 700;
+}
+
+.landing.qualities .number {
+    margin-inline-start: 0.5rem;
+    color: var(--pico-contrast);
+    font-weight: 400;
+}
+
+/* Explanatory sections */
+.landing.highlights ul.highlight {
+    max-width: 47rem;
+    padding: 0;
+    list-style: none;
+}
+
+.landing.highlights ul.highlight li {
+    position: relative;
+    padding: 0.45rem 0 0.45rem 2rem;
+    text-align: start;
+    font-size: calc(var(--pico-font-size) * 1.02);
+}
+
+.landing.highlights ul.highlight li::marker {
+    content: "";
+}
+
+[dir="rtl"] .landing.highlights ul.highlight li {
+    padding-inline: 2rem 0;
+}
+
+.landing.highlights ul.highlight li::before {
+    position: absolute;
+    top: 50%;
+    inset-inline-start: 0.35rem;
+    color: #B09050;
+    content: "›";
+    font-size: 1.4em;
+    font-weight: 700;
+    line-height: 1;
+    transform: translateY(-50%);
+}
+
+.type-page main .cms-content:has(.landing.welcome) .landing.highlights ul.highlight + h2 {
+    margin-top: 4rem;
+}
+
+.landing.integrations .integrations {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5rem;
+}
+
+.landing.integrations .integration {
+    display: grid;
+    width: min(13rem, 40vw);
+    min-height: 8rem;
+    place-items: center;
+    padding: 1.25rem 2rem;
+    border: 1px solid #10305024;
+    background-color: #FFFFFF;
+    box-shadow: 0 0.75rem 2rem #10305014;
+}
+
+.landing.integrations .integration-logo {
+    width: auto;
+    max-width: 100%;
+    max-height: 4.5rem;
+    object-fit: contain;
+}
+
+.landing.integrations .integrations:not(:has(*))::before,
+.landing.integrations .integrations:not(:has(*))::after {
+    padding: 1.75rem 2.5rem;
+    color: #FFFFFF;
+    background-color: #103050;
+    content: "Laravel";
+    font-weight: 700;
+}
+
+.landing.integrations .integrations:not(:has(*))::after {
+    color: #103050;
+    border: 1px solid #10305024;
+    background-color: #F4F0EA;
+    content: "TYPO3";
+}
+
+.landing.explain > div {
+    position: relative;
+    width: min(100%, 48rem);
+    height: auto !important;
+    min-height: 23rem;
+    margin: 0 auto;
+    overflow: hidden;
+    background-color: #103050;
+    box-shadow: 1.5rem 1.5rem 2rem #10305024;
+}
+
+.landing.explain > div::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    width: 5rem;
+    height: 5rem;
+    place-items: center;
+    padding-inline-start: 0.3rem;
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+    color: #FFFFFF;
+    content: "▶";
+    font-size: 2rem;
+    transform: translate(-50%, -50%);
+}
+
+.landing.explain > div > a {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.landing.explain > div img {
+    width: 100%;
+    height: 100%;
+    min-height: 23rem;
+    object-fit: cover;
+    opacity: 0.52;
+}
+
+.html:has(.landing.explain) .btn.explain {
+    display: block;
+    width: fit-content;
+    margin: 2.5rem auto 0;
+}
+
+/* Showcases and case studies */
+.type-page main .cms-content:has(.landing.welcome) > :has(.landing.showcases),
+.type-page main .cms-content:has(.landing.welcome) > :has(.landing.casestudies) {
+    background-color: #FFFFFF;
+}
+
+.landing.showcases .showcase,
+.landing.casestudies .casestudy {
+    display: none;
+}
+
+.landing.showcases .showcase.active {
+    display: flex;
+    min-height: 19.6875rem;
+    margin-inline: 2%;
+    padding: 2rem;
+}
+
+.landing.casestudies .casestudy.active {
+    display: flex;
+    margin-inline: 1%;
+    padding: 1%;
+}
+
+.landing.showcases .image,
+.landing.casestudies .image {
+    margin: 0;
+    background: none;
+}
+
+.landing.showcases .image > a {
+    position: relative;
+    display: block;
+    padding-top: calc(530 / 914 * 100%);
+}
+
+.landing.showcases .image img {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    height: auto;
+    max-height: none;
+}
+
+.landing.casestudies .image img {
+    width: 100%;
+    height: auto;
+    max-height: none;
+}
+
+.landing.showcases .text {
+    align-self: stretch;
+    padding-block: 4%;
+}
+
+.landing.casestudies .text {
+    align-self: stretch;
+    padding-block: 2%;
+}
+
+.landing.showcases .url,
+.landing.casestudies .url {
+    color: var(--pico-contrast);
+}
+
+.landing.showcases .url {
+    font-size: var(--pico-font-size);
+}
+
+.landing.showcases .url::after {
+    display: block;
+    width: 10rem;
+    margin: 1rem auto;
+    border-top: 1px solid #B09050;
+    content: "";
+    transition: width 0.2s ease;
+}
+
+.landing.showcases .showcase:hover .url::after {
+    width: 15rem;
+}
+
+.landing.showcases .segment {
+    margin-bottom: 1rem;
+    color: var(--pico-contrast);
+    font-size: calc(var(--pico-font-size) * 1.2);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.landing.showcases .text a,
+.landing.casestudies .text a {
+    text-decoration: none;
+}
+
+.landing.casestudies .description {
+    padding-block: 0.5rem;
+}
+
+.landing.showcases .btn,
+.landing.casestudies .btn {
+    min-width: 8rem;
+    max-width: 11.5rem;
+    margin: 0.5rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.landing.casestudies .buttons {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+}
+
+.landing.showcases .indicators,
+.landing.casestudies .indicators {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.landing.showcases .indicator,
+.landing.casestudies .indicator {
+    display: inline-block;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.landing.showcases .indicator a,
+.landing.casestudies .indicator a {
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1px solid #B09050;
+    border-radius: 50%;
+}
+
+.landing.showcases .indicator.active a,
+.landing.casestudies .indicator.active a {
+    background-color: #B09050;
+}
+
+/* Demo, partnering, support and destination links */
+.type-page main .cms-content:has(.landing.welcome) > :has(.landing.demo) {
+    background-image:
+        url("triangle.svg"),
+        url("triangle2.svg"),
+        url("background-light-small.jpg");
+    background-position: left top, right bottom, left top;
+    background-repeat: no-repeat, no-repeat, repeat-y;
+    background-size: 100%, 100%, cover;
+    transform: scaleX(-1);
+}
+
+.type-page main .cms-content:has(.landing.welcome) > :has(.landing.demo) > .container {
+    padding: 2rem;
+    transform: scaleX(-1);
+}
+
+.type-page main .cms-content:has(.landing.welcome) > :has(.landing.links) {
+    background-image: url("triangle.svg"), url("background-light-small.jpg");
+    background-position: left top, left top;
+    background-repeat: no-repeat, repeat-y;
+    background-size: 100%, cover;
+}
+
+.landing.demo .header {
+    max-width: 24rem;
+    margin-inline: auto;
+    line-height: 1.5;
+    text-transform: none;
+}
+
+.landing.demo .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.landing.demo .col-md-7:not(:has(*)) {
+    min-height: 22rem;
+    background: url("commerce-network.png") no-repeat center / contain;
+}
+
+.landing.demo .col-md-7 img {
+    display: block;
+    width: 100%;
+    max-height: 24rem;
+    object-fit: contain;
+}
+
+.partnering {
+    padding: clamp(2rem, 5vw, 3.5rem);
+    box-shadow: 0.25rem 1rem 1.5rem #1030501F;
+}
+
+.partnering .header,
+.partnering .intro {
+    text-align: start;
+}
+
+.partnering h2 {
+    margin-bottom: 1rem;
+    text-align: start;
+}
+
+.partnering .button {
+    color: #907040;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.landing.support .descrptions {
+    max-width: 42rem;
+    margin: 0 auto 1.5rem;
+}
+
+.landing.links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: clamp(1rem, 4vw, 4rem);
+    padding: 4rem 0 2rem;
+}
+
+.landing.links .link {
+    display: grid;
+    grid-template-rows: auto auto;
+    width: 10rem;
+    height: 10rem;
+    place-items: center;
+    align-content: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid #103050;
+    border-radius: 50%;
+    color: #103050;
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.landing.links .link:hover {
+    color: #FFFFFF;
+    background-color: #103050;
+}
+
+.landing.links .fa {
+    display: none;
+}
+
+/* Standalone footer fragments from the TYPO3 import */
+.type-page main .cms-content:has(.landing.welcome) > .heading,
+.type-page main .cms-content:has(.landing.welcome) > .html:has(> .container > .list-unstyled),
+.type-page main .cms-content:has(.landing.welcome) > .html:has(> .container > .capterra) {
+    background-color: #CAD2D9;
+}
+
+.type-page main .cms-content:has(.landing.welcome) > .heading .container,
+.type-page main .cms-content:has(.landing.welcome) > .html:has(> .container > .list-unstyled) .container,
+.type-page main .cms-content:has(.landing.welcome) > .html:has(> .container > .capterra) .container {
+    padding-block: 1.25rem;
+}
+
+.type-page main .cms-content:has(.landing.welcome) .list-unstyled {
+    width: min(100%, 18rem);
+    margin: auto;
+    padding: 0;
+    list-style: none;
+}
+
+.type-page main .cms-content:has(.landing.welcome) .list-unstyled li {
+    padding: 0.2rem 0;
+}
+
+/* Imported TYPO3 footer columns */
+footer.cms-content:has(.footer-links) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(3, auto);
+    gap: 0;
+    padding-block: 3.5rem;
+    padding-inline: max(1.25rem, calc((100vw - 71.25rem) / 2 + 1.25rem));
+    background-color: #CAD2D9;
+}
+
+footer.cms-content:has(.footer-links) > * {
+    min-width: 0;
+    background: transparent !important;
+}
+
+footer.cms-content:has(.footer-links) > * > .container {
+    width: min(100%, 15rem);
+    margin-inline: auto;
+    padding: 0.75rem 0;
+}
+
+footer.cms-content:has(.footer-links) > :has(.footer-available-for) { grid-area: 1 / 1; }
+footer.cms-content:has(.footer-links) > :has(.footer-developers) { grid-area: 2 / 1; }
+footer.cms-content:has(.footer-links) > :has(img[alt^="Softwareworld"]) { grid-area: 3 / 1; }
+footer.cms-content:has(.footer-links) > :has(.footer-extensions) { grid-area: 1 / 2; }
+footer.cms-content:has(.footer-links) > :has(.footer-partners) { grid-area: 2 / 2; }
+footer.cms-content:has(.footer-links) > :has(img[alt^="Capterra reviews"]) { grid-area: 3 / 2; }
+footer.cms-content:has(.footer-links) > :has(.logo-footer, .intouch) { grid-area: 1 / 3 / 4 / 4; }
+
+footer.cms-content .footer-links h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-align: start;
+    text-transform: uppercase;
+}
+
+footer.cms-content .footer-links ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+footer.cms-content .footer-links li {
+    padding: 0.2rem 0;
+    list-style: none;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+footer.cms-content .footer-links li::marker {
+    content: "";
+}
+
+footer.cms-content .footer-links a,
+footer.cms-content .footer-links a:visited,
+footer.cms-content .footer-links a:hover,
+footer.cms-content .footer-links a:focus,
+footer.cms-content .footer-links a:active,
+footer.cms-content .intouch a,
+footer.cms-content .intouch a:visited,
+footer.cms-content .intouch a:hover,
+footer.cms-content .intouch a:focus,
+footer.cms-content .intouch a:active {
+    text-decoration: none;
+}
+
+footer.cms-content .capterra img {
+    display: block;
+    width: auto;
+    max-width: 9rem;
+    max-height: 5rem;
+}
+
+footer.cms-content .logo-footer {
+    display: block;
+    width: min(10rem, 100%);
+    margin-inline: auto;
+}
+
+footer.cms-content .logo-footer img {
+    display: block;
+    width: 100%;
+    margin-bottom: 1.5rem;
+}
+
+footer.cms-content .intouch {
+    display: grid;
+    grid-template-columns: max-content;
+    width: min(10rem, 100%);
+    margin: 2rem auto 0;
+    justify-items: start;
+    gap: 0.45rem;
+}
+
+footer.cms-content .intouch a {
+    display: grid;
+    grid-template-columns: 1.35rem auto;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 1.5rem;
+    padding-block: 0.1rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+footer.cms-content .intouch a::before {
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: currentColor;
+    content: "";
+    -webkit-mask-position: center;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+}
+
+footer.cms-content .intouch .github::before {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 4.58c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.65 7.65 0 0 1 8 4.58c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z'/%3E%3C/svg%3E");
+}
+
+footer.cms-content .intouch .youtube::before {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4 2h8a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4Zm3 3.5v5L11.5 8 7 5.5Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M4 2h8a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V6a4 4 0 0 1 4-4Zm3 3.5v5L11.5 8 7 5.5Z'/%3E%3C/svg%3E");
+}
+
+footer.cms-content .intouch .facebook::before {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M9 3h3V0H9C6.8 0 5 1.8 5 4v2H2v3h3v7h3V9h3l1-3H8V4c0-.6.4-1 1-1Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M9 3h3V0H9C6.8 0 5 1.8 5 4v2H2v3h3v7h3V9h3l1-3H8V4c0-.6.4-1 1-1Z'/%3E%3C/svg%3E");
+}
+
+footer.cms-content .intouch .twitter::before {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M1 1h3.5l3.8 5L12.5 1H15L9.5 7.7 15 15h-3.5L7.3 9.4 2.5 15H0l6.1-7.3L1 1Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M1 1h3.5l3.8 5L12.5 1H15L9.5 7.7 15 15h-3.5L7.3 9.4 2.5 15H0l6.1-7.3L1 1Z'/%3E%3C/svg%3E");
+}
+
+footer.cms-content .intouch .contact::before {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M0 3h16v10H0V3Zm2 2 6 4 6-4H2Zm12 6V7l-6 4-6-4v4h12Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M0 3h16v10H0V3Zm2 2 6 4 6-4H2Zm12 6V7l-6 4-6-4v4h12Z'/%3E%3C/svg%3E");
+}
+
+footer.cms-content .intouch .mastodon::before {
+    display: none;
+}
+
+footer.cms-content .intouch img {
+    grid-column: 1;
+    grid-row: 1;
+    width: 1.35rem;
+    height: 1.35rem;
+    object-fit: contain;
+}
+
+footer.cms-content .intouch .text {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+@media screen and (min-width: 768px) {
+    .cms-content .row > .col-sm-4 { width: 33.333%; }
+    .cms-content .row > .col-sm-6 { width: 50%; }
+    .cms-content .row > .col-sm-12 { width: 100%; }
+    .cms-content .row > .col-md-5,
+    .cms-content .partnering.row > .col-md-5 { width: 41.666%; }
+    .cms-content .row > .col-md-7,
+    .cms-content .partnering.row > .col-md-7 { width: 58.333%; }
+}
+
+@media screen and (max-width: 767px) {
+    .landing.welcome {
+        min-height: 55rem;
+        padding: 4.5rem 0 15rem;
+    }
+
+    .landing.welcome .logo {
+        width: min(28rem, 115vw);
+        max-height: 8rem;
+        margin-bottom: 3.1rem;
+    }
+
+    .landing.welcome h1 {
+        font-size: 2.5rem;
+    }
+
+    .landing.welcome h2.claim {
+        margin-top: 3.1rem;
+    }
+
+    .landing.welcome .screens {
+        bottom: 1rem;
+        height: 18rem;
+    }
+
+    .landing.welcome .screen {
+        max-height: 18rem;
+    }
+
+    .landing.users .userlogo {
+        width: 50%;
+    }
+
+    .landing.users .userlogo:last-child {
+        width: 100%;
+    }
+
+    .landing.showcases .showcase.active,
+    .landing.casestudies .casestudy.active {
+        flex-direction: column;
+    }
+
+    .landing.casestudies .buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .landing.explain > div {
+        min-height: 16rem;
+    }
+
+    .landing.explain > div img {
+        min-height: 16rem;
+    }
+
+    .landing.links .link {
+        width: 8rem;
+        height: 8rem;
+    }
+
+    footer.cms-content:has(.footer-links) {
+        display: block;
+        padding: 2.5rem max(5%, 1.25rem);
+    }
+}
+
+
+/* TYPO3 shop-extension landing page */
+.landing.welcome.typo3-welcome {
+    min-height: 0;
+    padding-bottom: 3rem;
+}
+
+.landing.welcome.typo3-welcome > img.screen {
+    display: block;
+    width: min(37.5rem, 100%);
+    max-width: 37.5rem;
+    max-height: 20rem;
+    margin: 3rem auto 0;
+}
+
+.type-page main .cms-content:has(.typo3-welcome) > .aimeos-logo-cloud > .container {
+    padding-block: 0.5rem;
+}
+
+.type-page main .cms-content:has(.typo3-welcome) > .aimeos-logo-cloud .logo-cloud-item {
+    padding-block: 0.25rem;
+}
+
+.type-page main .cms-content:has(.typo3-welcome) > .aimeos-logo-cloud .logo-cloud-item > a,
+.type-page main .cms-content:has(.typo3-welcome) > .aimeos-logo-cloud .logo-cloud-item > div {
+    min-height: 3rem;
+}
+
+.type-page main .cms-content:has(.typo3-welcome) > .aimeos-logo-cloud .logo,
+.type-page main .cms-content:has(.typo3-welcome) > .aimeos-logo-cloud .logo img {
+    max-height: 2.5rem;
+}
+
+.type-page main .cms-content:has(.typo3-welcome) > .html:has(.landing.qualities) > .container {
+    padding-block: 4rem;
+}
+
+.type-page main .cms-content:has(.typo3-welcome) > :has(.landing.demo),
+.type-page main .cms-content:has(.typo3-welcome) > :has(.landing.demo) > .container {
+    transform: none;
+}
+
+@media screen and (max-width: 767px) {
+    .landing.welcome.typo3-welcome {
+        min-height: 0;
+        padding: 3rem 0 2rem;
+    }
+
+    .landing.welcome.typo3-welcome .logo {
+        width: 7rem;
+        max-height: 7rem;
+        margin-bottom: 2rem;
+    }
+
+    .landing.welcome.typo3-welcome h1 {
+        font-size: 2rem;
+    }
+
+    .landing.welcome.typo3-welcome h2.claim {
+        margin-top: 2rem;
+    }
+
+    .landing.welcome.typo3-welcome > img.screen {
+        max-height: 18rem;
+        margin-top: 2rem;
+    }
+}
+
+
+/* Laravel marketplace landing page */
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > * {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > * > .container {
+    width: 100%;
+    max-width: 73.5rem !important;
+}
+
+/* The live hero consists of three TYPO3 records: heading, illustration and
+   introductory copy. Keep them visually connected as one light stage. */
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html:has(.landing.welcome),
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html:has(.marketplace-logo),
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html:has(> .container > img.logo[src*="marketplace"]),
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html:has(.marketplace-intro) {
+    border: 0;
+    background-color: #F4F0EA;
+    background-image: url("background-light-small.jpg");
+    background-position: left top;
+    background-repeat: repeat-y;
+    background-size: cover;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html:has(.marketplace-intro) {
+    background-color: #FFFFFF;
+    background-image: url("triangle2.svg"), url("background-light-small.jpg");
+    background-position: right bottom, left top;
+    background-repeat: no-repeat, repeat-y;
+    background-size: 100%, cover;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html:has(.landing.welcome) > .container {
+    padding: 4.75rem min(5%, 2rem) 1.75rem;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) .landing.welcome {
+    min-height: 0;
+    padding: 0;
+    color: #103050;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) .landing.welcome h1,
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) .landing.welcome h1 strong,
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) .landing.welcome h2.claim {
+    color: #103050;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) .landing.welcome h1 {
+    max-width: 65rem;
+    font-size: clamp(2rem, 3.3vw, 3.5rem);
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) .landing.welcome h2.claim {
+    margin-top: 1.5rem;
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html:has(.marketplace-logo) > .container,
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html:has(> .container > img.logo[src*="marketplace"]) > .container {
+    padding-block: 1.5rem;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) .marketplace-logo img.logo,
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html > .container > img.logo[src*="marketplace"] {
+    display: block;
+    width: min(100%, 49.6875rem);
+    height: auto;
+    margin-inline: auto;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html:has(.marketplace-intro) > .container {
+    padding-top: 1rem;
+    padding-bottom: 6rem;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) .marketplace-intro {
+    max-width: 68rem;
+    color: #103050;
+    font-size: calc(var(--pico-font-size) * 1.18);
+    line-height: 1.65;
+}
+
+/* Branded quality row */
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.landing.qualities),
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .aimeos-stats {
+    background-color: #FFFFFF !important;
+}
+
+/* Marketplace feature and showcase sections are white on the source page. */
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.landing.explain),
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.landing.showcases),
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.landing.casestudies) {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.landing.highlights-image) {
+    background-color: #FFFFFF;
+}
+
+.landing.highlights-image > .highlight-image {
+    display: grid;
+    grid-template-columns: minmax(14rem, 20rem) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 0 3.5rem;
+    padding: 4.5rem 0;
+    text-align: start;
+}
+
+.landing.highlights-image > .highlight-image > img {
+    grid-row: 1 / 3;
+    width: 100%;
+    max-width: 20rem;
+    margin: 0;
+    object-fit: contain;
+}
+
+.landing.highlights-image > .highlight-image > .header {
+    align-self: end;
+    margin: 0 0 1.25rem;
+    font-size: calc(var(--pico-font-size) * 1.2);
+}
+
+.landing.highlights-image > .highlight-image > p:not(.header) {
+    align-self: start;
+    margin: 0;
+    color: #52697E;
+    font-size: var(--pico-font-size);
+    line-height: 1.7;
+}
+
+.landing.highlights-image > .highlight-image:nth-of-type(even) {
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem);
+}
+
+.landing.highlights-image > .highlight-image:nth-of-type(even) > img {
+    grid-column: 2;
+}
+
+.landing.highlights-image > .highlight-image:nth-of-type(even) > p {
+    grid-column: 1;
+}
+
+/* Demo and final contact bands */
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.marketplace-demo) {
+    background-color: #FFFFFF;
+    background-image: url("triangle.svg"), url("triangle2.svg"), url("background-light-small.jpg");
+    background-position: left top, right bottom, left top;
+    background-repeat: no-repeat, no-repeat, repeat-y;
+    background-size: 100%, 100%, cover;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.marketplace-contact) {
+    background-color: #FFFFFF;
+    background-image: url("triangle.svg"), url("background-light-small.jpg");
+    background-position: left top, left top;
+    background-repeat: no-repeat, repeat-y;
+    background-size: 100%, cover;
+}
+
+.marketplace-demo h2,
+.marketplace-contact h2 {
+    margin-bottom: 1rem;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 400;
+    text-transform: none;
+}
+
+.marketplace-demo .lead {
+    max-width: 34rem;
+    margin: 1rem auto;
+    font-size: calc(var(--pico-font-size) * 1.35);
+}
+
+.marketplace-demo p.landing,
+.marketplace-contact p.landing {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.marketplace-demo .btn,
+.marketplace-contact .btn {
+    min-width: 10rem;
+    margin: 0.5rem 0;
+}
+
+/* FAQ heading and accordion form one visual section in the source page. */
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.landing.faq),
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .questions {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.landing.faq) > .container {
+    padding-bottom: 1rem;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .questions > .container {
+    max-width: 55rem !important;
+    padding-top: 0;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .questions .title:empty {
+    display: none;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .questions .faqs {
+    max-width: 52rem;
+    margin-inline: auto;
+    column-count: 1;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .questions details {
+    padding: 1.5rem 1.75rem;
+    border-inline-start-width: 0.15rem;
+    border-radius: 0;
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > .questions h3 {
+    font-size: calc(var(--pico-font-size) * 0.92);
+}
+
+@media screen and (max-width: 767px) {
+    .type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html:has(.landing.welcome) > .container {
+        padding-top: 3rem;
+    }
+
+    .type-page main .cms-content:has(img.logo[src*="marketplace"]) .landing.welcome {
+        min-height: 0;
+        padding: 0;
+    }
+
+    .type-page main .cms-content:has(img.logo[src*="marketplace"]) .landing.welcome h1 {
+        font-size: 2rem;
+    }
+
+    .type-page main .cms-content:has(img.logo[src*="marketplace"]) > .html:has(.marketplace-intro) > .container {
+        padding-bottom: 4rem;
+    }
+
+    .landing.highlights-image > .highlight-image,
+    .landing.highlights-image > .highlight-image:nth-of-type(even) {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 1.5rem;
+        padding: 3rem 0;
+    }
+
+    .landing.highlights-image > .highlight-image > img,
+    .landing.highlights-image > .highlight-image:nth-of-type(even) > img,
+    .landing.highlights-image > .highlight-image:nth-of-type(even) > p {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .landing.highlights-image > .highlight-image > img {
+        margin-inline: auto;
+    }
+
+    .landing.highlights-image > .highlight-image > .header,
+    .landing.highlights-image > .highlight-image > p:not(.header) {
+        text-align: center;
+    }
+}
+
+
+/* Laravel multi-vendor SaaS landing page */
+.type-page main .cms-content:has(.saas-welcome) > * {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(.saas-welcome) > * > .container {
+    width: 100%;
+    max-width: 73.5rem !important;
+}
+
+.type-page main .cms-content:has(.saas-welcome) > .html:has(.saas-welcome),
+.type-page main .cms-content:has(.saas-welcome) > .html:has(.saas-logo),
+.type-page main .cms-content:has(.saas-welcome) > .html:has(.saas-intro) {
+    border: 0;
+    background-color: #FFFFFF;
+    background-image: url("background-light-small.jpg");
+    background-position: left top;
+    background-repeat: repeat-y;
+    background-size: cover;
+}
+
+.type-page main .cms-content:has(.saas-welcome) > .html:has(.saas-intro) {
+    background-image: url("triangle2.svg"), url("background-light-small.jpg");
+    background-position: right bottom, left top;
+    background-repeat: no-repeat, repeat-y;
+    background-size: 100%, cover;
+}
+
+.type-page main .cms-content:has(.saas-welcome) > .html:has(.saas-welcome) > .container {
+    padding: 4.75rem min(5%, 2rem) 1.75rem;
+}
+
+.type-page main .cms-content:has(.saas-welcome) .saas-welcome {
+    min-height: 0;
+    padding: 0;
+    color: #103050;
+}
+
+.type-page main .cms-content:has(.saas-welcome) .saas-welcome h1,
+.type-page main .cms-content:has(.saas-welcome) .saas-welcome h1 strong,
+.type-page main .cms-content:has(.saas-welcome) .saas-welcome h2.claim {
+    color: #103050;
+}
+
+.type-page main .cms-content:has(.saas-welcome) .saas-welcome h1 {
+    max-width: 65rem;
+    font-size: clamp(2rem, 3.3vw, 3.5rem);
+}
+
+.type-page main .cms-content:has(.saas-welcome) .saas-welcome h2.claim {
+    margin-top: 1.5rem;
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+}
+
+.type-page main .cms-content:has(.saas-welcome) > .html:has(.saas-logo) > .container {
+    padding-block: 1.5rem;
+}
+
+.type-page main .cms-content:has(.saas-welcome) .saas-logo img.logo {
+    display: block;
+    width: min(100%, 49.6875rem);
+    height: auto;
+    margin-inline: auto;
+}
+
+.type-page main .cms-content:has(.saas-welcome) > .html:has(.saas-intro) > .container {
+    padding-top: 1rem;
+    padding-bottom: 6rem;
+}
+
+.type-page main .cms-content:has(.saas-welcome) .saas-intro {
+    max-width: 68rem;
+    color: #103050;
+    font-size: calc(var(--pico-font-size) * 1.33);
+    line-height: 1.65;
+}
+
+.type-page main .cms-content:has(.saas-welcome) > :has(.landing.qualities),
+.type-page main .cms-content:has(.saas-welcome) > :has(.landing.highlights-image),
+.type-page main .cms-content:has(.saas-welcome) > :has(.landing.showcases) {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(.saas-welcome) .landing.highlights-image {
+    margin-top: -2rem;
+}
+
+.type-page main .cms-content:has(.saas-welcome) > :has(.saas-start) {
+    background-color: #FFFFFF;
+    background-image: url("triangle.svg"), url("background-light-small.jpg");
+    background-position: left top, left top;
+    background-repeat: no-repeat, repeat-y;
+    background-size: 100%, cover;
+}
+
+.saas-start h2 {
+    margin-bottom: 1rem;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 400;
+    text-transform: none;
+}
+
+.saas-start p.landing {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+@media screen and (max-width: 767px) {
+    .type-page main .cms-content:has(.saas-welcome) > .html:has(.saas-welcome) > .container {
+        padding-top: 3rem;
+    }
+
+    .type-page main .cms-content:has(.saas-welcome) .saas-welcome {
+        min-height: 0;
+        padding: 0;
+    }
+
+    .type-page main .cms-content:has(.saas-welcome) .saas-welcome h1 {
+        font-size: 2rem;
+    }
+
+    .type-page main .cms-content:has(.saas-welcome) > .html:has(.saas-intro) > .container {
+        padding-bottom: 4rem;
+    }
+}
+
+
+/* B2B commerce landing page */
+.type-page main .cms-content:has(.landing.b2b-logo) > * {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) > * > .container {
+    width: 100%;
+    max-width: 73.5rem !important;
+}
+
+/* TYPO3 stores the heading, illustration and introduction independently, but
+   the live B2B page presents them as one light illustrated stage. */
+.type-page main .cms-content:has(.landing.b2b-logo) > .html:has(.b2b-welcome),
+.type-page main .cms-content:has(.landing.b2b-logo) > .html:has(.landing.b2b-logo),
+.type-page main .cms-content:has(.landing.b2b-logo) > .html:has(.b2b-intro) {
+    border: 0;
+    background-color: #F4F0EA;
+    background-image: url("background-light-small.jpg");
+    background-position: left top;
+    background-repeat: repeat-y;
+    background-size: cover;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) > .html:has(.b2b-intro) {
+    background-image: url("triangle2.svg"), url("background-light-small.jpg");
+    background-position: right bottom, left top;
+    background-repeat: no-repeat, repeat-y;
+    background-size: 100%, cover;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) > .html:has(.b2b-welcome) > .container {
+    padding: 4.75rem min(5%, 2rem) 1.5rem;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .b2b-welcome {
+    min-height: 0;
+    padding: 0;
+    color: #103050;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .b2b-welcome h1,
+.type-page main .cms-content:has(.landing.b2b-logo) .b2b-welcome h1 strong,
+.type-page main .cms-content:has(.landing.b2b-logo) .b2b-welcome h2.claim {
+    color: #103050;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .b2b-welcome h1 {
+    max-width: 65rem;
+    font-size: clamp(2rem, 3.3vw, 3.5rem);
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .b2b-welcome h2.claim {
+    margin-top: 1.5rem;
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) > .html:has(.landing.b2b-logo) > .container {
+    padding-block: 1.25rem;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .b2b-logo img.logo {
+    display: block;
+    width: min(100%, 49.875rem);
+    height: auto;
+    margin-inline: auto;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) > .html:has(.b2b-intro) > .container {
+    padding-top: 1.25rem;
+    padding-bottom: 6rem;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .b2b-intro {
+    max-width: 68rem;
+    color: #103050;
+    font-size: var(--pico-font-size);
+    line-height: 1.65;
+}
+
+/* Preserve the source quality logos instead of the generic statistics icons. */
+.type-page main .cms-content:has(.landing.b2b-logo) > :has(.landing.qualities) {
+    background-color: #FFFFFF !important;
+}
+
+/* The B2B highlights alternate their original illustration and copy. */
+.type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .headlines + h2 {
+    margin-top: 2rem;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image {
+    display: grid;
+    grid-template-columns: minmax(14rem, 20rem) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 0 3.5rem;
+    padding: 3rem 0;
+    text-align: start;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image > img {
+    grid-row: 1 / 3;
+    width: 100%;
+    max-width: 20rem;
+    margin: 0;
+    object-fit: contain;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image > h3 {
+    align-self: end;
+    margin: 0 0 1.25rem;
+    font-size: calc(var(--pico-font-size) * 1.15);
+    font-weight: 700;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image > p {
+    align-self: start;
+    margin: 0;
+    color: #52697E;
+    font-size: var(--pico-font-size);
+    line-height: 1.7;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image:nth-of-type(even) {
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 20rem);
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image:nth-of-type(even) > img {
+    grid-column: 2;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image:nth-of-type(even) > h3,
+.type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image:nth-of-type(even) > p {
+    grid-column: 1;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) > :has(.landing.showcases),
+.type-page main .cms-content:has(.landing.b2b-logo) > :has(.landing.casestudies) {
+    background-color: #FFFFFF;
+}
+
+/* The two B2B calls to action use the light triangular source backdrop. */
+.type-page main .cms-content:has(.landing.b2b-logo) > :has(.b2b-more) {
+    background-color: #F4F0EA;
+    background-image: url("triangle.svg"), url("triangle2.svg"), url("background-light-small.jpg");
+    background-position: left top, right bottom, left top;
+    background-repeat: no-repeat, no-repeat, repeat-y;
+    background-size: 100%, 100%, cover;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) > :has(.b2b-consulting),
+.type-page main .cms-content:has(.landing.b2b-logo) > :has(.b2b-consulting-heading) {
+    background-color: #F4F0EA;
+    background-image: url("triangle.svg"), url("background-light-small.jpg");
+    background-position: left top, left top;
+    background-repeat: no-repeat, repeat-y;
+    background-size: 100%, cover;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) > :has(.b2b-consulting-action) {
+    background-color: #F4F0EA;
+    background-image: url("background-light-small.jpg");
+    background-position: left top;
+    background-repeat: repeat-y;
+    background-size: cover;
+}
+
+.b2b-more h2,
+.b2b-consulting h2,
+.b2b-consulting-heading h2 {
+    margin-bottom: 1rem;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 400;
+    text-transform: none;
+}
+
+.b2b-more .lead {
+    max-width: 34rem;
+    margin: 1rem auto;
+    font-size: calc(var(--pico-font-size) * 1.35);
+}
+
+.b2b-more p.landing,
+.b2b-consulting p.landing,
+.b2b-consulting-action p.landing {
+    display: flex;
+    justify-content: center;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) > :has(.b2b-consulting-heading) > .container {
+    padding-bottom: 0;
+}
+
+.type-page main .cms-content:has(.landing.b2b-logo) > :has(.b2b-consulting-action) > .container {
+    padding-top: 0;
+}
+
+@media screen and (max-width: 767px) {
+    .type-page main .cms-content:has(.landing.b2b-logo) > .html:has(.b2b-welcome) > .container {
+        padding-top: 3rem;
+    }
+
+    .type-page main .cms-content:has(.landing.b2b-logo) .b2b-welcome {
+        min-height: 0;
+        padding: 0;
+    }
+
+    .type-page main .cms-content:has(.landing.b2b-logo) .b2b-welcome h1 {
+        font-size: 2rem;
+    }
+
+    .type-page main .cms-content:has(.landing.b2b-logo) > .html:has(.b2b-intro) > .container {
+        padding-bottom: 4rem;
+    }
+
+    .type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image,
+    .type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image:nth-of-type(even) {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        gap: 1.5rem;
+    }
+
+    .type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image > img,
+    .type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image:nth-of-type(even) > img,
+    .type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image:nth-of-type(even) > h3,
+    .type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image:nth-of-type(even) > p {
+        grid-column: 1;
+        grid-row: auto;
+    }
+
+    .type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image > img {
+        margin-inline: auto;
+    }
+
+    .type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image > h3,
+    .type-page main .cms-content:has(.landing.b2b-logo) .landing.highlights-image > .highlight-image > p {
+        text-align: center;
+    }
+}
+
+
+/* Laravel platform landing page */
+
+.cms-content .landing .fa-play {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7L8 5Zm2 3.5 5.5 3.5-5.5 3.5v-7Z'/%3E%3C/svg%3E");
+}
+
+.cms-content .landing .fa-code {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m8.7 16.7-1.4 1.4L1.2 12l6.1-6.1 1.4 1.4L4 12l4.7 4.7Zm6.6 0L20 12l-4.7-4.7 1.4-1.4 6.1 6.1-6.1 6.1-1.4-1.4ZM10 20l2.7-16h2L12 20h-2Z'/%3E%3C/svg%3E");
+}
+
+.cms-content .landing .fa-cubes {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2 9 5v10l-9 5-9-5V7l9-5Zm0 2.3L6.6 7 12 9.7 17.4 7 12 4.3ZM5 8.6v7.8l6 3v-7.8l-6-3Zm8 10.8 6-3V8.6l-6 3v7.8Z'/%3E%3C/svg%3E");
+}
+
+.cms-content .landing .fa-question {
+    --aimeos-headicon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm-1-4h2v2h-2v-2Zm1-10c2.2 0 4 1.5 4 3.5 0 1.6-.9 2.5-2.1 3.3-.8.5-.9.8-.9 1.7h-2c0-1.7.4-2.4 1.8-3.3.8-.5 1.2-.9 1.2-1.7 0-.9-.9-1.5-2-1.5s-2 .7-2 1.7H8C8 7.6 9.8 6 12 6Z'/%3E%3C/svg%3E");
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > * {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > * > .container {
+    width: min(100%, 71.25rem);
+    max-width: 71.25rem !important;
+    margin-inline: auto;
+    padding: 2.75rem min(5%, 2rem);
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .html:has(.landing.welcome) {
+    border-bottom-width: 0.66rem;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .html:has(.landing.welcome) > .container {
+    width: 100%;
+    max-width: none !important;
+    padding: 0 min(5%, 2rem);
+}
+
+.landing.welcome:has(.logo[src*="laravel-gold"]) {
+    min-height: 0;
+    padding: 2.5rem 0 4.5rem;
+}
+
+.landing.welcome:has(.logo[src*="laravel-gold"]) .logo {
+    width: auto;
+    max-width: min(10rem, 45vw);
+    max-height: 10rem;
+    margin: 2rem auto;
+}
+
+.landing.welcome:has(.logo[src*="laravel-gold"]) h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.landing.welcome:has(.logo[src*="laravel-gold"]) h2.claim {
+    margin: 1.75rem 0 2.75rem;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+}
+
+.landing.welcome:has(.logo[src*="laravel-gold"]) .screen {
+    display: flex;
+    width: min(100%, 50rem);
+    height: auto !important;
+    max-height: none;
+    flex-direction: column;
+    align-items: center;
+    margin-inline: auto;
+    gap: 1.5rem;
+    filter: none;
+}
+
+.landing.welcome:has(.logo[src*="laravel-gold"]) .screen > img {
+    position: static;
+    display: block;
+    width: 100%;
+    max-height: 23rem;
+    object-fit: contain;
+    filter: drop-shadow(0 1.25rem 1.5rem #020D1780);
+    transform: none;
+}
+
+.landing.welcome:has(.logo[src*="laravel-gold"]) .cta-buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .headicon + .headlines {
+    margin-top: 0.75rem;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .headlines + h2,
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .headlines + .header {
+    margin-top: 2rem;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.showcases:has(> .landing.qualities) > .header {
+    margin-bottom: 2.5rem;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.showcases > .landing.qualities .row {
+    align-items: stretch;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.showcases > .landing.qualities .quality {
+    padding: 1.75rem 1.25rem;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.showcases > .landing.qualities .quality::before {
+    display: none;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.showcases > .landing.qualities .header {
+    min-height: 4.5rem;
+    margin: 0 auto 1rem;
+    padding-bottom: 1rem;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.showcases > .landing.qualities .number {
+    display: block;
+    margin: 0;
+    color: #52697E;
+    font-size: calc(var(--pico-font-size) * 0.82);
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .section-cta {
+    margin-top: 2rem;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .section-cta h3 {
+    margin-bottom: 1.25rem;
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    text-align: center;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .aimeos-feature {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .aimeos-feature > .container {
+    padding-block: 3.75rem;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .aimeos-feature .feature-copy {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+}
+
+/* Comparison and distributions */
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.showcases:has(table) table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    font-size: calc(var(--pico-font-size) * 0.72);
+    text-align: start;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.showcases:has(table) th,
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.showcases:has(table) td {
+    min-width: 10rem;
+    vertical-align: top;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.dists .row {
+    align-items: stretch;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.dists .dist a {
+    padding: 0;
+    text-decoration: none;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.dists .dist > a:has(> img) {
+    display: block;
+    padding: 1.5rem 0;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.dists .dist > a:has(> img):not(:has(> .header)) {
+    padding-bottom: 0;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.dists .dist > a:empty {
+    display: none;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.dists .dist img {
+    display: block;
+    width: auto;
+    height: 10rem;
+    margin-inline: auto;
+    object-fit: contain;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.dists .header {
+    display: block;
+    max-width: 25rem;
+    margin: 1.5rem auto;
+    padding: 1rem 0;
+    border-bottom: 1px solid #B09050;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.dists .header > a,
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.dists .button > a {
+    display: block;
+    padding: 0;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.dists .button {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border: 1px solid #B09050;
+    color: #103050;
+    font-size: calc(var(--pico-font-size) * 0.75);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Demo and destination-link source backgrounds */
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > :has(.landing.demo) {
+    background-image:
+        url("triangle.svg"),
+        url("triangle2.svg"),
+        url("background-light-small.jpg");
+    background-position: left top, right bottom, left top;
+    background-repeat: no-repeat, no-repeat, repeat-y;
+    background-size: 100%, 100%, cover;
+    transform: none;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > :has(.landing.demo) > .container {
+    padding: 2.75rem min(5%, 2rem);
+    transform: none;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > :has(.landing.explain) {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > :has(.landing.links) {
+    background-image: url("triangle.svg"), url("background-light-small.jpg");
+    background-position: left top, left top;
+    background-repeat: no-repeat, repeat-y;
+    background-size: 100%, cover;
+}
+
+/* Shared source-code examples */
+.landing.code .content {
+    position: relative;
+    max-width: 35rem;
+    margin: 3rem auto 0;
+    padding: 2rem 1rem;
+    border: 1px solid #B09050;
+    text-align: start;
+}
+
+.landing.code .content > ol.code {
+    display: none;
+    margin: 1rem;
+    padding-inline-start: 2.5rem;
+    border-inline-start: 1px solid #103050;
+    opacity: 0;
+}
+
+.landing.code .content > ol.code.active {
+    display: block;
+    opacity: 1;
+}
+
+.landing.code ol.code li {
+    padding: 0.2rem 0.35rem;
+    text-indent: 0;
+    overflow-wrap: anywhere;
+    font-family: var(--pico-font-family-monospace);
+    font-size: calc(var(--pico-font-size) * 0.72);
+}
+
+.landing.code .navbottom {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    height: 0;
+}
+
+.landing.code .navbottom a {
+    position: relative;
+    top: -2rem;
+    display: grid;
+    width: 4rem;
+    height: 4rem;
+    place-items: center;
+    border: 1px solid #B09050;
+    border-radius: 50%;
+    color: #B09050;
+    background-color: #FFFFFF;
+}
+
+.landing.code .navbottom a.active {
+    top: calc(-2rem - 4px);
+    color: #FFFFFF;
+    background-color: #B09050;
+    box-shadow: -6px 4px #C2E0FF;
+}
+
+.landing.code .navbottom .fa {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    font-size: 0;
+}
+
+.landing.code .navbottom .fa::before {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: currentColor;
+    content: "";
+    -webkit-mask: var(--aimeos-code-icon) center / contain no-repeat;
+    mask: var(--aimeos-code-icon) center / contain no-repeat;
+}
+
+.landing.code .navbottom .fa-search {
+    --aimeos-code-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10 2a8 8 0 1 0 4.9 14.3L20.6 22l1.4-1.4-5.7-5.7A8 8 0 0 0 10 2Zm0 2a6 6 0 1 1 0 12 6 6 0 0 1 0-12Z'/%3E%3C/svg%3E");
+}
+
+.landing.code .navbottom .fa-mouse-pointer {
+    --aimeos-code-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 2v17.5l4.8-4 3 6.5 2.7-1.3-3-6.2H18L4 2Zm2 5.2 7.2 5.3H8.4L6 14.5V7.2Z'/%3E%3C/svg%3E");
+}
+
+.landing.code .navbottom .fa-shopping-cart {
+    --aimeos-code-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 3h3l2.4 11.2A3 3 0 0 0 10.3 17H19v-2h-8.7a1 1 0 0 1-1-.8L9 13h9.6l2.2-7H7.5L7 3H2v2Zm6 5h10.1l-.9 3H8.6L8 8Zm2 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z'/%3E%3C/svg%3E");
+}
+
+/* FAQ */
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .html:has(.landing.faq) > .container {
+    padding-bottom: 0.75rem;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .html:has(.landing.faq) + .html > .container {
+    max-width: 52rem !important;
+    padding-top: 0.75rem;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .html:has(.landing.faq) + .html h3 {
+    margin: 2.25rem 0 0.75rem;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-weight: 700;
+    text-align: start;
+}
+
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .html:has(.landing.faq) + .html p {
+    color: #52697E;
+    line-height: 1.7;
+    text-align: start;
+}
+
+/* Shared source, documentation and help links */
+.landing.links .fa {
+    display: block;
+    width: 3.5rem;
+    height: 3.5rem;
+    color: currentColor;
+    filter: drop-shadow(-6px 4px #C2E0FF);
+    font-size: 0;
+}
+
+.landing.links .fa::before {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: currentColor;
+    content: "";
+    -webkit-mask: var(--aimeos-link-icon) center / contain no-repeat;
+    mask: var(--aimeos-link-icon) center / contain no-repeat;
+}
+
+.landing.links .fa-github {
+    --aimeos-link-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38v-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82A7.7 7.7 0 0 1 8 4.58c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z'/%3E%3C/svg%3E");
+}
+
+.landing.links .fa-file-code-o {
+    --aimeos-link-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 2h9l5 5v15H5V2Zm2 2v16h10V8h-4V4H7Zm8 .8V6h1.2L15 4.8ZM10 10l-3 3 3 3 1.4-1.4L9.8 13l1.6-1.6L10 10Zm4 0-1.4 1.4 1.6 1.6-1.6 1.6L14 16l3-3-3-3Z'/%3E%3C/svg%3E");
+}
+
+.landing.links .fa-comments {
+    --aimeos-link-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M2 3h15v12H8l-5 4v-4H2V3Zm2 2v8h1v2l2.3-2H15V5H4Zm15 2h3v12h-1v4l-5-4H9v-2h7.7l2.3 2v-2h1V9h-1V7Z'/%3E%3C/svg%3E");
+}
+
+/* Branded trust cards shared by all imported Aimeos pages. */
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality {
+    padding-block: 0;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality::before {
+    display: none;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality > span,
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality > img {
+    display: none;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality > a {
+    color: #103050;
+    text-decoration: none;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality > a:only-of-type {
+    display: block;
+    padding: 1.5rem 0;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality:has(> a:not(:only-of-type)) {
+    padding-block: 1.5rem;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality > a:not(:only-of-type) {
+    display: contents;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality > a:empty {
+    display: none;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality a img {
+    display: inline-block;
+    width: auto;
+    max-width: 100%;
+    height: 4rem;
+    object-fit: contain;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality .header,
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality > h2,
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality .stars {
+    display: block;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality .header,
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality > h2 {
+    max-width: 25rem;
+    margin: 1.5rem auto;
+    padding: 1rem 0;
+    border-bottom: 1.25px solid #B09050;
+    color: #103050;
+    font-size: calc(var(--pico-font-size) * 1.1);
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality .stars {
+    margin: 2rem 0;
+    color: #907040;
+    font-size: 120%;
+    font-weight: 700;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality .stars .fa {
+    font-size: 120%;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality .stars .fa-star {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.1em;
+    font-style: normal;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality .stars .fa-star::before {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: currentColor;
+    content: "";
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2.25 3 6.08 6.71.98-4.86 4.73L18 20.72l-6-3.15-6 3.15 1.15-6.68-4.86-4.73L9 8.33l3-6.08Z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m12 2.25 3 6.08 6.71.98-4.86 4.73L18 20.72l-6-3.15-6 3.15 1.15-6.68-4.86-4.73L9 8.33l3-6.08Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality .number {
+    margin-inline-start: 1rem;
+    color: #103050;
+    font-size: 100%;
+    font-weight: 400;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality [itemprop="reviewCount"] {
+    display: none;
+}
+
+.type-page main .cms-content:has(.landing.qualities .quality > a) .landing.qualities:has(.quality > a) .quality .button {
+    display: inline-block;
+    padding: 0 0.5rem;
+    color: #103050;
+    border: 1px solid #B09050;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+@media screen and (max-width: 767px) {
+    .landing.welcome:has(.logo[src*="laravel-gold"]) {
+        min-height: 0;
+        padding: 2rem 0 3.5rem;
+    }
+
+    .landing.welcome:has(.logo[src*="laravel-gold"]) .logo {
+        width: auto;
+        max-height: 8rem;
+        margin-bottom: 2rem;
+    }
+
+    .landing.welcome:has(.logo[src*="laravel-gold"]) h1 {
+        font-size: 2rem;
+    }
+
+    .type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > * > .container,
+    .type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .aimeos-feature > .container {
+        padding-block: 2.5rem;
+    }
+
+    .type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.showcases > .landing.qualities .header {
+        min-height: 0;
+    }
+
+    .type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.code .content {
+        padding-inline: 0.25rem;
+    }
+
+    .type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) .landing.code .content > ol.code {
+        margin-inline: 0.5rem;
+        padding-inline-start: 2rem;
+    }
+}

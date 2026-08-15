@@ -1,0 +1,415 @@
+/**
+ * @license MIT, https://opensource.org/license/MIT
+ */
+
+.contact label {
+    color: var(--pico-contrast);
+    display: inline-block;
+    margin: 0.5rem 0;
+    font-weight: 500;
+    font-size: calc(var(--pico-font-size) * 0.7);
+}
+
+.contact input, .contact textarea {
+    border: 1px solid var(--pico-contrast-border);
+    background-color: var(--pico-contrast-background);
+    color: var(--pico-color);
+    resize: vertical;
+    font-size: var(--pico-font-size);
+    display: block;
+    padding: 0.75rem 1.25rem;
+    width: 100%;
+    border-radius: var(--pico-border-radius);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.contact textarea {
+    border-radius: var(--pico-border-radius);
+}
+
+.contact input:focus,
+.contact textarea:focus {
+    border-color: var(--pico-primary);
+    box-shadow: 0 0 0 3px var(--pico-primary-background);
+    outline: none;
+}
+
+.contact input::-webkit-input-placeholder,
+.contact textarea::-webkit-input-placeholder {
+    color: var(--pico-muted-color);
+}
+
+.contact .errors {
+    color: var(--pico-form-element-invalid-focus-color);
+    font-size: calc(var(--pico-font-size) * 0.75);
+    margin: 1rem 1.5rem;
+}
+
+.contact .error {
+    border-color: var(--pico-form-element-invalid-border-color);
+}
+
+.contact .submit {
+    display: flex;
+    justify-content: space-around;
+    margin: 1rem 0;
+}
+
+.contact .h-captcha {
+    text-align: center;
+}
+
+.contact .h-captcha iframe {
+    margin-bottom: 0.5rem;
+    max-width: 100%;
+}
+
+.contact button {
+    display: block;
+    margin-inline-end: auto;
+    margin-inline-start: auto;
+    border-radius: var(--pico-border-radius);
+}
+
+.contact button:disabled {
+    border: 1px solid var(--pico-contrast-border);
+    background-color: var(--pico-contrast-background);
+    color: var(--pico-muted-color);
+}
+
+.contact button:has(.success:not(.hidden)) {
+    background-color: #166534;
+    border-color: #166534;
+    color: var(--pico-contrast-inverse);
+}
+
+.contact button:has(.failure:not(.hidden)) {
+    background-color: #991B1B;
+    border-color: #991B1B;
+    color: var(--pico-contrast-inverse);
+}
+
+/* Imported aimeos.org contact, support and legal-information page */
+.type-page main .cms-content > :has(.aimeos-contact-page) {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content > :has(.aimeos-contact-page) > .container {
+    width: 100%;
+    max-width: none !important;
+    padding: 0;
+}
+
+.aimeos-contact-page {
+    margin-top: -14px;
+    color: #103050;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.aimeos-contact-page .contact-band {
+    background-color: #FFFFFF;
+}
+
+.aimeos-contact-page .contact-band > .container {
+    width: 100%;
+    max-width: 1140px !important;
+    margin-inline: auto;
+    padding: 64px 20px;
+    text-align: center;
+}
+
+.aimeos-contact-page .contact-informed > .container {
+    padding-top: 0;
+}
+
+.aimeos-contact-page .contact-band h2 {
+    margin: 20px 0 16px;
+    color: #103050;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 48px;
+    text-align: center;
+    text-transform: none;
+}
+
+.aimeos-contact-page .landing.links {
+    display: block;
+    padding: 64px 0 32px;
+    font-size: 0;
+    text-align: center;
+}
+
+.aimeos-contact-page .landing.links .link {
+    display: inline-block;
+    width: 200px;
+    height: 200px;
+    margin: 40px;
+    padding: 20px;
+    border: 1px solid #103050;
+    border-radius: 50%;
+    color: #103050;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 3;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    vertical-align: top;
+}
+
+.aimeos-contact-page .landing.links .link:hover,
+.aimeos-contact-page .landing.links .link:focus {
+    color: #FFFFFF;
+    background-color: #103050;
+    text-decoration: none;
+}
+
+.aimeos-contact-page .landing.links .fa {
+    display: block;
+    width: auto;
+    height: 90px;
+    color: currentColor;
+    filter: none;
+    font-size: 0;
+    line-height: 1;
+}
+
+.aimeos-contact-page .landing.links .fa::before {
+    display: block;
+    width: 90px;
+    height: 90px;
+    margin-inline: auto;
+    background-color: currentColor;
+    content: "";
+    -webkit-mask: var(--aimeos-link-icon) center / contain no-repeat;
+    mask: var(--aimeos-link-icon) center / contain no-repeat;
+}
+
+.aimeos-contact-page .landing.links .fa-twitter {
+    --aimeos-link-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M23.4 4.8c-.8.4-1.7.6-2.7.7a4.7 4.7 0 0 0 2.1-2.6c-.9.5-1.9.9-3 1.1a4.7 4.7 0 0 0-8.1 4.3A13.3 13.3 0 0 1 2 3.4a4.7 4.7 0 0 0 1.5 6.3c-.8 0-1.5-.2-2.1-.6v.1a4.7 4.7 0 0 0 3.8 4.6c-.4.1-.8.2-1.2.2-.3 0-.6 0-.9-.1a4.7 4.7 0 0 0 4.4 3.3 9.4 9.4 0 0 1-5.8 2c-.4 0-.8 0-1.1-.1a13.2 13.2 0 0 0 7.2 2.1c8.6 0 13.4-7.2 13.4-13.4v-.6c.8-.7 1.6-1.5 2.2-2.4Z'/%3E%3C/svg%3E");
+}
+
+.aimeos-contact-page .landing.links .fa-facebook {
+    --aimeos-link-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 2H4a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8v-8H9v-3h3V8.5C12 5.6 13.7 4 16.3 4c1.2 0 2.3.1 2.7.1v3h-1.8c-1.4 0-1.7.7-1.7 1.7V11H19l-.5 3h-3v8H20a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2Z'/%3E%3C/svg%3E");
+}
+
+.aimeos-contact-page .landing.links .fa-question {
+    --aimeos-link-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.8 16h2.4v-2.1c0-1.3.5-1.8 1.6-2.6 1.3-1 2.2-2.2 2.2-4.1C17 4.1 14.7 2 11.4 2 8.3 2 6.2 3.6 5.2 6.2l2.3 1c.7-1.8 1.8-2.7 3.7-2.7 2 0 3.2 1.1 3.2 2.8 0 1.2-.6 1.8-1.7 2.7-1.3 1-1.9 2-1.9 3.8V16Zm0 2v3h3v-3h-3Z'/%3E%3C/svg%3E");
+}
+
+.aimeos-contact-page .contact-form-band {
+    background-color: #F4F0EA;
+}
+
+.aimeos-contact-page .contact-form-band > .container {
+    padding-top: 120px;
+}
+
+.aimeos-contact-page .contact-introduction p {
+    margin: 8px 0 0;
+    color: #103050;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+}
+
+.aimeos-contact-page form {
+    margin-top: 56px;
+}
+
+.aimeos-contact-page .contact-form-head {
+    display: grid;
+    grid-template-columns: 85% 15%;
+    align-items: start;
+}
+
+.aimeos-contact-page .contact-form-head h3 {
+    margin: 10.8px 0 0;
+    color: #103050;
+    font-size: 21.6px;
+    font-weight: 400;
+    line-height: 25.92px;
+    text-align: center;
+}
+
+.aimeos-contact-page .contact-form-head p {
+    margin: 8px 0 0;
+    padding-inline-start: 24px;
+    color: #103050;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+}
+
+.aimeos-contact-page .contact-form-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+    padding-bottom: 16px;
+}
+
+.aimeos-contact-page .form-group {
+    margin: 0 0 16px;
+}
+
+.aimeos-contact-page .form-group:last-child {
+    margin-bottom: 0;
+}
+
+.aimeos-contact-page .contact-form-columns label {
+    display: block;
+    margin: 0 0 8px;
+    color: #103050;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: center;
+}
+
+.aimeos-contact-page .contact-form-columns input,
+.aimeos-contact-page .contact-form-columns textarea {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    padding: 6px 12px;
+    border: 1px solid #CCCCCC;
+    border-radius: 0;
+    background-color: #FFFFFF;
+    color: #103050;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.aimeos-contact-page .contact-form-columns input {
+    height: 38px;
+}
+
+.aimeos-contact-page .contact-form-columns textarea {
+    height: 124px;
+    resize: vertical;
+}
+
+.aimeos-contact-page .errors:empty {
+    margin: 0;
+}
+
+.aimeos-contact-page .submit {
+    display: block;
+    box-sizing: border-box;
+    height: 82px;
+    margin: 16px 0 0;
+    padding-top: 16px;
+}
+
+.aimeos-contact-page .submit button {
+    display: block;
+    width: 256px;
+    min-width: 0;
+    height: 50px;
+    margin: 0 auto;
+    padding: 12px;
+    border: 1px solid #103050;
+    border-radius: 0;
+    background-color: #103050;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    text-transform: uppercase;
+}
+
+.aimeos-contact-page .contact-legal-band p {
+    margin: 8px 0;
+    color: #103050;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+}
+
+.aimeos-contact-page .contact-imprint p:last-child {
+    margin-top: 40px;
+}
+
+.aimeos-contact-page .contact-imprint p:last-child::before {
+    display: block;
+    height: 24px;
+    content: "";
+}
+
+.aimeos-contact-page .contact-credits ul {
+    margin: 0 0 16px;
+    padding-inline-start: 40px;
+    color: #103050;
+    font-size: 16px;
+    line-height: 24px;
+    list-style: disc;
+}
+
+.aimeos-contact-page .contact-credits li {
+    margin: 0;
+    padding: 0;
+    text-align: start;
+}
+
+@media screen and (max-width: 767px) {
+    .aimeos-contact-page {
+        margin-top: -37px;
+    }
+
+    .aimeos-contact-page .contact-band > .container {
+        padding-inline: 20px;
+    }
+
+    .aimeos-contact-page .contact-informed > .container {
+        padding-top: 64px;
+    }
+
+    .aimeos-contact-page .contact-band h2 {
+        margin: 16px 0;
+        font-size: 32px;
+        line-height: 38.4px;
+    }
+
+    .aimeos-contact-page .contact-form-band > .container {
+        padding-top: 96px;
+    }
+
+    .aimeos-contact-page form {
+        margin-top: 32px;
+    }
+
+    .aimeos-contact-page .contact-form-head {
+        grid-template-columns: 1fr;
+    }
+
+    .aimeos-contact-page .contact-form-head h3 {
+        margin: 10.8px 0;
+    }
+
+    .aimeos-contact-page .contact-form-head p {
+        margin: 8px 0;
+        padding-inline-start: 0;
+    }
+
+    .aimeos-contact-page .contact-form-columns {
+        grid-template-columns: 1fr;
+        gap: 0;
+        margin-inline: -5px;
+        padding-bottom: 0;
+    }
+
+    .aimeos-contact-page .contact-form-columns > div {
+        padding-inline: 5px;
+    }
+
+    .aimeos-contact-page .contact-form-columns .form-group:last-child {
+        margin-bottom: 16px;
+    }
+
+    .aimeos-contact-page .contact-form-columns textarea {
+        height: 90px;
+    }
+}

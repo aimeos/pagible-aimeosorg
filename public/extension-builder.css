@@ -1,0 +1,95 @@
+/**
+ * @license MIT, https://opensource.org/license/MIT
+ */
+
+.extension-builder {
+    color: var(--pico-contrast);
+}
+
+.extension-builder-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.extension-builder-actions .btn {
+    margin: 0;
+}
+
+.extension-builder-details {
+    max-width: 56rem;
+    margin: 3rem auto 0;
+    padding: 2rem;
+    background-color: var(--pico-muted-background-color);
+}
+
+.extension-builder-details[hidden] {
+    display: none;
+}
+
+.extension-builder-details h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+.extension-builder-details .cms-text {
+    margin-bottom: 2rem;
+    font-size: calc(var(--pico-font-size) * 0.85);
+    line-height: 1.65;
+}
+
+.extension-builder-details form {
+    margin: 0;
+}
+
+.extension-builder-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem 2rem;
+}
+
+.extension-builder-fields label {
+    display: block;
+    margin: 0;
+    color: var(--pico-contrast);
+    font-size: calc(var(--pico-font-size) * 0.75);
+    font-weight: 600;
+}
+
+.extension-builder-fields label > span {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.extension-builder-fields input,
+.extension-builder-fields select {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--pico-contrast-border);
+    border-radius: var(--pico-border-radius);
+    color: var(--pico-color);
+    background-color: var(--pico-contrast-background);
+    font: inherit;
+}
+
+.extension-builder-fields input:focus,
+.extension-builder-fields select:focus {
+    border-color: var(--pico-primary);
+    box-shadow: 0 0 0 3px var(--pico-primary-background);
+    outline: none;
+}
+
+.extension-builder-details .download {
+    display: block;
+    margin: 2rem auto 0;
+}
+
+@media screen and (min-width: 768px) {
+    .extension-builder-fields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}

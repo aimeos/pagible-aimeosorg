@@ -1,0 +1,91 @@
+/**
+ * @license MIT, https://opensource.org/license/MIT
+ */
+
+.aimeos-logo-cloud {
+    background-color: #EAEDEF !important;
+}
+
+.aimeos-logo-cloud > .container {
+    max-width: 80rem;
+    padding-block: 1.25rem;
+}
+
+.aimeos-logo-cloud .title {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.logo-cloud-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.logo-cloud-item {
+    min-width: 0;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    list-style: none;
+}
+
+.logo-cloud-item::marker {
+    content: "";
+}
+
+.logo-cloud-item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+}
+
+.logo-cloud-item > a,
+.logo-cloud-item > div {
+    display: grid;
+    min-height: 3.25rem;
+    place-items: center;
+}
+
+.logo-cloud-item a {
+    opacity: 0.68;
+    transition: opacity 0.15s ease;
+}
+
+.logo-cloud-item a:hover,
+.logo-cloud-item a:focus-visible {
+    opacity: 1;
+}
+
+.logo-cloud-item .logo,
+.logo-cloud-item .logo img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 3rem;
+    margin: auto;
+    object-fit: contain;
+}
+
+@media screen and (min-width: 576px) {
+    .logo-cloud-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .logo-cloud-item:last-child:nth-child(odd) {
+        grid-column: auto;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .logo-cloud-list {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logo-cloud-item a {
+        transition: none;
+    }
+}

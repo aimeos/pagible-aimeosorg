@@ -1,0 +1,57 @@
+/**
+ * Aimeos showcase gallery
+ * @license MIT, https://opensource.org/license/MIT
+ */
+
+.showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px 16px;
+}
+
+.showcase-card {
+    min-width: 0;
+    margin: 0;
+    color: #103050;
+    text-align: center;
+}
+
+.showcase-card > a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.showcase-image {
+    display: block;
+    width: 100%;
+    border: 1px solid #D2C5AB;
+}
+
+.showcase-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+}
+
+.showcase-card > a:hover .showcase-image {
+    box-shadow: 3px 3px 9px #808080;
+}
+
+.showcase-card figcaption {
+    padding-top: 2rem;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.showcase-name,
+.showcase-segment {
+    display: block;
+}
+
+@media screen and (max-width: 767px) {
+    .showcase-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

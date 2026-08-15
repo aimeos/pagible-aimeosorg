@@ -1,0 +1,29 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "aimeos/pagible-aimeosorg",
+    "description": "Aimeos.org theme, extension builder and TYPO3 importer for Pagible CMS",
+    "keywords": ["laravel", "cms", "theme", "aimeos", "ecommerce", "extension-builder", "typo3", "import"],
+    "homepage": "https://aimeos.org",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "ext-dom": "*",
+        "ext-zip": "*",
+        "aimeos/pagible-core": "^0.12",
+        "aimeos/pagible-theme": "^0.12",
+        "guzzlehttp/psr7": "^2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aimeos\\Cms\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aimeos\\Cms\\AimeosServiceProvider"
+            ]
+        }
+    }
+}

@@ -1,0 +1,575 @@
+{
+    "label": "Aimeos",
+    "description": "Enterprise ecommerce design with deep navy sections, warm gold accents, precise typography and technical imagery",
+    "maintainer": "Aimeos GmbH",
+    "email": "info@aimeos.org",
+    "website": "https://aimeos.org",
+    "types": {
+        "page": {
+            "sections": [
+                "main",
+                "footer"
+            ]
+        },
+        "docs": {
+            "sections": [
+                "main",
+                "footer"
+            ]
+        },
+        "blog": {
+            "sections": [
+                "main",
+                "footer"
+            ]
+        }
+    },
+    "content": {
+        "contact-page": {
+            "group": "content",
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M20 4H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z\"/></svg>",
+            "fields": {
+                "informed_title": {
+                    "type": "string",
+                    "min": 1
+                },
+                "informed_links": {
+                    "type": "items",
+                    "min": 1,
+                    "item": {
+                        "label": {
+                            "type": "string",
+                            "min": 1
+                        },
+                        "url": {
+                            "type": "url",
+                            "required": true
+                        },
+                        "icon": {
+                            "type": "select",
+                            "options": [
+                                {
+                                    "value": "github",
+                                    "label": "GitHub"
+                                },
+                                {
+                                    "value": "twitter",
+                                    "label": "Twitter"
+                                },
+                                {
+                                    "value": "facebook",
+                                    "label": "Facebook"
+                                },
+                                {
+                                    "value": "question",
+                                    "label": "Question"
+                                },
+                                {
+                                    "value": "comments",
+                                    "label": "Comments"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "support_title": {
+                    "type": "string",
+                    "min": 1
+                },
+                "support_links": {
+                    "type": "items",
+                    "min": 1,
+                    "item": {
+                        "label": {
+                            "type": "string",
+                            "min": 1
+                        },
+                        "url": {
+                            "type": "url",
+                            "required": true
+                        },
+                        "icon": {
+                            "type": "select",
+                            "options": [
+                                {
+                                    "value": "github",
+                                    "label": "GitHub"
+                                },
+                                {
+                                    "value": "twitter",
+                                    "label": "Twitter"
+                                },
+                                {
+                                    "value": "facebook",
+                                    "label": "Facebook"
+                                },
+                                {
+                                    "value": "question",
+                                    "label": "Question"
+                                },
+                                {
+                                    "value": "comments",
+                                    "label": "Comments"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "contact_title": {
+                    "type": "string",
+                    "min": 1
+                },
+                "contact_text": {
+                    "type": "markdown"
+                },
+                "form_title": {
+                    "type": "string",
+                    "min": 1
+                },
+                "mandatory_text": {
+                    "type": "string"
+                },
+                "imprint_title": {
+                    "type": "string",
+                    "min": 1
+                },
+                "imprint_text": {
+                    "type": "markdown"
+                },
+                "privacy_title": {
+                    "type": "string",
+                    "min": 1
+                },
+                "privacy_text": {
+                    "type": "markdown"
+                },
+                "credits_title": {
+                    "type": "string",
+                    "min": 1
+                },
+                "credits_text": {
+                    "type": "markdown"
+                }
+            }
+        },
+        "extension-builder": {
+            "group": "content",
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M5 4h14v2H5V4m0 14h14v2H5v-2m-2-7h18v2H3v-2m7-4h4v2h-4V7m0 8h4v2h-4v-2Z\"/></svg>",
+            "fields": {
+                "title": {
+                    "type": "string",
+                    "min": 1
+                },
+                "text": {
+                    "type": "markdown"
+                },
+                "create_label": {
+                    "type": "string",
+                    "min": 1
+                },
+                "submit_label": {
+                    "type": "string",
+                    "min": 1
+                },
+                "submit_url": {
+                    "type": "url"
+                },
+                "name_label": {
+                    "type": "string",
+                    "min": 1
+                },
+                "type_label": {
+                    "type": "string",
+                    "min": 1
+                },
+                "download_label": {
+                    "type": "string",
+                    "min": 1
+                }
+            }
+        },
+        "stats": {
+            "group": "content",
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M4 19h16v2H4v-2m1-3 4-4 3 3 5-6 2 2-7 8-3-3-3 3-1-3Z\"/></svg>",
+            "fields": {
+                "title": {
+                    "type": "string"
+                },
+                "items": {
+                    "type": "items",
+                    "min": 1,
+                    "item": {
+                        "kind": {
+                            "type": "select",
+                            "label": "Trust metric",
+                            "options": [
+                                {
+                                    "value": "github",
+                                    "label": "GitHub"
+                                },
+                                {
+                                    "value": "capterra",
+                                    "label": "Capterra"
+                                },
+                                {
+                                    "value": "downloads",
+                                    "label": "Downloads"
+                                },
+                                {
+                                    "value": "code",
+                                    "label": "Code quality"
+                                }
+                            ]
+                        },
+                        "file": {
+                            "type": "image",
+                            "label": "Logo"
+                        },
+                        "value": {
+                            "type": "string",
+                            "min": 1,
+                            "label": "Value"
+                        },
+                        "label": {
+                            "type": "string",
+                            "min": 1,
+                            "label": "Label"
+                        },
+                        "text": {
+                            "type": "string",
+                            "label": "Supporting text"
+                        },
+                        "url": {
+                            "type": "url"
+                        }
+                    }
+                }
+            }
+        },
+        "logo-cloud": {
+            "group": "content",
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M3 5h8v6H3V5m10 0h8v6h-8V5M3 13h5v6H3v-6m7 0h5v6h-5v-6m7 0h4v6h-4v-6Z\"/></svg>",
+            "fields": {
+                "title": {
+                    "type": "string"
+                },
+                "items": {
+                    "type": "items",
+                    "min": 2,
+                    "item": {
+                        "name": {
+                            "type": "string",
+                            "min": 1,
+                            "label": "Organization"
+                        },
+                        "file": {
+                            "type": "image",
+                            "required": true,
+                            "label": "Logo"
+                        },
+                        "url": {
+                            "type": "url"
+                        }
+                    }
+                }
+            }
+        },
+        "showcases": {
+            "group": "content",
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M3 4h8v7H3V4m10 0h8v7h-8V4M3 13h8v7H3v-7m10 0h8v7h-8v-7Z\"/></svg>",
+            "fields": {
+                "items": {
+                    "type": "items",
+                    "min": 1,
+                    "item": {
+                        "name": {
+                            "type": "string",
+                            "label": "Site"
+                        },
+                        "text": {
+                            "type": "string",
+                            "label": "Segment"
+                        },
+                        "file": {
+                            "type": "image",
+                            "required": true,
+                            "label": "Screenshot"
+                        },
+                        "url": {
+                            "type": "url"
+                        }
+                    }
+                }
+            }
+        },
+        "case-study": {
+            "group": "content",
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M4 3h16v18H4V3m2 2v5h12V5H6m0 7v2h12v-2H6m0 4v3h5v-3H6m7 0v3h5v-3h-5Z\"/></svg>",
+            "fields": {
+                "title": {
+                    "type": "string",
+                    "min": 1
+                },
+                "tags": {
+                    "type": "items",
+                    "label": "Tags",
+                    "item": {
+                        "label": {
+                            "type": "string",
+                            "min": 1
+                        }
+                    }
+                },
+                "intro": {
+                    "type": "markdown"
+                },
+                "stage_file": {
+                    "type": "image",
+                    "label": "Stage image"
+                },
+                "sections": {
+                    "type": "items",
+                    "label": "Content sections",
+                    "item": {
+                        "title": {
+                            "type": "string"
+                        },
+                        "text": {
+                            "type": "markdown"
+                        },
+                        "files": {
+                            "type": "images",
+                            "label": "Images"
+                        },
+                        "url": {
+                            "type": "url",
+                            "label": "Image link"
+                        },
+                        "position": {
+                            "type": "select",
+                            "options": [
+                                {
+                                    "value": "start",
+                                    "label": "Image left"
+                                },
+                                {
+                                    "value": "end",
+                                    "label": "Image right"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "gallery_title": {
+                    "type": "string",
+                    "label": "Gallery title"
+                },
+                "screenshots": {
+                    "type": "images",
+                    "label": "Screenshots"
+                },
+                "implementer_title": {
+                    "type": "string",
+                    "label": "Implementer heading"
+                },
+                "implementer_name": {
+                    "type": "string",
+                    "label": "Implementer name"
+                },
+                "implementer_text": {
+                    "type": "markdown",
+                    "label": "Implementer description"
+                },
+                "implementer_file": {
+                    "type": "image",
+                    "label": "Implementer logo"
+                },
+                "implementer_url": {
+                    "type": "url",
+                    "label": "Implementer link"
+                },
+                "back_label": {
+                    "type": "string",
+                    "label": "Back-link label"
+                },
+                "back_url": {
+                    "type": "url",
+                    "label": "Back-link URL"
+                }
+            }
+        },
+        "feature": {
+            "group": "content",
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M4 4h7v7H4V4m9 0h7v7h-7V4M4 13h7v7H4v-7m9 0h7v7h-7v-7Z\"/></svg>",
+            "fields": {
+                "title": {
+                    "type": "string",
+                    "min": 1
+                },
+                "text": {
+                    "type": "markdown",
+                    "min": 1
+                },
+                "file": {
+                    "type": "image",
+                    "required": true,
+                    "label": "Illustration"
+                },
+                "position": {
+                    "type": "select",
+                    "options": [
+                        {
+                            "value": "start",
+                            "label": "Image left"
+                        },
+                        {
+                            "value": "end",
+                            "label": "Image right"
+                        }
+                    ]
+                }
+            }
+        },
+        "feature-list": {
+            "group": "content",
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M7 5h14v2H7V5m0 6h14v2H7v-2m0 6h14v2H7v-2M3 4h2v4H3V4m0 6h2v4H3v-4m0 6h2v4H3v-4Z\"/></svg>",
+            "fields": {
+                "title": {
+                    "type": "string",
+                    "min": 1
+                },
+                "icon": {
+                    "type": "select",
+                    "options": [
+                        {
+                            "value": "check",
+                            "label": "Advantages"
+                        },
+                        {
+                            "value": "code",
+                            "label": "Developers"
+                        },
+                        {
+                            "value": "list",
+                            "label": "Catalog"
+                        },
+                        {
+                            "value": "cube",
+                            "label": "Products"
+                        },
+                        {
+                            "value": "basket",
+                            "label": "Basket"
+                        },
+                        {
+                            "value": "payment",
+                            "label": "Checkout"
+                        },
+                        {
+                            "value": "customer",
+                            "label": "Customers"
+                        },
+                        {
+                            "value": "settings",
+                            "label": "Administration"
+                        },
+                        {
+                            "value": "tasks",
+                            "label": "Asynchronous tasks"
+                        }
+                    ]
+                },
+                "items": {
+                    "type": "items",
+                    "min": 1,
+                    "item": {
+                        "title": {
+                            "type": "string",
+                            "min": 1
+                        },
+                        "text": {
+                            "type": "markdown",
+                            "min": 1
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "config": {
+        "theme": {
+            "group": "theme",
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M20 14H6C3.8 14 2 15.8 2 18S3.8 22 6 22H20C21.1 22 22 21.1 22 20V16C22 14.9 21.1 14 20 14M6 20C4.9 20 4 19.1 4 18S4.9 16 6 16 8 16.9 8 18 7.1 20 6 20M6.3 12L13 5.3C13.8 4.5 15 4.5 15.8 5.3L18.6 8.1C19.4 8.9 19.4 10.1 18.6 10.9L17.7 12H6.3M2 13.5V4C2 2.9 2.9 2 4 2H8C9.1 2 10 2.9 10 4V5.5L2 13.5Z\" /></svg>",
+            "fields": {
+                "--pico-font-family-sans-serif": {
+                    "type": "string",
+                    "default": "\"Noto Sans\", Arial, Helvetica, sans-serif"
+                },
+                "--pico-color": {
+                    "type": "color",
+                    "default": "#103050"
+                },
+                "--pico-background-color": {
+                    "type": "color",
+                    "default": "#FFFFFF"
+                },
+                "--pico-text-selection-color": {
+                    "type": "color",
+                    "default": "#E4D9C2"
+                },
+                "--pico-contrast": {
+                    "type": "color",
+                    "default": "#103050"
+                },
+                "--pico-contrast-hover": {
+                    "type": "color",
+                    "default": "#082039"
+                },
+                "--pico-contrast-inverse": {
+                    "type": "color",
+                    "default": "#FFFFFF"
+                },
+                "--pico-primary": {
+                    "type": "color",
+                    "default": "#907040"
+                },
+                "--pico-primary-background": {
+                    "type": "color",
+                    "default": "#F4F0EA"
+                },
+                "--pico-primary-hover": {
+                    "type": "color",
+                    "default": "#6F5227"
+                },
+                "--pico-primary-hover-background": {
+                    "type": "color",
+                    "default": "#E7DDCB"
+                },
+                "--pico-secondary": {
+                    "type": "color",
+                    "default": "#28658B"
+                },
+                "--pico-secondary-background": {
+                    "type": "color",
+                    "default": "#CAD2D9"
+                },
+                "--pico-secondary-hover": {
+                    "type": "color",
+                    "default": "#174966"
+                },
+                "--pico-secondary-hover-background": {
+                    "type": "color",
+                    "default": "#B9C5CE"
+                },
+                "--pico-border-radius": {
+                    "type": "string",
+                    "default": "0"
+                },
+                "--pico-nav-breadcrumb-divider": {
+                    "type": "string",
+                    "default": "/"
+                }
+            }
+        }
+    }
+}

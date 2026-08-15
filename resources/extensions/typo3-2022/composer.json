@@ -1,0 +1,22 @@
+{
+	"name": "aimeos-extensions/<extname>",
+	"description": "Aimeos <extname> extension",
+	"keywords": ["aimeos", "extension"],
+	"type": "typo3-cms-extension",
+	"prefer-stable": true,
+	"minimum-stability": "dev",
+	"require": {
+		"php": "~7.1||^8.0.11"
+	},
+	"autoload": {
+		"classmap": ["Classes"],
+		"psr-4": {
+			"Aimeos\\Aimeos\\": "Classes"
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "<extname>"
+		}
+	}
+}

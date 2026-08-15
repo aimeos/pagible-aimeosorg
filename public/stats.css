@@ -1,0 +1,119 @@
+/**
+ * @license MIT, https://opensource.org/license/MIT
+ */
+
+.aimeos-stats {
+    background-color: #FFFFFF !important;
+}
+
+.aimeos-stats > .container {
+    max-width: 72rem;
+}
+
+.aimeos-stats .title {
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.stats-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.stats-item {
+    margin: 0;
+    padding: 0 0.75rem;
+    list-style: none;
+    text-align: center;
+}
+
+.stats-item::marker {
+    content: "";
+}
+
+.stats-item > a,
+.stats-item > div {
+    display: block;
+    padding: 1.5rem 0;
+    color: #103050;
+    text-decoration: none;
+}
+
+.stats-item .logo {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: 4rem;
+    margin-inline: auto;
+    object-fit: contain;
+}
+
+.stats-item .value,
+.stats-item .label,
+.stats-item .text {
+    display: block;
+}
+
+.stats-item .value {
+    margin: 2rem 0;
+    color: #103050;
+    font-size: calc(var(--pico-font-size) * 1.2);
+    font-weight: 400;
+}
+
+.stats-item .label {
+    max-width: 25rem;
+    margin: 1.5rem auto;
+    padding: 1rem 0;
+    color: #103050;
+    border-bottom: 1.25px solid #B09050;
+    font-size: calc(var(--pico-font-size) * 1.1);
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+.stats-item .text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.stats-item-github .value::before,
+.stats-item-capterra .value::before {
+    margin-inline-end: 1rem;
+    color: #907040;
+    content: "★★★★★";
+    font-size: 120%;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+}
+
+.stats-item-downloads .value::before {
+    margin-inline-end: 1rem;
+    color: #907040;
+    content: "MORE THAN";
+    font-weight: 700;
+}
+
+.stats-item-code .value::before {
+    margin-inline-end: 1rem;
+    color: #907040;
+    content: "VERY GOOD";
+    font-weight: 700;
+}
+
+@media screen and (min-width: 768px) {
+    .stats-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

@@ -1,0 +1,110 @@
+/**
+ * Aimeos feature accordions
+ * @license MIT, https://opensource.org/license/MIT
+ */
+
+.aimeos-feature-list > .container {
+    width: min(100%, 68rem);
+    margin-inline: auto;
+}
+
+.aimeos-feature-list .feature-list-head {
+    margin-bottom: 2.25rem;
+    text-align: center;
+}
+
+.aimeos-feature-list .feature-list-head h2 {
+    margin: 2rem 0;
+    color: #103050;
+    font-size: 1.33rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.aimeos-feature-list .feature-list-icon {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    margin-inline: auto;
+    color: #B09050;
+    filter: drop-shadow(-4px 3px #C2E0FF);
+}
+
+.aimeos-feature-list .feature-list-icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+.aimeos-feature-list details {
+    margin: 0 0 0.75rem;
+    padding: 0;
+    border: 1px solid #DCE2E6;
+    border-inline-start: 0.2rem solid #B09050;
+    background: #FFFFFF;
+}
+
+.aimeos-feature-list details[open] {
+    border-inline-start-color: #28658B;
+    box-shadow: 0 0.5rem 1.5rem #1030500D;
+}
+
+.aimeos-feature-list summary {
+    display: flex;
+    min-height: 4.5rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    list-style: none;
+}
+
+.aimeos-feature-list summary::-webkit-details-marker {
+    display: none;
+}
+
+.aimeos-feature-list summary h3 {
+    margin: 0;
+    color: #103050;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.aimeos-feature-list .feature-list-toggle {
+    position: relative;
+    flex: 0 0 1rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+.aimeos-feature-list .feature-list-toggle::before,
+.aimeos-feature-list .feature-list-toggle::after {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #907040;
+    content: "";
+}
+
+.aimeos-feature-list .feature-list-toggle::after {
+    transform: rotate(90deg);
+    transition: transform 0.2s ease;
+}
+
+.aimeos-feature-list details[open] .feature-list-toggle::after {
+    transform: rotate(0);
+}
+
+.aimeos-feature-list details > .cms-text {
+    padding: 0 1.5rem 1.5rem;
+    color: #5C6872;
+    line-height: 1.7;
+}
+
+.aimeos-feature-list details > .cms-text > :last-child {
+    margin-bottom: 0;
+}
