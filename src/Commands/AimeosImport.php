@@ -419,21 +419,37 @@ class AimeosImport extends Command
                 return $record;
             }
 
-            $demo = str_contains($body, 'Want to see a demo?')
-                && str_contains($body, '>Request access</link>');
-            $contact = str_contains($body, 'Want to know more?')
-                && str_contains($body, '>Contact</link>')
-                && str_contains($body, '>Pricing</link>');
+            $cleaned = (string) preg_replace(
+                [
+                    '/\s+style=(["\'])\s*max-width\s*:\s*100%\s*;?\s*\1/i',
+                    '/\s+style=(["\'])\s*height\s*:\s*315px\s*;?\s*\1/i',
+                ],
+                '',
+                $body,
+            );
+
+            $demo = str_contains($cleaned, 'Want to see a demo?')
+                && str_contains($cleaned, '>Request access</link>');
+            $contact = str_contains($cleaned, 'Want to know more?')
+                && str_contains($cleaned, '>Contact</link>')
+                && str_contains($cleaned, '>Pricing</link>');
 
             if (! $demo && ! $contact) {
-                return $record;
+                if ($cleaned === $body) {
+                    return $record;
+                }
+
+                $copy = clone $record;
+                $copy->bodytext = $cleaned;
+
+                return $copy;
             }
 
             $copy = clone $record;
             $body = str_ireplace(
                 ['t3://page?uid=85', 't3://page?uid=88#c436'],
                 ['https://aimeos.com/aimeos-gmbh/contact', 'https://aimeos.com/extensions#c436'],
-                $body,
+                $cleaned,
             );
             $copy->bodytext = (string) preg_replace(
                 '/class=(["\'])container\1/i',
