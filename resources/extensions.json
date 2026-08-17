@@ -1,0 +1,130 @@
+[
+    {
+        "code": "ai-payments",
+        "title": "Payments",
+        "text": "Omnipay PHP library integration with 100+ drivers for payment providers world-wide",
+        "url": "https://packagist.org/packages/aimeos/ai-payments",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/c/1/c103e5f7137eaf1158ea0e4446d2ba69.svg",
+        "icon_alt": "Payments"
+    },
+    {
+        "code": "ai-theme-berlin",
+        "title": "Theme Berlin",
+        "text": "High quality Aimeos theme from the creators of Aimeos. For Aimeos Laravel 2022.04 and later.",
+        "url": "https://aimeos.com/extensions#c759",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/0/e/0ed41aa3c19b2467f9afac2562561d31.png",
+        "icon_alt": "Aimeos Theme Berlin"
+    },
+    {
+        "code": "ai-sites",
+        "title": "Market place and complex B2B",
+        "text": "Build your own market place with vendor shops or complex portal or reseller solutions (B2B/B2C)",
+        "url": "https://aimeos.com/extensions#c436",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/2/6/267f3ccd86174aec33e3f5ee3174ed19.svg",
+        "icon_alt": "Marketplace and B2B"
+    },
+    {
+        "code": "ai-elastic",
+        "title": "ElasticSearch",
+        "text": "#gigacommerce with 1,000,000,000+ products by storing products exclusively in ElasticSearch",
+        "url": "https://aimeos.com/extensions#c435",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/1/5/1572e18b03545e73af4c6433818933b9.svg",
+        "icon_alt": "ElasticSearch"
+    },
+    {
+        "code": "ai-vatcheck",
+        "title": "VAT Calculation",
+        "text": "Check global VAT IDs and calculate VAT for customers in different countries (B2B and B2C)",
+        "url": "https://aimeos.com/extensions#c438",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/9/0/90da2c15f3f1326f4d802a831fa875b7.svg",
+        "icon_alt": "VAT calculation"
+    },
+    {
+        "code": "ai-customergroups",
+        "title": "Customer groups",
+        "text": "Limit prices, products, categories, services, etc. to customer groups or single customers",
+        "url": "https://aimeos.com/extensions#c437",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/a/9/a93b64557bf03b0c43a32c59c325fe0a.svg",
+        "icon_alt": "Customer groups"
+    },
+    {
+        "code": "ai-solr",
+        "title": "Solr",
+        "text": "Ultra fast searching and filtering huge product catalogs using a separate Solr index",
+        "url": "https://aimeos.com/extensions#c606",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/5/e/5eea44fe80dae28506812d09a2942fc1.svg",
+        "icon_alt": "Solr search"
+    },
+    {
+        "code": "ai-stripe-marketplace",
+        "title": "Stripe Payments For Marketplaces",
+        "text": "Stripe payments for marketplaces incl. vendor payouts and customizable commission handling",
+        "url": "https://aimeos.com/extensions#c750",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/d/5/d579bee52a17b0425c64427e8c65c5b3.svg",
+        "icon_alt": "Stripe payments for marketplaces"
+    },
+    {
+        "code": "ai-mangopay",
+        "title": "Mangopay - Payments For Marketplaces",
+        "text": "Mangopay payments for marketplaces incl. vendor payouts and commission handling",
+        "url": "https://aimeos.com/extensions#c757",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/6/b/6b136d8a13ca9e997de0cbc2840d24f9.svg",
+        "icon_alt": "Mangopay payments for marketplaces"
+    },
+    {
+        "code": "cms",
+        "title": "CMS",
+        "text": "Sophisticated CMS extension based on GrapesJS with custom blocks and drag&drop",
+        "url": "https://packagist.org/packages/aimeos/ai-cms-grapesjs",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/2/d/2ddcdf096e26f775f7b9fc56742fcc0c.svg",
+        "icon_alt": "CMS"
+    },
+    {
+        "code": "ai-filesystem",
+        "title": "Filesystem",
+        "text": "Cloud storage and CDN support using the FlySystem PHP library for FTP, AWS, Azure, etc.",
+        "url": "https://packagist.org/packages/aimeos/ai-filesystem",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/1/4/149f48f29871df6238801897b0f3ce18.svg",
+        "icon_alt": "Cloud filesystem"
+    },
+    {
+        "code": "ai-cache",
+        "title": "Caching",
+        "text": "Advanced caching, offload HTML fragments to a separate Redis server instead of the database",
+        "url": "https://packagist.org/packages/aimeos/ai-cache",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/d/4/d462729ecc2cd79531415f2d8f48ca24.svg",
+        "icon_alt": "Caching"
+    },
+    {
+        "code": "ai-mqueue",
+        "title": "Message Queue",
+        "text": "Advanced message queueing, offload asynchronous task to RabbitMQ, Beanstalk or Stomp",
+        "url": "https://packagist.org/packages/aimeos/ai-mqueue",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/a/f/af921a63155e02bacddcabf1c86ba52d.svg",
+        "icon_alt": "Message queue"
+    },
+    {
+        "code": "ai-lexoffice",
+        "title": "Lexoffice integration",
+        "text": "Sends orders to the web API of the Lexoffice bookkeeping SaaS portal automatically",
+        "url": "https://github.com/aimeos/ai-lexoffice",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/c/3/c384c5032aca355c712d14f4c05d5696.svg",
+        "icon_alt": "Lexoffice integration"
+    },
+    {
+        "code": "ai-catsuggest",
+        "title": "Suggest categories",
+        "text": "Extends catalog/suggest component to display found categories together with products",
+        "url": "https://github.com/aimeos/ai-catsuggest",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/7/5/75278066c36f03e3698e1ae2bafd25b5.svg",
+        "icon_alt": "Category suggestions"
+    },
+    {
+        "code": "ai-woocommerce",
+        "title": "Woocommerce migration",
+        "text": "Migrate products, categories, brands and other data from Wordpress and Woocommerce to Aimeos",
+        "url": "https://packagist.org/packages/aimeos/ai-woocommerce",
+        "icon": "https://aimeos.org/uploads/tx_aimeos/preview/e/6/e68159779bbdd6009e36e13c6aeb124f.svg",
+        "icon_alt": "WooCommerce migration"
+    }
+]

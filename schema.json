@@ -188,6 +188,45 @@
                 }
             }
         },
+        "extension-catalog": {
+            "group": "content",
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M3 3h8v8H3V3m10 0h8v8h-8V3M3 13h8v8H3v-8m10 0h8v8h-8v-8Z\"/></svg>",
+            "fields": {
+                "details_label": {
+                    "type": "string",
+                    "min": 1
+                },
+                "items": {
+                    "type": "items",
+                    "min": 1,
+                    "item": {
+                        "code": {
+                            "type": "string",
+                            "min": 1
+                        },
+                        "title": {
+                            "type": "string",
+                            "min": 1
+                        },
+                        "text": {
+                            "type": "text",
+                            "min": 1
+                        },
+                        "url": {
+                            "type": "url",
+                            "required": true
+                        },
+                        "icon": {
+                            "type": "url",
+                            "required": true
+                        },
+                        "icon_alt": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "stats": {
             "group": "content",
             "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M4 19h16v2H4v-2m1-3 4-4 3 3 5-6 2 2-7 8-3-3-3 3-1-3Z\"/></svg>",

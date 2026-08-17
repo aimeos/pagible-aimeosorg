@@ -1,0 +1,134 @@
+/**
+ * @license MIT, https://opensource.org/license/MIT
+ */
+
+.type-page main .cms-content:has(> .extension-catalog) > * {
+    background-color: #FFFFFF;
+}
+
+.type-page main .cms-content:has(> .extension-catalog) > .heading:first-child > .container {
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+}
+
+.type-page main .cms-content:has(> .extension-catalog) > .extension-builder > .container {
+    padding-top: 1rem;
+    padding-bottom: 4rem;
+}
+
+.type-page main .cms-content:has(> .extension-catalog) > :has(.partnering) > .container {
+    padding-block: 4rem;
+}
+
+.type-page main .cms-content:has(> .extension-catalog) > .extension-catalog {
+    background-color: #F4F0EA;
+}
+
+.type-page main .cms-content > .extension-catalog > .container {
+    width: 100%;
+    max-width: 71.25rem;
+    padding-block: 4rem;
+}
+
+.extension-catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+    max-width: 62rem;
+    margin-inline: auto;
+}
+
+.extension-card {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: #FFFFFF;
+    box-shadow: none;
+}
+
+.extension-card > a {
+    display: flex;
+    min-height: 22rem;
+    padding: 2rem 1.5rem 1.5rem;
+    flex-direction: column;
+    align-items: center;
+    color: #103050;
+    text-align: center;
+    text-decoration: none;
+}
+
+.extension-card-icon {
+    display: flex;
+    width: 100%;
+    min-height: 7rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #D9D9D9;
+}
+
+.extension-card-icon img {
+    display: block;
+    width: auto;
+    max-width: 10rem;
+    height: auto;
+    max-height: 6rem;
+}
+
+.extension-card h2 {
+    margin: 0 0 1rem;
+    color: #103050;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.35;
+    text-transform: uppercase;
+}
+
+.extension-card p {
+    margin: 0 0 1.5rem;
+    color: #103050;
+    font-size: 0.78rem;
+    line-height: 1.55;
+}
+
+.extension-card .extension-details {
+    min-width: 8rem;
+    margin: auto 0 0;
+    padding: 0.55rem 1rem;
+    border-radius: 0;
+    background-color: #103050;
+    color: #FFFFFF;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.extension-card > a:hover .extension-details,
+.extension-card > a:focus-visible .extension-details {
+    background-color: #C99A3D;
+    color: #103050;
+}
+
+@media screen and (max-width: 991px) {
+    .extension-catalog-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 599px) {
+    .type-page main .cms-content > .extension-catalog > .container {
+        padding-block: 2rem;
+    }
+
+    .extension-catalog-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .extension-card > a {
+        min-height: 20rem;
+    }
+}

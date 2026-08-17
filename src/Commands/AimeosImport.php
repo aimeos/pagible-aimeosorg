@@ -316,6 +316,19 @@ class AimeosImport extends Command
             ];
         }
 
+        if ($extensions = $this->convertExtensionsPage($t3Page, $records)) {
+            $remaining = $this->buildContent($records->filter(
+                fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
+                    || (string) ($record->CType ?? '') === 'shortcut'
+            ));
+
+            return [
+                'elements' => array_merge($extensions['elements'], $remaining['elements']),
+                'fileIds' => array_values(array_unique(array_merge($extensions['fileIds'], $remaining['fileIds']))),
+                'elementIds' => $remaining['elementIds'],
+            ];
+        }
+
         return $this->buildContent($records);
     }
 
@@ -723,6 +736,150 @@ class AimeosImport extends Command
         $result = $this->rewriteHtmlFiles($html);
 
         return ['text' => $this->htmlToMarkdown($result['html']), 'fileIds' => $result['fileIds']];
+    }
+
+    /**
+     * Converts the legacy builder and catalog plugins on aimeos.org/extensions
+     * into native theme components.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return array{elements: array<int, array<string, mixed>>, fileIds: string[]}|null
+     */
+    protected function convertExtensionsPage(object $t3Page, Collection $records): ?array
+    {
+        if ($this->slugFromPath((string) ($t3Page->slug ?? '')) !== 'extensions') {
+            return null;
+        }
+
+        $records = $records->filter(
+            fn ($record) => ($record->_pagible_group ?? 'main') !== 'footer'
+        )->values();
+        $heading = $records->first(fn ($record) => (string) ($record->CType ?? '') === 'header'
+            && strcasecmp(trim((string) ($record->header ?? '')), 'Aimeos extensions') === 0);
+        $actions = $records->first(fn ($record) => (string) ($record->CType ?? '') === 'html'
+            && str_contains((string) ($record->bodytext ?? ''), 'createext'));
+        $hints = $records->first(fn ($record) => (string) ($record->CType ?? '') === 'html'
+            && str_contains((string) ($record->bodytext ?? ''), 'class="hints"'));
+        $builder = $records->first(fn ($record) => (string) ($record->CType ?? '') === 'list'
+            && (string) ($record->list_type ?? '') === 'extbuilder_extbuilder');
+        $catalog = $records->first(fn ($record) => (string) ($record->CType ?? '') === 'list'
+            && (string) ($record->list_type ?? '') === 'aimeos_catalog-list');
+
+        if (! $heading || ! $actions || ! $hints || ! $builder || ! $catalog) {
+            return null;
+        }
+
+        $actionsResult = $this->rewriteHtmlFiles((string) ($actions->bodytext ?? ''));
+        $createLabel = $this->extensionClassText($actionsResult['html'], 'createext');
+        $submitLabel = $this->extensionClassText($actionsResult['html'], 'submitext');
+        preg_match('/<a\b[^>]*\bhref\s*=\s*(["\'])(.*?)\1/is', $actionsResult['html'], $submitUrl);
+
+        if ($createLabel === '' || $submitLabel === '' || empty($submitUrl[2])) {
+            return null;
+        }
+
+        $hintsHtml = (string) ($hints->bodytext ?? '');
+        $hintsHtml = (string) preg_replace('/<h[1-6]\b[^>]*>.*?<\/h[1-6]>/is', '', $hintsHtml, 1);
+        $text = $this->contactMarkdown($hintsHtml);
+        $submitUrl = preg_replace('/#.*$/', '', html_entity_decode(
+            trim($submitUrl[2]),
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8',
+        )) ?: '/contact';
+
+        return ['elements' => [
+            [
+                'id' => Utils::uid(),
+                'type' => 'heading',
+                'group' => 'main',
+                'data' => [
+                    'level' => $this->headerLevel($heading->header_layout), // @phpstan-ignore property.notFound
+                    'title' => (string) $heading->header,
+                ],
+            ],
+            [
+                'id' => Utils::uid(),
+                'type' => 'extension-builder',
+                'group' => 'main',
+                'data' => [
+                    'title' => (string) ($hints->header ?: 'Create your own extension'),
+                    'text' => $text['text'],
+                    'create_label' => $createLabel,
+                    'submit_label' => $submitLabel,
+                    'submit_url' => $submitUrl,
+                    'name_label' => 'Project name *',
+                    'type_label' => 'Package type *',
+                    'download_label' => 'Download',
+                ],
+            ],
+            [
+                'id' => Utils::uid(),
+                'type' => 'extension-catalog',
+                'group' => 'main',
+                'data' => [
+                    'details_label' => 'Details',
+                    'items' => $this->extensionCatalog(),
+                ],
+            ],
+        ], 'fileIds' => array_values(array_unique(array_merge(
+            $actionsResult['fileIds'],
+            $text['fileIds'],
+        )))];
+    }
+
+    /**
+     * Returns the plain text inside an element carrying the given CSS class.
+     */
+    protected function extensionClassText(string $html, string $class): string
+    {
+        $class = preg_quote($class, '/');
+
+        if (! preg_match('/<[^>]*\bclass\s*=\s*(["\'])[^"\']*\b'.$class.'\b[^"\']*\1[^>]*>(.*?)<\/[^>]+>/is',
+            $html, $match)) {
+            return '';
+        }
+
+        return trim((string) preg_replace('/\s+/u', ' ', html_entity_decode(
+            strip_tags($match[2]),
+            ENT_QUOTES | ENT_HTML5,
+            'UTF-8',
+        )));
+    }
+
+    /**
+     * Returns the theme-owned extension catalog used when the legacy Aimeos
+     * product database isn't part of the TYPO3 page export.
+     *
+     * @return array<int, array{code: string, title: string, text: string, url: string, icon: string, icon_alt: string}>
+     */
+    protected function extensionCatalog(): array
+    {
+        $path = dirname(__DIR__, 2).'/resources/extensions.json';
+        $json = file_get_contents($path);
+
+        if ($json === false) {
+            throw new \RuntimeException('Unable to read the extension catalog manifest.');
+        }
+
+        $items = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+
+        if (! is_array($items)) {
+            throw new \RuntimeException('Invalid extension catalog manifest.');
+        }
+
+        foreach ($items as $item) {
+            if (! is_array($item)
+                || preg_match('/^[a-z0-9-]+$/', (string) ($item['code'] ?? '')) !== 1
+                || trim((string) ($item['title'] ?? '')) === ''
+                || trim((string) ($item['text'] ?? '')) === ''
+                || filter_var($item['url'] ?? null, FILTER_VALIDATE_URL) === false
+                || filter_var($item['icon'] ?? null, FILTER_VALIDATE_URL) === false) {
+                throw new \RuntimeException('Invalid extension catalog item.');
+            }
+        }
+
+        /** @var array<int, array{code: string, title: string, text: string, url: string, icon: string, icon_alt: string}> $items */
+        return array_values($items);
     }
 
     /**
