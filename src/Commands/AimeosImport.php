@@ -229,9 +229,10 @@ class AimeosImport extends Command
             $filesBefore = clone $this->createdFiles;
             $urlsBefore = clone $this->createdFileUrls;
             $this->contentUid = (string) ($record->uid ?? '?');
+            $group = (string) ($record->_pagible_group ?? 'main');
 
             try {
-                $result = DB::connection(config('cms.db', 'sqlite'))->transaction(function () use ($record, $filesBefore) {
+                $result = DB::connection(config('cms.db', 'sqlite'))->transaction(function () use ($record, $filesBefore, $group) {
                     try {
                         $result = $this->convertContentElement($record);
 
@@ -240,7 +241,7 @@ class AimeosImport extends Command
                         }
 
                         foreach ($result['elements'] as &$element) {
-                            $element['group'] = 'main';
+                            $element['group'] = $group;
                         }
                         unset($element);
 
@@ -258,7 +259,7 @@ class AimeosImport extends Command
                                 $result['fileIds'] ?? [],
                                 $position,
                             );
-                            $references[] = ['type' => 'reference', 'refid' => $id, 'group' => 'main'];
+                            $references[] = ['type' => 'reference', 'refid' => $id, 'group' => $group];
                             $elementIds[] = $id;
                         }
 
@@ -641,6 +642,7 @@ class AimeosImport extends Command
         if ($placement) {
             $copy->colPos = (int) ($placement->colPos ?? $copy->colPos ?? 0);
             $copy->sorting = (int) ($placement->sorting ?? $copy->sorting ?? 0);
+            $copy->_pagible_group = (string) ($placement->_pagible_group ?? $copy->_pagible_group ?? 'main');
         }
 
         if ($kind !== '') {
@@ -889,6 +891,10 @@ class AimeosImport extends Command
      */
     protected function convertText(object $record): ?array
     {
+        if (($record->_pagible_group ?? 'main') === 'footer') {
+            return $this->convertFooterText($record);
+        }
+
         $elements = [];
         $fileIds = [];
 
@@ -923,6 +929,51 @@ class AimeosImport extends Command
         }
 
         return ['elements' => $elements, 'fileIds' => array_values(array_unique($fileIds))];
+    }
+
+    /**
+     * Converts a TYPO3 footer text record into one column block.
+     *
+     * @return array{elements: array<int, array<string, mixed>>, fileIds: string[]}|null
+     */
+    protected function convertFooterText(object $record): ?array
+    {
+        $header = trim((string) ($record->header ?? ''));
+        $body = trim((string) ($record->bodytext ?? ''));
+
+        if ($header === '' && $body === '') {
+            return null;
+        }
+
+        $fileIds = [];
+        $classes = ['footer-links'];
+        $html = '';
+
+        if ($header !== '' && ($record->header_layout ?? '0') !== '100') {
+            $level = $this->headerLevel($record->header_layout); // @phpstan-ignore property.notFound
+            $classes[] = 'footer-'.Utils::slugify($header);
+            $html .= sprintf(
+                '<h%d>%s</h%d>',
+                $level,
+                htmlspecialchars($header, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+                $level,
+            );
+        }
+
+        if ($body !== '') {
+            $result = $this->rewriteHtmlFiles($body);
+            $html .= $result['html'];
+            $fileIds = $result['fileIds'];
+        }
+
+        $html = sprintf('<div class="%s">%s</div>', implode(' ', $classes), $html);
+
+        return ['elements' => [[
+            'id' => Utils::uid(),
+            'type' => 'html',
+            'group' => 'footer',
+            'data' => ['text' => Utils::html($html)],
+        ]], 'fileIds' => array_values(array_unique($fileIds))];
     }
 
     /**
@@ -1757,10 +1808,16 @@ class AimeosImport extends Command
     {
         $pageUid = (int) ($t3Page->uid ?? 0);
         $contentPageUid = $this->contentSourcePageUid($t3Page);
+        $groups = $this->sourceLayoutGroups($t3Page);
         $records = $this->sortRecordsBySourceLayout(
             $contentElements->get($contentPageUid, Collection::make()),
             $t3Page,
-        );
+        )->map(function ($record) use ($groups) {
+            $record = clone $record;
+            $record->_pagible_group = $groups[(int) ($record->colPos ?? 0)] ?? 'main';
+
+            return $record;
+        });
 
         return $contentPageUid === $pageUid
             ? $records
@@ -1848,6 +1905,41 @@ class AimeosImport extends Command
      */
     protected function sourceLayoutColumns(object $t3Page): array
     {
+        preg_match_all('/\bcolPos\s*=\s*(-?\d+)/i', $this->sourceLayoutConfig($t3Page), $matches);
+
+        return array_values(array_unique(array_map('intval', $matches[1] ?? [])));
+    }
+
+    /**
+     * Returns Pagible content groups keyed by TYPO3 backend-layout column.
+     *
+     * @return array<int, string>
+     */
+    protected function sourceLayoutGroups(object $t3Page): array
+    {
+        preg_match_all(
+            '/\bname\s*=\s*([^\r\n]+)\R\s*colPos\s*=\s*(-?\d+)/i',
+            $this->sourceLayoutConfig($t3Page),
+            $matches,
+            PREG_SET_ORDER,
+        );
+
+        $groups = [];
+
+        foreach ($matches as $match) {
+            if (str_contains(strtolower(trim($match[1])), 'footer')) {
+                $groups[(int) $match[2]] = 'footer';
+            }
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Returns the resolved TYPO3 backend-layout configuration for a page.
+     */
+    protected function sourceLayoutConfig(object $t3Page): string
+    {
         $layout = trim((string) ($t3Page->backend_layout ?? ''));
 
         if ($layout === '') {
@@ -1870,7 +1962,7 @@ class AimeosImport extends Command
             }
         }
 
-        $config = match (true) {
+        return match (true) {
             str_starts_with($layout, 'pagets__') => $this->pageTsBackendLayout(
                 $t3Page,
                 substr($layout, strlen('pagets__'))
@@ -1880,10 +1972,6 @@ class AimeosImport extends Command
             )?->config ?? ''),
             default => '',
         };
-
-        preg_match_all('/\bcolPos\s*=\s*(-?\d+)/i', $config, $matches);
-
-        return array_values(array_unique(array_map('intval', $matches[1] ?? [])));
     }
 
     /**
