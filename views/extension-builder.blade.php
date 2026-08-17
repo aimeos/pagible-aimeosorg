@@ -21,7 +21,7 @@
             <div class="cms-text">@markdown($data->text)</div>
         @endif
 
-        <form action="{{ route('aimeos.api.extension-builder') }}" method="POST">
+        <form action="{{ cmsroute('aimeos.api.extension-builder') }}" method="POST">
             <input type="hidden" name="_token" value="">
             <div class="extension-builder-fields">
                 <div class="extension-builder-field">
