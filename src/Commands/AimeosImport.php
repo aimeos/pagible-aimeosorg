@@ -781,6 +781,7 @@ class AimeosImport extends Command
         $hintsHtml = (string) ($hints->bodytext ?? '');
         $hintsHtml = (string) preg_replace('/<h[1-6]\b[^>]*>.*?<\/h[1-6]>/is', '', $hintsHtml, 1);
         $text = $this->contactMarkdown($hintsHtml);
+        $catalogContent = $this->importExtensionCatalog();
         $submitUrl = preg_replace('/#.*$/', '', html_entity_decode(
             trim($submitUrl[2]),
             ENT_QUOTES | ENT_HTML5,
@@ -818,12 +819,13 @@ class AimeosImport extends Command
                 'group' => 'main',
                 'data' => [
                     'details_label' => 'Details',
-                    'items' => $this->extensionCatalog(),
+                    'items' => $catalogContent['items'],
                 ],
             ],
         ], 'fileIds' => array_values(array_unique(array_merge(
             $actionsResult['fileIds'],
             $text['fileIds'],
+            $catalogContent['fileIds'],
         )))];
     }
 
@@ -880,6 +882,51 @@ class AimeosImport extends Command
 
         /** @var array<int, array{code: string, title: string, text: string, url: string, icon: string, icon_alt: string}> $items */
         return array_values($items);
+    }
+
+    /**
+     * Imports catalog icons into managed storage and returns renderable items.
+     * Existing importer-owned files are reused on later page imports.
+     *
+     * @return array{items: array<int, array<string, mixed>>, fileIds: string[]}
+     */
+    protected function importExtensionCatalog(): array
+    {
+        $items = [];
+        $fileIds = [];
+
+        foreach ($this->extensionCatalog() as $item) {
+            $icon = (string) $item['icon'];
+            $extension = strtolower((string) pathinfo((string) parse_url($icon, PHP_URL_PATH), PATHINFO_EXTENSION));
+            $name = 'extension-catalog-'.$item['code'].'.'.$extension;
+            $file = File::withTrashed()->where('editor', $this->editor)->where('name', $name)->first();
+            $id = null;
+
+            if ($file) {
+                if ($file->trashed()) {
+                    $file->restore();
+                }
+
+                $id = (string) $file->id;
+            } else {
+                $id = $this->importFileSafely(fn () => $this->createFile(
+                    $this->normalizeMime('', $extension),
+                    $name,
+                    $icon,
+                ));
+            }
+
+            unset($item['icon']);
+
+            if ($id) {
+                $item['file'] = ['id' => $id, 'type' => 'file'];
+                $fileIds[] = $id;
+            }
+
+            $items[] = $item;
+        }
+
+        return ['items' => $items, 'fileIds' => array_values(array_unique($fileIds))];
     }
 
     /**

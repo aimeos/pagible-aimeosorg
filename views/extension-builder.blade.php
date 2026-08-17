@@ -4,7 +4,7 @@
 @endPushOnce
 
 @php($builderId = 'extension-builder-'.($data->id ?? cms($page, 'id')))
-<div class="extension-builder">
+<div class="extension-builder-component">
     <div class="extension-builder-actions">
         <button type="button" class="btn btn-primary createext" aria-expanded="false" aria-controls="{{ cmsattr($builderId) }}">
             {{ $data->create_label ?? 'Create own extension' }}

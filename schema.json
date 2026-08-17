@@ -216,9 +216,9 @@
                             "type": "url",
                             "required": true
                         },
-                        "icon": {
-                            "type": "url",
-                            "required": true
+                        "file": {
+                            "type": "image",
+                            "label": "Icon"
                         },
                         "icon_alt": {
                             "type": "string"
