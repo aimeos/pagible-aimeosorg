@@ -329,7 +329,71 @@ class AimeosImport extends Command
             ];
         }
 
-        return $this->buildContent($records);
+        return $this->buildContent($this->prepareB2bPageRecords($t3Page, $records));
+    }
+
+    /**
+     * Adds the structural markers used by the Aimeos B2B landing-page theme.
+     * TYPO3 stores the stage and final call to action in separate records.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return Collection<int|string, mixed>
+     */
+    protected function prepareB2bPageRecords(object $t3Page, Collection $records): Collection
+    {
+        if ($this->slugFromPath((string) ($t3Page->slug ?? '')) !== 'b2b-ecommerce') {
+            return $records;
+        }
+
+        return $records->map(function ($record) {
+            if (($record->_pagible_group ?? 'main') === 'footer') {
+                return $record;
+            }
+
+            $copy = clone $record;
+            $body = str_ireplace(
+                't3://page?uid=85',
+                'https://aimeos.com/aimeos-gmbh/contact',
+                (string) ($copy->bodytext ?? ''),
+            );
+
+            if ((string) ($copy->CType ?? '') === 'html'
+                && str_contains($body, 'class="landing welcome"')
+                && str_contains($body, 'B2B eCommerce')) {
+                $body = (string) preg_replace(
+                    '/class=(["\'])landing\s+welcome\1/i',
+                    'class=$1landing welcome b2b-welcome$1',
+                    $body,
+                    1,
+                );
+            } elseif ((string) ($copy->CType ?? '') === 'html'
+                && str_contains($body, 'B2B.png')
+                && preg_match('/<img\b[^>]*class=(["\'])[^"\']*\blogo\b[^"\']*\1/i', $body)) {
+                $body = '<div class="landing b2b-logo">'.$body.'</div>';
+            } elseif ((string) ($copy->CType ?? '') === 'text'
+                && str_contains($body, 'Build complex B2B eCommerce platforms')) {
+                $body = '<div class="b2b-intro">'.$body.'</div>';
+            } elseif ((string) ($copy->CType ?? '') === 'html'
+                && str_contains($body, 'Want to know more?')) {
+                $body = (string) preg_replace(
+                    '/class=(["\'])container\1/i',
+                    'class=$1container b2b-more$1',
+                    $body,
+                    1,
+                );
+            } elseif ((string) ($copy->CType ?? '') === 'text'
+                && strcasecmp(trim((string) ($copy->header ?? '')), 'Get free consulting now!') === 0) {
+                $header = htmlspecialchars((string) $copy->header, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $copy->CType = 'html';
+                $copy->header = '';
+                $copy->header_layout = '100';
+                $body = '<div class="b2b-consulting"><h2>'.$header.'</h2>'.$body.'</div>';
+            }
+
+            $copy->bodytext = $body;
+
+            return $copy;
+        });
     }
 
     /**
