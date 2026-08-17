@@ -400,7 +400,7 @@ class AimeosImport extends Command
     }
 
     /**
-     * Restores the final marketplace contact band and its aimeos.com links.
+     * Restores the marketplace demo/contact bands and their aimeos.com links.
      *
      * @param  Collection<int|string, mixed>  $records
      * @return Collection<int|string, mixed>
@@ -415,10 +415,17 @@ class AimeosImport extends Command
             $body = (string) ($record->bodytext ?? '');
 
             if (($record->_pagible_group ?? 'main') === 'footer'
-                || (string) ($record->CType ?? '') !== 'html'
-                || ! str_contains($body, 'Want to know more?')
-                || ! str_contains($body, '>Contact</link>')
-                || ! str_contains($body, '>Pricing</link>')) {
+                || (string) ($record->CType ?? '') !== 'html') {
+                return $record;
+            }
+
+            $demo = str_contains($body, 'Want to see a demo?')
+                && str_contains($body, '>Request access</link>');
+            $contact = str_contains($body, 'Want to know more?')
+                && str_contains($body, '>Contact</link>')
+                && str_contains($body, '>Pricing</link>');
+
+            if (! $demo && ! $contact) {
                 return $record;
             }
 
@@ -430,7 +437,7 @@ class AimeosImport extends Command
             );
             $copy->bodytext = (string) preg_replace(
                 '/class=(["\'])container\1/i',
-                'class=$1container marketplace-contact$1',
+                'class=$1container '.($demo ? 'marketplace-demo' : 'marketplace-contact').'$1',
                 $body,
                 1,
             );
