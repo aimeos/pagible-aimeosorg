@@ -5,12 +5,11 @@ builder and TYPO3 importer for [Pagible CMS](https://pagible.com).
 
 It contains the theme schema, Blade views, public assets, the ZIP generator,
 its download route, the supported Aimeos, Laravel and TYPO3 extension
-templates, and the Aimeos.org TYPO3 migration command.
+templates, and a generic TYPO3 migration command.
 
 ## Requirements
 
 - PHP 8.2 or newer
-- PHP DOM extension
 - PHP ZIP extension
 - `aimeos/pagible-core` 0.12
 - `aimeos/pagible-theme` 0.12
@@ -56,19 +55,25 @@ all pages for the selected TYPO3 domain:
 ```bash
 php artisan aimeos:import \
     --connection=typo3 \
-    --domain=aimeos.org:1 \
-    --theme=aimeos \
-    --file-base=https://aimeos.org/fileadmin
+    --domain=example.org:1 \
+    --theme=your-theme \
+    --file-base=https://example.org/fileadmin
 ```
 
 Use one or more `--page` options to re-import only selected TYPO3 page IDs:
 
 ```bash
-php artisan aimeos:import --connection=typo3 --domain=aimeos.org:1 --page=106
+php artisan aimeos:import --connection=typo3 --domain=example.org:1 --page=106
 ```
 
 Add `--dry-run` to inspect the selected pages without creating or updating
 Pagible content. Run `php artisan help aimeos:import` for all options.
+
+The importer handles TYPO3 pages, redirects, shared content references and the
+stock header, text, text-with-image, image, HTML and shortcut elements. It also
+converts Bootstrap Package accordions and carousels. Unknown content types are
+imported only when they contain a regular heading or body text; extension-
+specific plugin behavior is not migrated.
 
 ## Theme contents
 

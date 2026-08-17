@@ -8,11 +8,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "ext-dom": "*",
         "ext-zip": "*",
-        "aimeos/pagible-core": "^0.12",
-        "aimeos/pagible-theme": "^0.12",
-        "guzzlehttp/psr7": "^2.6"
+        "aimeos/pagible-core": "dev-master",
+        "aimeos/pagible-theme": "dev-master"
     },
     "autoload": {
         "psr-4": {
