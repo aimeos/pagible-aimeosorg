@@ -329,7 +329,10 @@ class AimeosImport extends Command
             ];
         }
 
-        return $this->buildContent($this->prepareB2bPageRecords($t3Page, $records));
+        $records = $this->prepareB2bPageRecords($t3Page, $records);
+        $records = $this->prepareMarketplacePageRecords($t3Page, $records);
+
+        return $this->buildContent($records);
     }
 
     /**
@@ -391,6 +394,46 @@ class AimeosImport extends Command
             }
 
             $copy->bodytext = $body;
+
+            return $copy;
+        });
+    }
+
+    /**
+     * Restores the final marketplace contact band and its aimeos.com links.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return Collection<int|string, mixed>
+     */
+    protected function prepareMarketplacePageRecords(object $t3Page, Collection $records): Collection
+    {
+        if ($this->slugFromPath((string) ($t3Page->slug ?? '')) !== 'laravel-marketplace-ecommerce') {
+            return $records;
+        }
+
+        return $records->map(function ($record) {
+            $body = (string) ($record->bodytext ?? '');
+
+            if (($record->_pagible_group ?? 'main') === 'footer'
+                || (string) ($record->CType ?? '') !== 'html'
+                || ! str_contains($body, 'Want to know more?')
+                || ! str_contains($body, '>Contact</link>')
+                || ! str_contains($body, '>Pricing</link>')) {
+                return $record;
+            }
+
+            $copy = clone $record;
+            $body = str_ireplace(
+                ['t3://page?uid=85', 't3://page?uid=88#c436'],
+                ['https://aimeos.com/aimeos-gmbh/contact', 'https://aimeos.com/extensions#c436'],
+                $body,
+            );
+            $copy->bodytext = (string) preg_replace(
+                '/class=(["\'])container\1/i',
+                'class=$1container marketplace-contact$1',
+                $body,
+                1,
+            );
 
             return $copy;
         });
