@@ -1773,6 +1773,14 @@ footer.cms-content .intouch .text {
     background-size: 100%, 100%, cover;
 }
 
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.marketplace-demo) > .container {
+    max-width: 1140px !important;
+    padding: 4em 20px;
+    font-size: 16px;
+    line-height: 1.5;
+    text-align: center;
+}
+
 .type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.marketplace-contact) {
     background-color: #FFFFFF;
     background-image: url("triangle.svg"), url("background-light-small.jpg");
@@ -1781,7 +1789,6 @@ footer.cms-content .intouch .text {
     background-size: 100%, cover;
 }
 
-.marketplace-demo h2,
 .marketplace-contact h2 {
     margin-bottom: 1rem;
     font-size: clamp(1.75rem, 3vw, 2.5rem);
@@ -1789,13 +1796,29 @@ footer.cms-content .intouch .text {
     text-transform: none;
 }
 
-.marketplace-demo .lead {
-    max-width: 34rem;
-    margin: 1rem auto;
-    font-size: calc(var(--pico-font-size) * 1.35);
+.marketplace-demo {
+    width: 100%;
+    max-width: 1140px !important;
+    margin-inline: auto;
+    padding: 4em 15px;
 }
 
-.marketplace-demo p.landing,
+.marketplace-demo h2 {
+    margin: 0 0 0.5rem;
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-transform: none;
+}
+
+.marketplace-demo .lead {
+    max-width: 34em;
+    margin: 16px auto;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
 .marketplace-contact p.landing {
     display: flex;
     flex-wrap: wrap;
@@ -1803,10 +1826,39 @@ footer.cms-content .intouch .text {
     gap: 1rem;
 }
 
-.marketplace-demo .btn,
 .marketplace-contact .btn {
     min-width: 10rem;
     margin: 0.5rem 0;
+}
+
+.marketplace-demo p.landing {
+    display: block;
+    margin: 0 0 1rem;
+}
+
+.marketplace-demo .btn {
+    width: 100%;
+    min-width: 8em;
+    max-width: 11.5em;
+    margin: 0.5em;
+    padding: 0.75em;
+    border: 1px solid #103050;
+    border-radius: 0;
+    color: #FFFFFF;
+    background-color: #103050;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.marketplace-demo .btn:hover,
+.marketplace-demo .btn:focus {
+    border-color: #103050;
+    color: #103050;
+    background-color: transparent;
 }
 
 /* FAQ heading and accordion form one visual section in the source page. */
