@@ -43,7 +43,7 @@
             <h2>{{ $data->contact_title ?? '' }}</h2>
             <div class="contact-introduction">@markdown($data->contact_text ?? '')</div>
 
-            <form action="{{ route('cms.api.contact') }}" method="POST" aria-describedby="contact-errors-{{ $formId }}" toolname="contact" tooldescription="{{ __('Send a message to the site owner through the contact form') }}">
+            <form action="{{ route('cms.api.contact', cmsrouteparams()) }}" method="POST" aria-describedby="contact-errors-{{ $formId }}" toolname="contact" tooldescription="{{ __('Send a message to the site owner through the contact form') }}">
                 <input type="hidden" name="_token" value="">
                 <input type="hidden" name="source" value="{{ cmsroute($page) }}">
 
