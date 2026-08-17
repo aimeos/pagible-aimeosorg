@@ -296,6 +296,30 @@ class AimeosImport extends Command
     }
 
     /**
+     * Builds page content, using page-level converters when a theme component
+     * represents a group of related TYPO3 content records.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return array{elements: array<int, array<string, mixed>>, fileIds: string[], elementIds: string[]}
+     */
+    protected function buildPageContent(object $t3Page, Collection $records): array
+    {
+        if ($contact = $this->convertContactPage($t3Page, $records)) {
+            $footer = $this->buildContent($records->filter(
+                fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
+            ));
+
+            return [
+                'elements' => array_merge($contact['elements'], $footer['elements']),
+                'fileIds' => array_values(array_unique(array_merge($contact['fileIds'], $footer['fileIds']))),
+                'elementIds' => $footer['elementIds'],
+            ];
+        }
+
+        return $this->buildContent($records);
+    }
+
+    /**
      * Creates or updates one reusable Pagible element for a referenced TYPO3 item.
      *
      * @param  array<string, mixed>  $element
@@ -521,6 +545,184 @@ class AimeosImport extends Command
             'shortcut' => $this->convertShortcut($record),
             default => $this->convertDefault($record),
         };
+    }
+
+    /**
+     * Converts the legacy aimeos.org contact content columns into the contact
+     * page component instead of exposing the obsolete TYPO3 form TypoScript.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return array{elements: array<int, array<string, mixed>>, fileIds: string[]}|null
+     */
+    protected function convertContactPage(object $t3Page, Collection $records): ?array
+    {
+        if ($this->slugFromPath((string) ($t3Page->slug ?? '')) !== 'contact') {
+            return null;
+        }
+
+        $records = $records->filter(
+            fn ($record) => ($record->_pagible_group ?? 'main') !== 'footer'
+        )->values();
+
+        $informed = $this->contactRecord($records, 'header', 'Stay informed');
+        $support = $this->contactRecord($records, 'header', 'Help & Support');
+        $contact = $this->contactRecord($records, 'text', 'Contact Us');
+        $imprint = $this->contactRecord($records, 'text', 'Imprint');
+        $privacy = $this->contactRecord($records, 'text', 'Privacy policy');
+        $creditsTitle = $this->contactRecord($records, 'header', 'Credits');
+        $form = $records->first(
+            fn ($record) => (string) ($record->CType ?? '') === 'form_formframework'
+        );
+        $informedSource = $this->contactRecordAfter($records, $informed, 'html');
+        $supportSource = $this->contactRecordAfter($records, $support, 'html');
+        $credits = $this->contactRecordAfter($records, $creditsTitle, 'html');
+
+        if (! $informed || ! $support || ! $contact || ! $form || ! $imprint || ! $privacy
+            || ! $creditsTitle || ! $informedSource || ! $supportSource || ! $credits) {
+            return null;
+        }
+
+        $informedLinks = $this->contactLinks((string) ($informedSource->bodytext ?? ''));
+        $supportLinks = $this->contactLinks((string) ($supportSource->bodytext ?? ''));
+
+        if ($informedLinks['links'] === [] || $supportLinks['links'] === []) {
+            return null;
+        }
+
+        $contactHtml = (string) ($contact->bodytext ?? '');
+        $privacyHtml = (string) ($privacy->bodytext ?? '');
+
+        if ($privacyUrl = $this->contactPrivacyUrl($privacyHtml)) {
+            $contactHtml = (string) preg_replace_callback(
+                '/\bhref\s*=\s*(["\'])(t3:\/\/page\?.*?)\1/is',
+                fn (array $matches) => 'href='.$matches[1]
+                    .htmlspecialchars($privacyUrl, ENT_QUOTES | ENT_HTML5, 'UTF-8').$matches[1],
+                $contactHtml,
+            );
+        }
+
+        $contactText = $this->contactMarkdown($contactHtml);
+        $imprintText = $this->contactMarkdown((string) ($imprint->bodytext ?? ''));
+        $privacyText = $this->contactMarkdown($privacyHtml);
+        $creditsText = $this->contactMarkdown((string) ($credits->bodytext ?? ''));
+        $fileIds = array_merge(
+            $informedLinks['fileIds'],
+            $supportLinks['fileIds'],
+            $contactText['fileIds'],
+            $imprintText['fileIds'],
+            $privacyText['fileIds'],
+            $creditsText['fileIds'],
+        );
+
+        return ['elements' => [[
+            'id' => Utils::uid(),
+            'type' => 'contact-page',
+            'group' => 'main',
+            'data' => [
+                'informed_title' => (string) $informed->header,
+                'informed_links' => $informedLinks['links'],
+                'support_title' => (string) $support->header,
+                'support_links' => $supportLinks['links'],
+                'contact_title' => (string) $contact->header,
+                'contact_text' => $contactText['text'],
+                'form_title' => 'Your personal data',
+                'mandatory_text' => '* Mandatory fields',
+                'imprint_title' => (string) $imprint->header,
+                'imprint_text' => $imprintText['text'],
+                'privacy_title' => (string) $privacy->header,
+                'privacy_text' => $privacyText['text'],
+                'credits_title' => (string) $creditsTitle->header,
+                'credits_text' => $creditsText['text'],
+            ],
+        ]], 'fileIds' => array_values(array_unique($fileIds))];
+    }
+
+    /**
+     * Finds a contact page record by content type and heading.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     */
+    protected function contactRecord(Collection $records, string $type, string $header): ?object
+    {
+        return $records->first(fn ($record) => (string) ($record->CType ?? '') === $type
+            && strcasecmp(trim((string) ($record->header ?? '')), $header) === 0);
+    }
+
+    /**
+     * Finds the next record of a given type in the contact record's source column.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     */
+    protected function contactRecordAfter(Collection $records, ?object $record, string $type): ?object
+    {
+        if (! $record) {
+            return null;
+        }
+
+        $column = (int) ($record->colPos ?? 0);
+        $sorting = (int) ($record->sorting ?? 0);
+
+        return $records->first(fn ($candidate) => (string) ($candidate->CType ?? '') === $type
+            && (int) ($candidate->colPos ?? 0) === $column
+            && (int) ($candidate->sorting ?? 0) > $sorting);
+    }
+
+    /**
+     * Extracts the icon links used by the contact page's circular link lists.
+     *
+     * @return array{links: array<int, array{label: string, url: string, icon: string}>, fileIds: string[]}
+     */
+    protected function contactLinks(string $html): array
+    {
+        $result = $this->rewriteHtmlFiles($html);
+        preg_match_all('/<a\b([^>]*)>(.*?)<\/a>/is', $result['html'], $matches, PREG_SET_ORDER);
+        $links = [];
+        $icons = ['github', 'twitter', 'facebook', 'question', 'comments'];
+
+        foreach ($matches as $match) {
+            if (! preg_match('/\bhref\s*=\s*(["\'])(.*?)\1/is', $match[1], $url)
+                || ! preg_match('/\bfa-([a-z0-9-]+)\b/i', $match[2], $icon)) {
+                continue;
+            }
+
+            $label = trim((string) preg_replace('/\s+/u', ' ', html_entity_decode(
+                strip_tags($match[2]),
+                ENT_QUOTES | ENT_HTML5,
+                'UTF-8',
+            )));
+            $url = html_entity_decode(trim($url[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $icon = strtolower($icon[1]);
+
+            if ($label !== '' && $url !== '' && in_array($icon, $icons, true)) {
+                $links[] = ['label' => $label, 'url' => $url, 'icon' => $icon];
+            }
+        }
+
+        return ['links' => $links, 'fileIds' => $result['fileIds']];
+    }
+
+    /**
+     * Returns the first absolute privacy URL used by the legal information.
+     */
+    protected function contactPrivacyUrl(string $html): ?string
+    {
+        if (! preg_match('/\bhref\s*=\s*(["\'])(https?:\/\/.*?)\1/is', $html, $match)) {
+            return null;
+        }
+
+        return html_entity_decode(trim($match[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+
+    /**
+     * Rewrites imported files and TYPO3 links before storing rich text as Markdown.
+     *
+     * @return array{text: string, fileIds: string[]}
+     */
+    protected function contactMarkdown(string $html): array
+    {
+        $result = $this->rewriteHtmlFiles($html);
+
+        return ['text' => $this->htmlToMarkdown($result['html']), 'fileIds' => $result['fileIds']];
     }
 
     /**
@@ -1746,7 +1948,7 @@ class AimeosImport extends Command
         $pageData['tag'] = 'root';
         $records = $this->recordsForPage($t3Root, $contentElements);
         $pageData['theme'] = $this->theme;
-        $content = $this->buildContent($records);
+        $content = $this->buildPageContent($t3Root, $records);
         $page = $this->createRootPage($pageData, $content['elements'], $content['fileIds'], $content['elementIds']);
 
         $this->info("Created root page: {$t3Root->title} ({$domain})"); // @phpstan-ignore property.notFound
@@ -1819,9 +2021,39 @@ class AimeosImport extends Command
             return $record;
         });
 
-        return $contentPageUid === $pageUid
+        $records = $contentPageUid === $pageUid
             ? $records
             : $this->markSharedRecords($records, 'reference', $contentPageUid);
+
+        if ($records->contains(fn ($record) => ($record->_pagible_group ?? 'main') === 'footer')
+            || ! $this->t3Pages) {
+            return $records;
+        }
+
+        $root = $this->sourceRootPage($t3Page, $this->t3Pages);
+        $rootUid = (int) ($root->uid ?? 0);
+
+        if ($rootUid === 0 || $rootUid === $pageUid) {
+            return $records;
+        }
+
+        $rootContentUid = $this->contentSourcePageUid($root);
+        $rootGroups = $this->sourceLayoutGroups($root);
+        $footer = $this->sortRecordsBySourceLayout(
+            $contentElements->get($rootContentUid, Collection::make()),
+            $root,
+        )->map(function ($record) use ($rootGroups) {
+            $record = clone $record;
+            $record->_pagible_group = $rootGroups[(int) ($record->colPos ?? 0)] ?? 'main';
+
+            return $record;
+        })->filter(
+            fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
+        );
+
+        return $records->concat(
+            $this->markSharedRecords($footer, 'footer', $rootContentUid)
+        )->values();
     }
 
     /**
@@ -2272,7 +2504,7 @@ class AimeosImport extends Command
 
         $records = $this->recordsForPage($t3Page, $contentElements);
         $pageData['theme'] = $this->theme;
-        $content = $this->buildContent($records);
+        $content = $this->buildPageContent($t3Page, $records);
 
         if ($page) {
             $this->createVersion($page, $pageData, $content['elements'], $content['fileIds'], $content['elementIds']);
@@ -2399,7 +2631,7 @@ class AimeosImport extends Command
                             $pageData = $this->buildPageData($t3Page, $slug, $domain, $to);
                             $records = $this->recordsForPage($t3Page, $contentElements);
                             $pageData['theme'] = $this->theme;
-                            $content = $this->buildContent($records);
+                            $content = $this->buildPageContent($t3Page, $records);
 
                             $page = $this->createPage($pageData, $content['elements'], $parentPage);
                             $this->createVersion($page, $pageData, $content['elements'], $content['fileIds'], $content['elementIds']);
