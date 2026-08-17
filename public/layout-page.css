@@ -1775,7 +1775,7 @@ footer.cms-content .intouch .text {
 
 .type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.marketplace-demo) > .container {
     max-width: 1140px !important;
-    padding: 4em 20px;
+    padding: 4em 15px;
     font-size: 16px;
     line-height: 1.5;
     text-align: center;
@@ -1796,7 +1796,7 @@ footer.cms-content .intouch .text {
     text-transform: none;
 }
 
-.marketplace-demo {
+.type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.marketplace-demo) > .container > .marketplace-demo {
     width: 100%;
     max-width: 1140px !important;
     margin-inline: auto;
@@ -1804,9 +1804,9 @@ footer.cms-content .intouch .text {
 }
 
 .marketplace-demo h2 {
-    margin: 0 0 0.5rem;
-    font-size: 32px;
-    font-weight: 500;
+    margin: 0.5em 0;
+    font-size: 40px;
+    font-weight: 400;
     line-height: 1.2;
     text-transform: none;
 }
@@ -1833,7 +1833,7 @@ footer.cms-content .intouch .text {
 
 .marketplace-demo p.landing {
     display: block;
-    margin: 0 0 1rem;
+    margin: 0.5em 0;
 }
 
 .marketplace-demo .btn {
@@ -1859,6 +1859,12 @@ footer.cms-content .intouch .text {
     border-color: #103050;
     color: #103050;
     background-color: transparent;
+}
+
+@media screen and (max-width: 420px) {
+    .marketplace-demo h2 {
+        font-size: 32px;
+    }
 }
 
 /* FAQ heading and accordion form one visual section in the source page. */
