@@ -1775,7 +1775,7 @@ footer.cms-content .intouch .text {
 
 .type-page main .cms-content:has(img.logo[src*="marketplace"]) > :has(.marketplace-demo) > .container {
     max-width: 1140px !important;
-    padding: 4em 15px;
+    padding: 4em 20px;
     font-size: 16px;
     line-height: 1.5;
     text-align: center;
@@ -1800,10 +1800,10 @@ footer.cms-content .intouch .text {
     width: 100%;
     max-width: 1140px !important;
     margin-inline: auto;
-    padding: 4em 15px;
+    padding: 4em 20px;
 }
 
-.marketplace-demo h2 {
+.marketplace-demo.container h2:first-child {
     margin: 0.5em 0;
     font-size: 40px;
     font-weight: 400;
@@ -1815,7 +1815,7 @@ footer.cms-content .intouch .text {
     max-width: 34em;
     margin: 16px auto;
     font-size: 28px;
-    font-weight: 400;
+    font-weight: 300;
     line-height: 1.5;
 }
 
@@ -1862,7 +1862,7 @@ footer.cms-content .intouch .text {
 }
 
 @media screen and (max-width: 420px) {
-    .marketplace-demo h2 {
+    .marketplace-demo.container h2:first-child {
         font-size: 32px;
     }
 }
