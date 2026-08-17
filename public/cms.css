@@ -161,8 +161,7 @@ header nav > ul:not(.menu) > li {
     padding: 0;
 }
 
-header nav ul.menu > li:has(+ li.login) > a,
-header nav ul.menu > li:last-child:not(.login) > a {
+header nav ul.menu > li:last-child > a {
     color: var(--pico-primary-inverse);
     background-color: #E02020;
     border-radius: var(--pico-border-radius);
@@ -195,8 +194,8 @@ header nav a:not([role]):active {
     text-decoration: none;
 }
 
-header nav ul.menu > li:not(:last-child):not(:has(+ li.login)):not(.login) > a:hover,
-header nav ul.menu > li:not(:last-child):not(:has(+ li.login)):not(.login) > a:focus,
+header nav ul.menu > li:not(:last-child) > a:hover,
+header nav ul.menu > li:not(:last-child) > a:focus,
 header nav details.dropdown > summary:not([role]):hover,
 header nav details.dropdown > summary:not([role]):focus,
 header nav details.dropdown > summary:not([role]):focus-visible,
@@ -208,12 +207,9 @@ header nav details.dropdown[open] > summary:not([role]) {
     border: 0;
 }
 
-header nav ul.menu > li:has(+ li.login) > a:hover,
-header nav ul.menu > li:has(+ li.login) > a:focus,
-header nav ul.menu > li:has(+ li.login) > a:active,
-header nav ul.menu > li:last-child:not(.login) > a:hover,
-header nav ul.menu > li:last-child:not(.login) > a:focus,
-header nav ul.menu > li:last-child:not(.login) > a:active {
+header nav ul.menu > li:last-child > a:hover,
+header nav ul.menu > li:last-child > a:focus,
+header nav ul.menu > li:last-child > a:active {
     color: #E02020;
     background-color: var(--pico-background-color);
     box-shadow: inset 0 0 0 1px #E02020;
@@ -348,7 +344,7 @@ header nav .sidebar-close button {
         width: 100%;
     }
 
-    header nav.small ul.menu > li:last-child:not(.login) > a {
+    header nav.small ul.menu > li:last-child > a {
         justify-content: center;
         margin-top: 1rem;
     }
