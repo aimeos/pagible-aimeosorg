@@ -78,7 +78,7 @@
     }
 
     .type-page main .cms-content:has(> .feature-list) > .feature:has(+ .feature-list) > .container {
-        padding-bottom: 64px;
+        padding-bottom: 40px;
     }
 
     .type-page main .cms-content:has(> .feature-list) .feature-content {

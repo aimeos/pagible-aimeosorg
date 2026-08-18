@@ -63,6 +63,7 @@ main .cms-content > :nth-child(even) {
 }
 
 .type-page main .cms-content:has(> .feature-list) .feature-partner .partnering.row {
+    min-height: 256px;
     margin: 0;
     padding: 40px;
     background-color: #FFFFFF;

@@ -169,13 +169,14 @@
     .type-page main .cms-content:has(> .feature-list) > .feature-list > .container {
         width: 100%;
         max-width: 1140px !important;
-        padding: 64px 20px;
+        padding: 64px 20px 60px;
         font-size: 16px;
         line-height: 24px;
     }
 
     .type-page main .cms-content:has(> .feature-list) .feature-list-head {
-        margin-bottom: 40px;
+        margin-bottom: 44px;
+        padding-bottom: 10px;
     }
 
     .type-page main .cms-content:has(> .feature-list) .feature-list-head h2 {
