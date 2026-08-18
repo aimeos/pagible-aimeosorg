@@ -158,7 +158,8 @@
                                     <ul class="align">
                                         @foreach($item->children as $subItem)
                                             <li>
-                                                <a href="{{ cmsroute($subItem) }}" class="{{ $page->isSelfOrDescendantOf($subItem) ? 'active' : '' }}">
+                                                @php($target = cms($subItem, 'to'))
+                                                <a href="{{ $target ? cmslink($target) : '/'.ltrim(cms($subItem, 'path'), '/') }}" class="{{ $page->isSelfOrDescendantOf($subItem) ? 'active' : '' }}">
                                                     {{ cms($subItem, 'name') }}
                                                 </a>
                                             </li>

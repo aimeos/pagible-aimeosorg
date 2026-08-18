@@ -2606,7 +2606,7 @@ class AimeosImport extends Command
     protected function redirectTarget(object $t3Page, Collection $pages): string
     {
         if ($t3Page->doktype == 3) { // @phpstan-ignore property.notFound
-            return trim((string) $t3Page->url); // @phpstan-ignore property.notFound
+            return $this->redirectUrl($t3Page);
         }
 
         if ($t3Page->doktype != 4 || $t3Page->shortcut_mode != 0) { // @phpstan-ignore property.notFound, property.notFound
@@ -2635,7 +2635,7 @@ class AimeosImport extends Command
         $seen[$uid] = true;
 
         if ($t3Page->doktype == 3) { // @phpstan-ignore property.notFound
-            return trim((string) $t3Page->url); // @phpstan-ignore property.notFound
+            return $this->redirectUrl($t3Page);
         }
 
         if ($t3Page->doktype == 4) { // @phpstan-ignore property.notFound
@@ -2649,6 +2649,29 @@ class AimeosImport extends Command
         }
 
         return '/'.$this->slugFromPath($t3Page->slug); // @phpstan-ignore property.notFound
+    }
+
+    /**
+     * Converts self-referential Aimeos URLs to paths on the imported site.
+     */
+    protected function redirectUrl(object $t3Page): string
+    {
+        $url = trim((string) $t3Page->url); // @phpstan-ignore property.notFound
+        $host = strtolower((string) parse_url($url, PHP_URL_HOST));
+        $path = parse_url($url, PHP_URL_PATH);
+        $sourcePath = '/'.$this->slugFromPath($t3Page->slug); // @phpstan-ignore property.notFound
+        $targetPath = is_string($path) ? '/'.trim($path, '/') : '';
+
+        if (! in_array($host, ['aimeos.org', 'www.aimeos.org'], true) || $targetPath !== $sourcePath) {
+            return $url;
+        }
+
+        $query = parse_url($url, PHP_URL_QUERY);
+        $fragment = parse_url($url, PHP_URL_FRAGMENT);
+
+        return $sourcePath
+            .(is_string($query) ? '?'.$query : '')
+            .(is_string($fragment) ? '#'.$fragment : '');
     }
 
     /**
