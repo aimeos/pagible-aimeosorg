@@ -105,7 +105,7 @@
     font-size: 1rem;
     font-weight: 700;
     text-align: start;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 .feature-list details[open] summary h3 {
@@ -216,6 +216,14 @@
         padding: 24px 40px;
         font-size: 16px;
         line-height: 24px;
+    }
+
+    .type-page main .cms-content:has(> .feature-list) .feature-list details > .cms-text ul {
+        margin-block: 0;
+    }
+
+    .type-page main .cms-content:has(> .feature-list) .feature-list details > .cms-text li {
+        margin: 0;
     }
 }
 

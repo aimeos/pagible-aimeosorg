@@ -85,6 +85,16 @@ main .cms-content > :nth-child(even) {
     margin: 8px 0 0;
 }
 
+.type-page main .cms-content:has(> .feature-list) .feature-partner .btn-block {
+    display: block;
+    width: 100%;
+    max-width: 320px;
+    margin-inline: auto;
+    padding: 12px 16px;
+    font-size: 16px;
+    line-height: 24px;
+}
+
 /* The standalone showcase gallery is one white source block containing its
    heading and two-column screenshot grid. */
 .type-page main .cms-content:has(.aimeos-showcases) > * {
