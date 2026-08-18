@@ -42,8 +42,7 @@ main .cms-content > :nth-child(even) {
 }
 
 .type-page main .cms-content:has(.feature-list) > .feature,
-.type-page main .cms-content:has(.feature-list) > .feature-list,
-.type-page main .cms-content:has(.feature-list) > .html:has(.partnering) {
+.type-page main .cms-content:has(.feature-list) > .feature-list {
     background-color: #FFFFFF;
 }
 
