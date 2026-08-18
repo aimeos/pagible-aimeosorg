@@ -3,36 +3,36 @@
  * @license MIT, https://opensource.org/license/MIT
  */
 
-.feature > .container {
+:is(.feature, .aimeos-feature) > .container {
     width: min(100%, 71.25rem);
     margin-inline: auto;
     padding: 1rem min(5%, 2rem);
 }
 
-.feature .feature-content {
+:is(.feature, .aimeos-feature) .feature-content {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: center;
     gap: clamp(2rem, 5vw, 5rem);
 }
 
-.feature .feature-content.end .feature-visual {
+:is(.feature, .aimeos-feature) .feature-content.end .feature-visual {
     order: 2;
 }
 
-.feature .feature-visual {
+:is(.feature, .aimeos-feature) .feature-visual {
     display: grid;
     min-height: 18rem;
     align-items: center;
     justify-items: center;
 }
 
-.feature .feature-visual picture {
+:is(.feature, .aimeos-feature) .feature-visual picture {
     display: block;
     width: 100%;
 }
 
-.feature .feature-image {
+:is(.feature, .aimeos-feature) .feature-image {
     display: block;
     width: 100%;
     max-width: 33rem;
@@ -41,12 +41,12 @@
     object-fit: contain;
 }
 
-.feature .feature-copy {
+:is(.feature, .aimeos-feature) .feature-copy {
     color: #103050;
     text-align: center;
 }
 
-.feature .feature-copy h2 {
+:is(.feature, .aimeos-feature) .feature-copy h2 {
     margin: 0 0 1.25rem;
     color: #103050;
     font-size: clamp(1.75rem, 3vw, 2.5rem);
@@ -54,14 +54,14 @@
     line-height: 1.2;
 }
 
-.feature .feature-copy .cms-text {
+:is(.feature, .aimeos-feature) .feature-copy .cms-text {
     max-width: 34rem;
     margin-inline: auto;
     color: #103050;
     line-height: 1.55;
 }
 
-.feature .feature-copy .cms-text > :last-child {
+:is(.feature, .aimeos-feature) .feature-copy .cms-text > :last-child {
     margin-bottom: 0;
 }
 
@@ -69,7 +69,7 @@
    rows use a fixed 16px type scale. Keep that geometry page-specific so the
    same component can retain the normal Pagible scale on landing pages. */
 @media (min-width: 768px) {
-    .type-page main .cms-content:has(> .feature-list) > .feature > .container {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) > :is(.feature, .aimeos-feature) > .container {
         width: 100%;
         max-width: 1140px !important;
         padding: 0 20px;
@@ -77,63 +77,63 @@
         line-height: 24px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) > .feature:has(+ .feature-list) > .container {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) > :is(.feature, .aimeos-feature):has(+ :is(.feature-list, .aimeos-feature-list)) > .container {
         padding-bottom: 40px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-content {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-content {
         min-height: 435px;
         grid-template-columns: repeat(2, minmax(0, 530px));
         justify-content: center;
         gap: 40px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-visual {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-visual {
         min-height: 435px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-image {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-image {
         max-width: 530px;
         max-height: 379px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-image img {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-image img {
         width: 100%;
         max-height: 379px;
         object-fit: contain;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-copy h2 {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-copy h2 {
         margin: 20px 0 16px;
         font-size: 40px;
         line-height: 48px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-copy .cms-text {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-copy .cms-text {
         font-size: 16px;
         line-height: 24px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-copy .cms-text p {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-copy .cms-text p {
         margin: 0;
     }
 }
 
 @media (max-width: 767px) {
-    .feature > .container {
+    :is(.feature, .aimeos-feature) > .container {
         padding-block: 2rem;
     }
 
-    .feature .feature-content {
+    :is(.feature, .aimeos-feature) .feature-content {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
 
-    .feature .feature-content.end .feature-visual {
+    :is(.feature, .aimeos-feature) .feature-content.end .feature-visual {
         order: 0;
     }
 
-    .feature .feature-visual {
+    :is(.feature, .aimeos-feature) .feature-visual {
         min-height: 0;
     }
 }

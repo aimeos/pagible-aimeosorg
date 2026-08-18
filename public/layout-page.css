@@ -25,28 +25,28 @@ main .cms-content > :nth-child(even) {
 
 /* The Features page mirrors the source layout: one simple page title,
    combined image/text highlights and self-contained feature accordions. */
-.type-page main .cms-content:has(.feature-list) > .heading:first-child {
+.type-page main .cms-content:has(:is(.feature-list, .aimeos-feature-list)) > .heading:first-child {
     border: 0;
     background: #FFFFFF;
 }
 
-.type-page main .cms-content:has(.feature-list) > .heading:first-child h1 {
+.type-page main .cms-content:has(:is(.feature-list, .aimeos-feature-list)) > .heading:first-child h1 {
     color: #103050;
     font-size: clamp(2.5rem, 4vw, 3.5rem);
     font-weight: 400;
 }
 
-.type-page main .cms-content:has(.feature-list) > .heading:first-child > .container {
+.type-page main .cms-content:has(:is(.feature-list, .aimeos-feature-list)) > .heading:first-child > .container {
     padding-top: 2rem;
     padding-bottom: 1rem;
 }
 
-.type-page main .cms-content:has(.feature-list) > .feature,
-.type-page main .cms-content:has(.feature-list) > .feature-list {
+.type-page main .cms-content:has(:is(.feature-list, .aimeos-feature-list)) > :is(.feature, .aimeos-feature),
+.type-page main .cms-content:has(:is(.feature-list, .aimeos-feature-list)) > :is(.feature-list, .aimeos-feature-list) {
     background-color: #FFFFFF;
 }
 
-.type-page main .cms-content:has(.feature-list) > .feature-list {
+.type-page main .cms-content:has(:is(.feature-list, .aimeos-feature-list)) > :is(.feature-list, .aimeos-feature-list) {
     border: 0;
 }
 
@@ -2455,15 +2455,15 @@ footer.cms-content .intouch .text {
     text-align: center;
 }
 
-.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .feature {
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > :is(.feature, .aimeos-feature) {
     background-color: #FFFFFF;
 }
 
-.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .feature > .container {
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > :is(.feature, .aimeos-feature) > .container {
     padding-block: 3.75rem;
 }
 
-.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .feature .feature-copy {
+.type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > :is(.feature, .aimeos-feature) .feature-copy {
     padding-inline-start: 0;
     border-inline-start: 0;
 }
@@ -2841,7 +2841,7 @@ footer.cms-content .intouch .text {
     }
 
     .type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > * > .container,
-    .type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > .feature > .container {
+    .type-page main .cms-content:has(.landing.welcome .logo[src*="laravel-gold"]) > :is(.feature, .aimeos-feature) > .container {
         padding-block: 2.5rem;
     }
 

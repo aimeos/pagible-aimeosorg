@@ -2,7 +2,7 @@
  * @license MIT, https://opensource.org/license/MIT
  */
 
-.extension-builder {
+:is(.extension-builder, .aimeos-extension-builder) {
     color: var(--pico-contrast);
 }
 

@@ -2,29 +2,29 @@
  * @license MIT, https://opensource.org/license/MIT
  */
 
-.type-page main .cms-content:has(> .extension-catalog) > * {
+.type-page main .cms-content:has(> :is(.extension-catalog, .aimeos-extension-catalog)) > * {
     background-color: #FFFFFF;
 }
 
-.type-page main .cms-content:has(> .extension-catalog) > .heading:first-child > .container {
+.type-page main .cms-content:has(> :is(.extension-catalog, .aimeos-extension-catalog)) > .heading:first-child > .container {
     padding-top: 2rem;
     padding-bottom: 1rem;
 }
 
-.type-page main .cms-content:has(> .extension-catalog) > .extension-builder > .container {
+.type-page main .cms-content:has(> :is(.extension-catalog, .aimeos-extension-catalog)) > :is(.extension-builder, .aimeos-extension-builder) > .container {
     padding-top: 1rem;
     padding-bottom: 4rem;
 }
 
-.type-page main .cms-content:has(> .extension-catalog) > :has(.partnering) > .container {
+.type-page main .cms-content:has(> :is(.extension-catalog, .aimeos-extension-catalog)) > :has(.partnering) > .container {
     padding-block: 4rem;
 }
 
-.type-page main .cms-content:has(> .extension-catalog) > .extension-catalog {
+.type-page main .cms-content:has(> :is(.extension-catalog, .aimeos-extension-catalog)) > :is(.extension-catalog, .aimeos-extension-catalog) {
     background-color: #F4F0EA;
 }
 
-.type-page main .cms-content > .extension-catalog > .container {
+.type-page main .cms-content > :is(.extension-catalog, .aimeos-extension-catalog) > .container {
     width: 100%;
     max-width: 71.25rem;
     padding-block: 4rem;
@@ -128,7 +128,7 @@
 }
 
 @media screen and (max-width: 599px) {
-    .type-page main .cms-content > .extension-catalog > .container {
+    .type-page main .cms-content > :is(.extension-catalog, .aimeos-extension-catalog) > .container {
         padding-block: 2rem;
     }
 

@@ -2,7 +2,7 @@
  * @license MIT, https://opensource.org/license/MIT
  */
 
-document.querySelectorAll('.extension-builder').forEach(builder => {
+document.querySelectorAll('.extension-builder, .aimeos-extension-builder').forEach(builder => {
     const button = builder.querySelector('.createext');
     const details = builder.querySelector('.extension-builder-details');
     const name = builder.querySelector('input[name="name"]');

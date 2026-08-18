@@ -777,7 +777,7 @@ class AimeosImport extends Command
 
         return ['elements' => [[
             'id' => Utils::uid(),
-            'type' => 'contact-page',
+            'type' => 'aimeos::contact-page',
             'group' => 'main',
             'data' => [
                 'informed_title' => (string) $informed->header,
@@ -974,7 +974,7 @@ class AimeosImport extends Command
         return [
             'element' => [
                 'id' => Utils::uid(),
-                'type' => 'feature',
+                'type' => 'aimeos::feature',
                 'group' => 'main',
                 'data' => [
                     'title' => $title,
@@ -1040,7 +1040,7 @@ class AimeosImport extends Command
         return [
             'element' => [
                 'id' => Utils::uid(),
-                'type' => 'feature-list',
+                'type' => 'aimeos::feature-list',
                 'group' => 'main',
                 'data' => [
                     'title' => $title,
@@ -1126,7 +1126,7 @@ class AimeosImport extends Command
             ],
             [
                 'id' => Utils::uid(),
-                'type' => 'extension-builder',
+                'type' => 'aimeos::extension-builder',
                 'group' => 'main',
                 'data' => [
                     'title' => (string) ($hints->header ?: 'Create your own extension'),
@@ -1141,7 +1141,7 @@ class AimeosImport extends Command
             ],
             [
                 'id' => Utils::uid(),
-                'type' => 'extension-catalog',
+                'type' => 'aimeos::extension-catalog',
                 'group' => 'main',
                 'data' => [
                     'details_label' => 'Details',

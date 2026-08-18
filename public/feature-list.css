@@ -3,18 +3,18 @@
  * @license MIT, https://opensource.org/license/MIT
  */
 
-.feature-list > .container {
+:is(.feature-list, .aimeos-feature-list) > .container {
     width: min(100%, 71.25rem);
     margin-inline: auto;
     padding: 4rem min(5%, 2rem);
 }
 
-.feature-list .feature-list-head {
+:is(.feature-list, .aimeos-feature-list) .feature-list-head {
     margin-bottom: 2.5rem;
     text-align: center;
 }
 
-.feature-list .feature-list-head h2 {
+:is(.feature-list, .aimeos-feature-list) .feature-list-head h2 {
     margin: 2rem 0 0;
     color: #103050;
     font-size: 1.33rem;
@@ -22,7 +22,7 @@
     text-transform: uppercase;
 }
 
-.feature-list .feature-list-icon {
+:is(.feature-list, .aimeos-feature-list) .feature-list-icon {
     display: block;
     width: 2rem;
     height: 2rem;
@@ -31,14 +31,14 @@
     filter: drop-shadow(-4px 3px #C2E0FF);
 }
 
-.feature-list .feature-list-icon svg {
+:is(.feature-list, .aimeos-feature-list) .feature-list-icon svg {
     display: block;
     width: 100%;
     height: 100%;
     fill: currentColor;
 }
 
-.feature-list .feature-list-lines {
+:is(.feature-list, .aimeos-feature-list) .feature-list-lines {
     position: relative;
     display: block;
     width: 7rem;
@@ -46,28 +46,28 @@
     margin: 0.75rem auto 0;
 }
 
-.feature-list .feature-list-lines::before,
-.feature-list .feature-list-lines::after {
+:is(.feature-list, .aimeos-feature-list) .feature-list-lines::before,
+:is(.feature-list, .aimeos-feature-list) .feature-list-lines::after {
     position: absolute;
     height: 1px;
     background: #B09050;
     content: "";
 }
 
-.feature-list .feature-list-lines::before {
+:is(.feature-list, .aimeos-feature-list) .feature-list-lines::before {
     top: 0;
     left: 15%;
     width: 65%;
 }
 
-.feature-list .feature-list-lines::after {
+:is(.feature-list, .aimeos-feature-list) .feature-list-lines::after {
     right: 15%;
     bottom: 0;
     width: 45%;
     box-shadow: -2.5rem -0.35rem 0 #D2C5AB;
 }
 
-.feature-list details {
+:is(.feature-list, .aimeos-feature-list) details {
     margin: 0 0 0.2rem;
     padding: 0;
     border: 1px solid #F4F0EA;
@@ -75,12 +75,12 @@
     background: #F4F0EA;
 }
 
-.feature-list details[open] {
+:is(.feature-list, .aimeos-feature-list) details[open] {
     border-color: #103050;
     background: #FFFFFF;
 }
 
-.feature-list summary {
+:is(.feature-list, .aimeos-feature-list) summary {
     display: flex;
     min-height: 3.75rem;
     align-items: center;
@@ -91,15 +91,15 @@
     list-style: none;
 }
 
-.feature-list details[open] summary {
+:is(.feature-list, .aimeos-feature-list) details[open] summary {
     background: #103050;
 }
 
-.feature-list summary::-webkit-details-marker {
+:is(.feature-list, .aimeos-feature-list) summary::-webkit-details-marker {
     display: none;
 }
 
-.feature-list summary h3 {
+:is(.feature-list, .aimeos-feature-list) summary h3 {
     margin: 0;
     color: #103050;
     font-size: 1rem;
@@ -108,19 +108,19 @@
     text-decoration: none;
 }
 
-.feature-list details[open] summary h3 {
+:is(.feature-list, .aimeos-feature-list) details[open] summary h3 {
     color: #FFFFFF;
 }
 
-.feature-list .feature-list-toggle {
+:is(.feature-list, .aimeos-feature-list) .feature-list-toggle {
     position: relative;
     flex: 0 0 1rem;
     width: 1rem;
     height: 1rem;
 }
 
-.feature-list .feature-list-toggle::before,
-.feature-list .feature-list-toggle::after {
+:is(.feature-list, .aimeos-feature-list) .feature-list-toggle::before,
+:is(.feature-list, .aimeos-feature-list) .feature-list-toggle::after {
     position: absolute;
     top: 50%;
     left: 0;
@@ -131,42 +131,42 @@
     transition: transform 0.2s ease;
 }
 
-.feature-list .feature-list-toggle::after {
+:is(.feature-list, .aimeos-feature-list) .feature-list-toggle::after {
     transform: rotate(90deg);
 }
 
-.feature-list details[open] .feature-list-toggle::before,
-.feature-list details[open] .feature-list-toggle::after {
+:is(.feature-list, .aimeos-feature-list) details[open] .feature-list-toggle::before,
+:is(.feature-list, .aimeos-feature-list) details[open] .feature-list-toggle::after {
     background: #FFFFFF;
 }
 
-.feature-list details[open] .feature-list-toggle::before {
+:is(.feature-list, .aimeos-feature-list) details[open] .feature-list-toggle::before {
     transform: rotate(45deg);
 }
 
-.feature-list details[open] .feature-list-toggle::after {
+:is(.feature-list, .aimeos-feature-list) details[open] .feature-list-toggle::after {
     transform: rotate(-45deg);
 }
 
-.feature-list details > .cms-text {
+:is(.feature-list, .aimeos-feature-list) details > .cms-text {
     padding: 1.5rem 2.5rem;
     color: #103050;
     line-height: 1.55;
     text-align: start;
 }
 
-.feature-list details > .cms-text ul {
+:is(.feature-list, .aimeos-feature-list) details > .cms-text ul {
     list-style: square;
 }
 
-.feature-list details > .cms-text > :last-child {
+:is(.feature-list, .aimeos-feature-list) details > .cms-text > :last-child {
     margin-bottom: 0;
 }
 
 /* Match the source Bootstrap Package blocks without inheriting Pagible's
    larger desktop root font size. */
 @media (min-width: 768px) {
-    .type-page main .cms-content:has(> .feature-list) > .feature-list > .container {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) > :is(.feature-list, .aimeos-feature-list) > .container {
         width: 100%;
         max-width: 1140px !important;
         padding: 64px 20px 60px;
@@ -174,66 +174,66 @@
         line-height: 24px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-list-head {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-list-head {
         margin-bottom: 44px;
         padding-bottom: 10px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-list-head h2 {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-list-head h2 {
         margin-top: 32px;
         font-size: 21.28px;
         line-height: 25.536px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-list-icon {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-list-icon {
         width: 32px;
         height: 32px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-list-lines {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-list-lines {
         width: 112px;
         height: 12px;
         margin-top: 12px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-list summary {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) :is(.feature-list, .aimeos-feature-list) summary {
         min-height: 53px;
         gap: 24px;
         padding: 16px 24px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-list summary h3 {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) :is(.feature-list, .aimeos-feature-list) summary h3 {
         font-size: 17.6px;
         line-height: 21.12px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-list-toggle {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) .feature-list-toggle {
         width: 16px;
         height: 16px;
         flex-basis: 16px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-list details > .cms-text {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) :is(.feature-list, .aimeos-feature-list) details > .cms-text {
         padding: 24px 40px;
         font-size: 16px;
         line-height: 24px;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-list details > .cms-text ul {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) :is(.feature-list, .aimeos-feature-list) details > .cms-text ul {
         margin-block: 0;
     }
 
-    .type-page main .cms-content:has(> .feature-list) .feature-list details > .cms-text li {
+    .type-page main .cms-content:has(> :is(.feature-list, .aimeos-feature-list)) :is(.feature-list, .aimeos-feature-list) details > .cms-text li {
         margin: 0;
     }
 }
 
 @media (max-width: 767px) {
-    .feature-list > .container {
+    :is(.feature-list, .aimeos-feature-list) > .container {
         padding-block: 3rem;
     }
 
-    .feature-list details > .cms-text {
+    :is(.feature-list, .aimeos-feature-list) details > .cms-text {
         padding: 1.25rem 1.5rem;
     }
 }
