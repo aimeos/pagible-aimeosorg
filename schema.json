@@ -529,6 +529,10 @@
                         "text": {
                             "type": "markdown",
                             "min": 1
+                        },
+                        "expanded": {
+                            "type": "switch",
+                            "label": "Expanded initially"
                         }
                     }
                 }

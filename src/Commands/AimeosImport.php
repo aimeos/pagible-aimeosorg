@@ -316,6 +316,19 @@ class AimeosImport extends Command
             ];
         }
 
+        if ($features = $this->convertFeaturesPage($t3Page, $records)) {
+            $remaining = $this->buildContent($records->filter(
+                fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
+                    || (string) ($record->CType ?? '') === 'shortcut'
+            ));
+
+            return [
+                'elements' => array_merge($features['elements'], $remaining['elements']),
+                'fileIds' => array_values(array_unique(array_merge($features['fileIds'], $remaining['fileIds']))),
+                'elementIds' => $remaining['elementIds'],
+            ];
+        }
+
         if ($extensions = $this->convertExtensionsPage($t3Page, $records)) {
             $remaining = $this->buildContent($records->filter(
                 fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
@@ -871,6 +884,184 @@ class AimeosImport extends Command
         $result = $this->rewriteHtmlFiles($html);
 
         return ['text' => $this->htmlToMarkdown($result['html']), 'fileIds' => $result['fileIds']];
+    }
+
+    /**
+     * Converts the mixed TYPO3 columns on aimeos.org/features into the
+     * highlight and feature-list components owned by the Aimeos theme.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return array{elements: array<int, array<string, mixed>>, fileIds: string[]}|null
+     */
+    protected function convertFeaturesPage(object $t3Page, Collection $records): ?array
+    {
+        if ($this->slugFromPath((string) ($t3Page->slug ?? '')) !== 'features') {
+            return null;
+        }
+
+        $records = $records->filter(
+            fn ($record) => ($record->_pagible_group ?? 'main') !== 'footer'
+        )->values();
+        $heading = $records->first(fn ($record) => (string) ($record->CType ?? '') === 'header'
+            && strcasecmp(trim((string) ($record->header ?? '')), 'Aimeos Features') === 0);
+        $highlights = $records->filter(
+            fn ($record) => in_array((string) ($record->CType ?? ''), ['textpic', 'textmedia'], true)
+        )->values();
+        $lists = $records->filter(
+            fn ($record) => (string) ($record->CType ?? '') === 'accordion'
+        )->values();
+
+        if (! $heading || $highlights->isEmpty() || $lists->isEmpty()) {
+            return null;
+        }
+
+        $elements = [[
+            'id' => Utils::uid(),
+            'type' => 'heading',
+            'group' => 'main',
+            'data' => [
+                'level' => $this->headerLevel($heading->header_layout), // @phpstan-ignore property.notFound
+                'title' => (string) $heading->header,
+            ],
+        ]];
+        $fileIds = [];
+
+        foreach ($highlights as $record) {
+            $result = $this->convertFeatureHighlight($record);
+
+            if (! $result) {
+                return null;
+            }
+
+            $elements[] = $result['element'];
+            $fileIds = array_merge($fileIds, $result['fileIds']);
+        }
+
+        foreach ($lists as $record) {
+            $result = $this->convertFeatureList($record);
+
+            if (! $result) {
+                return null;
+            }
+
+            $elements[] = $result['element'];
+            $fileIds = array_merge($fileIds, $result['fileIds']);
+        }
+
+        return [
+            'elements' => $elements,
+            'fileIds' => array_values(array_unique($fileIds)),
+        ];
+    }
+
+    /**
+     * Converts one TYPO3 text-with-image record into a combined feature row.
+     *
+     * @return array{element: array<string, mixed>, fileIds: string[]}|null
+     */
+    protected function convertFeatureHighlight(object $record): ?array
+    {
+        $title = trim((string) ($record->header ?? ''));
+        $body = trim((string) ($record->bodytext ?? ''));
+        $fileId = $this->importFileForContent((int) ($record->uid ?? 0));
+
+        if ($title === '' || $body === '' || ! $fileId) {
+            return null;
+        }
+
+        $result = $this->rewriteHtmlFiles($body);
+
+        return [
+            'element' => [
+                'id' => Utils::uid(),
+                'type' => 'feature',
+                'group' => 'main',
+                'data' => [
+                    'title' => $title,
+                    'text' => $this->htmlToMarkdown($result['html']),
+                    'file' => ['id' => $fileId, 'type' => 'file'],
+                    'position' => $this->imagePosition((int) ($record->imageorient ?? 0)) === 'end'
+                        ? 'end'
+                        : 'start',
+                ],
+            ],
+            'fileIds' => array_values(array_unique(array_merge($result['fileIds'], [$fileId]))),
+        ];
+    }
+
+    /**
+     * Converts one TYPO3 feature accordion and its default-open item.
+     *
+     * @return array{element: array<string, mixed>, fileIds: string[]}|null
+     */
+    protected function convertFeatureList(object $record): ?array
+    {
+        $title = trim((string) ($record->header ?? ''));
+        $icons = [
+            'advantages' => 'check',
+            'for developers' => 'code',
+            'catalog' => 'list',
+            'products' => 'cube',
+            'basket' => 'basket',
+            'checkout' => 'payment',
+            'customer related' => 'customer',
+            'shop administration' => 'settings',
+            'asynchronous tasks' => 'tasks',
+        ];
+        $icon = $icons[strtolower($title)] ?? null;
+        $default = $this->accordionDefaultElement($record);
+        $children = $this->accordionItems?->get((int) ($record->uid ?? 0), Collection::make())
+            ?? Collection::make();
+        $items = [];
+        $fileIds = [];
+
+        if ($title === '' || ! $icon) {
+            return null;
+        }
+
+        foreach ($children as $child) {
+            if (empty($child->header) || empty($child->bodytext)) {
+                continue;
+            }
+
+            $result = $this->rewriteHtmlFiles((string) $child->bodytext);
+            $items[] = [
+                'title' => (string) $child->header,
+                'text' => $this->htmlToMarkdown($result['html']),
+                'expanded' => (int) ($child->uid ?? 0) === $default,
+            ];
+            $fileIds = array_merge($fileIds, $result['fileIds']);
+        }
+
+        if ($items === []) {
+            return null;
+        }
+
+        return [
+            'element' => [
+                'id' => Utils::uid(),
+                'type' => 'feature-list',
+                'group' => 'main',
+                'data' => [
+                    'title' => $title,
+                    'icon' => $icon,
+                    'items' => $items,
+                ],
+            ],
+            'fileIds' => array_values(array_unique($fileIds)),
+        ];
+    }
+
+    /**
+     * Returns the Bootstrap Package accordion item expanded by default.
+     */
+    protected function accordionDefaultElement(object $record): int
+    {
+        $xml = (string) ($record->pi_flexform ?? '');
+
+        return preg_match('/<field\s+index=["\']default_element["\'][^>]*>.*?<value\s+index=["\']vDEF["\'][^>]*>\s*(\d+)\s*<\/value>/is', $xml, $match)
+            ? (int) $match[1]
+            : 0;
     }
 
     /**

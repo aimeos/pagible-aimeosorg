@@ -3,25 +3,26 @@
  * @license MIT, https://opensource.org/license/MIT
  */
 
-.aimeos-feature-list > .container {
-    width: min(100%, 68rem);
+.feature-list > .container {
+    width: min(100%, 71.25rem);
     margin-inline: auto;
+    padding: 4rem min(5%, 2rem);
 }
 
-.aimeos-feature-list .feature-list-head {
-    margin-bottom: 2.25rem;
+.feature-list .feature-list-head {
+    margin-bottom: 2.5rem;
     text-align: center;
 }
 
-.aimeos-feature-list .feature-list-head h2 {
-    margin: 2rem 0;
+.feature-list .feature-list-head h2 {
+    margin: 2rem 0 0;
     color: #103050;
     font-size: 1.33rem;
     font-weight: 700;
     text-transform: uppercase;
 }
 
-.aimeos-feature-list .feature-list-icon {
+.feature-list .feature-list-icon {
     display: block;
     width: 2rem;
     height: 2rem;
@@ -30,81 +31,144 @@
     filter: drop-shadow(-4px 3px #C2E0FF);
 }
 
-.aimeos-feature-list .feature-list-icon svg {
+.feature-list .feature-list-icon svg {
     display: block;
     width: 100%;
     height: 100%;
     fill: currentColor;
 }
 
-.aimeos-feature-list details {
-    margin: 0 0 0.75rem;
+.feature-list .feature-list-lines {
+    position: relative;
+    display: block;
+    width: 7rem;
+    height: 0.75rem;
+    margin: 0.75rem auto 0;
+}
+
+.feature-list .feature-list-lines::before,
+.feature-list .feature-list-lines::after {
+    position: absolute;
+    height: 1px;
+    background: #B09050;
+    content: "";
+}
+
+.feature-list .feature-list-lines::before {
+    top: 0;
+    left: 15%;
+    width: 65%;
+}
+
+.feature-list .feature-list-lines::after {
+    right: 15%;
+    bottom: 0;
+    width: 45%;
+    box-shadow: -2.5rem -0.35rem 0 #D2C5AB;
+}
+
+.feature-list details {
+    margin: 0 0 0.2rem;
     padding: 0;
-    border: 1px solid #DCE2E6;
-    border-inline-start: 0.2rem solid #B09050;
+    border: 1px solid #F4F0EA;
+    border-radius: 0;
+    background: #F4F0EA;
+}
+
+.feature-list details[open] {
+    border-color: #103050;
     background: #FFFFFF;
 }
 
-.aimeos-feature-list details[open] {
-    border-inline-start-color: #28658B;
-    box-shadow: 0 0.5rem 1.5rem #1030500D;
-}
-
-.aimeos-feature-list summary {
+.feature-list summary {
     display: flex;
-    min-height: 4.5rem;
+    min-height: 3.75rem;
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    padding: 1.25rem 1.5rem;
+    padding: 1rem 1.5rem;
     cursor: pointer;
     list-style: none;
 }
 
-.aimeos-feature-list summary::-webkit-details-marker {
+.feature-list details[open] summary {
+    background: #103050;
+}
+
+.feature-list summary::-webkit-details-marker {
     display: none;
 }
 
-.aimeos-feature-list summary h3 {
+.feature-list summary h3 {
     margin: 0;
     color: #103050;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
+    text-align: start;
+    text-decoration: underline;
 }
 
-.aimeos-feature-list .feature-list-toggle {
+.feature-list details[open] summary h3 {
+    color: #FFFFFF;
+}
+
+.feature-list .feature-list-toggle {
     position: relative;
     flex: 0 0 1rem;
     width: 1rem;
     height: 1rem;
 }
 
-.aimeos-feature-list .feature-list-toggle::before,
-.aimeos-feature-list .feature-list-toggle::after {
+.feature-list .feature-list-toggle::before,
+.feature-list .feature-list-toggle::after {
     position: absolute;
     top: 50%;
     left: 0;
     width: 100%;
     height: 1px;
-    background: #907040;
+    background: #103050;
     content: "";
-}
-
-.aimeos-feature-list .feature-list-toggle::after {
-    transform: rotate(90deg);
     transition: transform 0.2s ease;
 }
 
-.aimeos-feature-list details[open] .feature-list-toggle::after {
-    transform: rotate(0);
+.feature-list .feature-list-toggle::after {
+    transform: rotate(90deg);
 }
 
-.aimeos-feature-list details > .cms-text {
-    padding: 0 1.5rem 1.5rem;
-    color: #5C6872;
-    line-height: 1.7;
+.feature-list details[open] .feature-list-toggle::before,
+.feature-list details[open] .feature-list-toggle::after {
+    background: #FFFFFF;
 }
 
-.aimeos-feature-list details > .cms-text > :last-child {
+.feature-list details[open] .feature-list-toggle::before {
+    transform: rotate(45deg);
+}
+
+.feature-list details[open] .feature-list-toggle::after {
+    transform: rotate(-45deg);
+}
+
+.feature-list details > .cms-text {
+    padding: 1.5rem 2.5rem;
+    color: #103050;
+    line-height: 1.55;
+    text-align: start;
+}
+
+.feature-list details > .cms-text ul {
+    list-style: square;
+}
+
+.feature-list details > .cms-text > :last-child {
     margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+    .feature-list > .container {
+        padding-block: 3rem;
+    }
+
+    .feature-list details > .cms-text {
+        padding: 1.25rem 1.5rem;
+    }
 }

@@ -21,13 +21,14 @@
     <span class="feature-list-icon" aria-hidden="true">
         <svg viewBox="0 0 32 32" focusable="false"><path d="{{ $icons[$icon] }}" /></svg>
     </span>
+    <span class="feature-list-lines" aria-hidden="true"></span>
     <h2>{{ $data->title ?? '' }}</h2>
 </header>
 
 <div class="feature-list-items">
     @foreach($data->items ?? [] as $item)
         @php($text = preg_replace('/^[\t ]+(?=-\s)/m', '', (string) ($item->text ?? '')))
-        <details>
+        <details name="feature-list-{{ md5((string) ($data->title ?? '')) }}" @if($item->expanded ?? false) open @endif>
             <summary>
                 <h3>{{ $item->title ?? '' }}</h3>
                 <span class="feature-list-toggle" aria-hidden="true"></span>
