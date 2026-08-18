@@ -428,6 +428,11 @@ class AimeosImport extends Command
                 $body,
             );
 
+            if (stripos($cleaned, 'Create your own feature rich') !== false
+                && ! str_contains($cleaned, 'marketplace-intro')) {
+                $cleaned = '<div class="landing marketplace-intro">'.$cleaned.'</div>';
+            }
+
             $demo = str_contains($cleaned, 'Want to see a demo?')
                 && str_contains($cleaned, '>Request access</link>');
             $contact = str_contains($cleaned, 'Want to know more?')
