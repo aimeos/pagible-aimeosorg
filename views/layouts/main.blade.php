@@ -1,5 +1,5 @@
-@php($isLanding = (cms($page, 'type') ?: 'page') === 'page')
 @php
+    $isLanding = (cms($page, 'type') ?: 'page') === 'page';
     $navTarget = static function ($item): string {
         $target = (string) (cms($item, 'to') ?: '');
         $path = '/'.ltrim((string) cms($item, 'path'), '/');
