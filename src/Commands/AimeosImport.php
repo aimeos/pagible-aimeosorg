@@ -318,8 +318,10 @@ class AimeosImport extends Command
 
         if ($features = $this->convertFeaturesPage($t3Page, $records)) {
             $remaining = $this->buildContent($records->filter(
-                fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
-                    || (string) ($record->CType ?? '') === 'shortcut'
+                fn ($record) => ! ((string) ($record->CType ?? '') === 'shortcut'
+                        && $this->isFeaturePartnerShortcut($record))
+                    && (($record->_pagible_group ?? 'main') === 'footer'
+                        || (string) ($record->CType ?? '') === 'shortcut')
             ));
 
             return [
@@ -346,6 +348,24 @@ class AimeosImport extends Command
         $records = $this->prepareMarketplacePageRecords($t3Page, $records);
 
         return $this->buildContent($records);
+    }
+
+    /**
+     * Tests if a TYPO3 shortcut references the partner callout removed from the
+     * Pagible Features page.
+     */
+    protected function isFeaturePartnerShortcut(object $record): bool
+    {
+        foreach ($this->referencedContentUids($record) as $uid) {
+            $target = $this->contentRecords?->get($uid);
+            $body = (string) ($target->bodytext ?? '');
+
+            if (preg_match('/\bclass\s*=\s*(["\'])[^"\']*\bpartnering\b[^"\']*\1/is', $body)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
