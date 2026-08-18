@@ -1571,52 +1571,12 @@ class AimeosImport extends Command
 
         $result = $this->rewriteHtmlFiles((string) $record->bodytext);
 
-        if ($data = $this->featurePartnerData($result['html'])) {
-            return ['elements' => [[
-                'id' => Utils::uid(),
-                'type' => 'feature-partner',
-                'group' => 'main',
-                'data' => $data,
-            ]], 'fileIds' => $result['fileIds']];
-        }
-
         return ['elements' => [[
             'id' => Utils::uid(),
             'type' => 'html',
             'group' => 'main',
             'data' => ['text' => Utils::html($result['html'])],
         ]], 'fileIds' => $result['fileIds']];
-    }
-
-    /**
-     * Converts the shared TYPO3 partner callout into editable component data.
-     *
-     * @return array{title: string, text: string, button_label: string, button_url: string}|null
-     */
-    protected function featurePartnerData(string $html): ?array
-    {
-        if (! preg_match('/\bclass\s*=\s*(["\'])[^"\']*\bpartnering\b[^"\']*\1/is', $html)
-            || ! preg_match('/<h[1-6]\b[^>]*>(.*?)<\/h[1-6]>/is', $html, $title)
-            || ! preg_match('/<div\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bintro\b[^"\']*\1[^>]*>(.*?)<\/div>/is', $html, $intro)
-            || ! preg_match('/<div\b[^>]*\bclass\s*=\s*(["\'])[^"\']*\bbutton\b[^"\']*\1[^>]*>(.*?)<\/div>/is', $html, $button)
-            || ! preg_match('/<a\b([^>]*)>(.*?)<\/a>/is', $button[2], $link)
-            || ! preg_match('/\bhref\s*=\s*(["\'])(.*?)\1/is', $link[1], $url)) {
-            return null;
-        }
-
-        $plain = static fn (string $value): string => trim((string) preg_replace(
-            '/\s+/u',
-            ' ',
-            html_entity_decode(strip_tags($value), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
-        ));
-        $data = [
-            'title' => $plain($title[1]),
-            'text' => $this->htmlToMarkdown(trim($intro[2])),
-            'button_label' => $plain($link[2]),
-            'button_url' => html_entity_decode(trim($url[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
-        ];
-
-        return in_array('', $data, true) ? null : $data;
     }
 
     /**

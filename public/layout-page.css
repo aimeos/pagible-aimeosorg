@@ -50,52 +50,6 @@ main .cms-content > :nth-child(even) {
     border: 0;
 }
 
-/* The TYPO3 partner shortcut is imported as a semantic component. Its source
-   block is white even though it follows an even number of Pagible elements. */
-.type-page main .cms-content:has(> .feature-list) > .feature-partner {
-    background-color: #FFFFFF;
-}
-
-.type-page main .cms-content:has(> .feature-list) > .feature-partner > .container {
-    width: 100%;
-    max-width: 1140px !important;
-    padding: 64px 20px;
-}
-
-.type-page main .cms-content:has(> .feature-list) .feature-partner .partnering.row {
-    min-height: 256px;
-    margin: 0;
-    padding: 40px;
-    background-color: #FFFFFF;
-    box-shadow: 4px 16px 20px 4px #E6EAEE;
-    font-size: 16px;
-    line-height: 24px;
-}
-
-.type-page main .cms-content:has(> .feature-list) .feature-partner .partnering.row > [class*="col-"] {
-    padding-inline: 20px;
-}
-
-.type-page main .cms-content:has(> .feature-list) .feature-partner h2 {
-    margin: 20px 0 16px;
-    font-size: 40px;
-    line-height: 48px;
-}
-
-.type-page main .cms-content:has(> .feature-list) .feature-partner p {
-    margin: 8px 0 0;
-}
-
-.type-page main .cms-content:has(> .feature-list) .feature-partner .btn-block {
-    display: block;
-    width: 100%;
-    max-width: 320px;
-    margin-inline: auto;
-    padding: 12px 16px;
-    font-size: 16px;
-    line-height: 24px;
-}
-
 /* The standalone showcase gallery is one white source block containing its
    heading and two-column screenshot grid. */
 .type-page main .cms-content:has(.aimeos-showcases) > * {
