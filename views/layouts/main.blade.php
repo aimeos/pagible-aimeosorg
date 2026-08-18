@@ -1,4 +1,29 @@
 @php($isLanding = (cms($page, 'type') ?: 'page') === 'page')
+@php
+    $navTarget = static function ($item): string {
+        $target = (string) (cms($item, 'to') ?: '');
+        $path = '/'.ltrim((string) cms($item, 'path'), '/');
+
+        if ($target === '') {
+            return $path;
+        }
+
+        $host = strtolower((string) parse_url($target, PHP_URL_HOST));
+        $targetPath = parse_url($target, PHP_URL_PATH);
+
+        if (in_array($host, ['aimeos.org', 'www.aimeos.org'], true)
+            && is_string($targetPath) && '/'.trim($targetPath, '/') === $path) {
+            $query = parse_url($target, PHP_URL_QUERY);
+            $fragment = parse_url($target, PHP_URL_FRAGMENT);
+
+            return $path
+                .(is_string($query) ? '?'.$query : '')
+                .(is_string($fragment) ? '#'.$fragment : '');
+        }
+
+        return cmslink($target);
+    };
+@endphp
 <!DOCTYPE html>
 <html class="no-js" data-theme="light" lang="{{ cms($page, 'lang') }}" dir="{{ in_array(cms($page, 'lang'), ['ar', 'az', 'dv', 'fa', 'he', 'ku', 'ur']) ? 'rtl' : 'ltr' }}">
     <head>
@@ -156,10 +181,9 @@
                                 <details class="dropdown is-menu">
                                     <summary>{{ cms($item, 'name') }}</summary>
                                     <ul class="align">
-                                        @foreach($item->children as $subItem)
+                                        @foreach($item->children->unique(fn ($subItem) => cms($subItem, 'path')) as $subItem)
                                             <li>
-                                                @php($target = cms($subItem, 'to'))
-                                                <a href="{{ $target ? cmslink($target) : '/'.ltrim(cms($subItem, 'path'), '/') }}" class="{{ $page->isSelfOrDescendantOf($subItem) ? 'active' : '' }}">
+                                                <a href="{{ $navTarget($subItem) }}" class="{{ $page->isSelfOrDescendantOf($subItem) ? 'active' : '' }}">
                                                     {{ cms($subItem, 'name') }}
                                                 </a>
                                             </li>
