@@ -39,8 +39,8 @@ minute and host/IP pair.
 Available templates:
 
 - Aimeos extensions: 2022.x through 2026.x
-- Laravel theme extensions: 2022.x through 2025.x
-- TYPO3 extensions: 2022.x through 2025.x
+- Laravel theme extensions: 2022.x through 2026.x
+- TYPO3 extensions: 2022.x through 2026.x
 
 TYPO3 packages include the matching Aimeos extension under
 `Resources/Private/Extensions/<project-name>`. Generated ZIP files replace the
