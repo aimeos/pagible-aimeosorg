@@ -6,7 +6,7 @@
 .feature > .container {
     width: min(100%, 71.25rem);
     margin-inline: auto;
-    padding: 4rem min(5%, 2rem);
+    padding: 1rem min(5%, 2rem);
 }
 
 .feature .feature-content {
@@ -67,7 +67,7 @@
 
 @media (max-width: 767px) {
     .feature > .container {
-        padding-block: 3rem;
+        padding-block: 2rem;
     }
 
     .feature .feature-content {
