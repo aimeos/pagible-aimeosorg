@@ -65,6 +65,60 @@
     margin-bottom: 0;
 }
 
+/* TYPO3 groups the Features highlights into one 1140px source block whose
+   rows use a fixed 16px type scale. Keep that geometry page-specific so the
+   same component can retain the normal Pagible scale on landing pages. */
+@media (min-width: 768px) {
+    .type-page main .cms-content:has(> .feature-list) > .feature > .container {
+        width: 100%;
+        max-width: 1140px !important;
+        padding: 0 20px;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .type-page main .cms-content:has(> .feature-list) > .feature:has(+ .feature-list) > .container {
+        padding-bottom: 64px;
+    }
+
+    .type-page main .cms-content:has(> .feature-list) .feature-content {
+        min-height: 435px;
+        grid-template-columns: repeat(2, minmax(0, 530px));
+        justify-content: center;
+        gap: 40px;
+    }
+
+    .type-page main .cms-content:has(> .feature-list) .feature-visual {
+        min-height: 435px;
+    }
+
+    .type-page main .cms-content:has(> .feature-list) .feature-image {
+        max-width: 530px;
+        max-height: 379px;
+    }
+
+    .type-page main .cms-content:has(> .feature-list) .feature-image img {
+        width: 100%;
+        max-height: 379px;
+        object-fit: contain;
+    }
+
+    .type-page main .cms-content:has(> .feature-list) .feature-copy h2 {
+        margin: 20px 0 16px;
+        font-size: 40px;
+        line-height: 48px;
+    }
+
+    .type-page main .cms-content:has(> .feature-list) .feature-copy .cms-text {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .type-page main .cms-content:has(> .feature-list) .feature-copy .cms-text p {
+        margin: 0;
+    }
+}
+
 @media (max-width: 767px) {
     .feature > .container {
         padding-block: 2rem;
