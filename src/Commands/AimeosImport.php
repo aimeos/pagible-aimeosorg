@@ -2352,7 +2352,23 @@ class AimeosImport extends Command
      */
     protected function pageHasLegacyFeatureTypes(Page $page): bool
     {
-        $content = $page->latest?->aux?->content ?? $page->content ?? [];
+        if ($this->contentHasLegacyFeatureTypes($page->latest?->aux?->content ?? null)) {
+            return true;
+        }
+
+        return $this->contentHasLegacyFeatureTypes($page->content);
+    }
+
+    /**
+     * Checks whether the provided content contains legacy Aimeos feature types.
+     *
+     * @param  mixed  $content
+     */
+    protected function contentHasLegacyFeatureTypes(mixed $content): bool
+    {
+        if (is_string($content) && $content !== '') {
+            $content = json_decode($content, true);
+        }
 
         if (! is_array($content) && ! is_object($content)) {
             return false;
