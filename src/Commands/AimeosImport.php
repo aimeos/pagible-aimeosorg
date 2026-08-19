@@ -51,8 +51,8 @@ class AimeosImport extends Command
 
     /** @var array<string, string> */
     protected const LEGACY_FEATURE_TYPES = [
-        'feature' => 'aimeos::feature',
-        'feature-list' => 'aimeos::feature-list',
+        'feature' => 'aimeos:feature',
+        'feature-list' => 'aimeos:feature-list',
     ];
 
     protected string $fileBase;
@@ -1019,7 +1019,7 @@ class AimeosImport extends Command
         return [
             'element' => [
                 'id' => Utils::uid(),
-                'type' => 'aimeos::feature',
+                'type' => 'aimeos:feature',
                 'group' => 'main',
                 'data' => $data,
             ],
@@ -1078,7 +1078,7 @@ class AimeosImport extends Command
         return [
             'element' => [
                 'id' => Utils::uid(),
-                'type' => 'aimeos::feature-list',
+                'type' => 'aimeos:feature-list',
                 'group' => 'main',
                 'data' => [
                     'title' => $title,
