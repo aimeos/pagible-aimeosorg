@@ -2328,21 +2328,40 @@ class AimeosImport extends Command
     protected function normalizeLegacyContentTypes(array $elements): array
     {
         return array_map(function (mixed $element): mixed {
-            if (! is_array($element) || ! isset($element['type'])) {
-                return $element;
-            }
+            return $this->normalizeLegacyContentType($element);
+        }, $elements);
+    }
 
+    /**
+     * Normalizes a content element and nested data recursively.
+     *
+     * @param  mixed  $element
+     * @return mixed
+     */
+    protected function normalizeLegacyContentType(mixed $element): mixed
+    {
+        if (! is_array($element) && ! is_object($element)) {
+            return $element;
+        }
+
+        $element = is_object($element) ? (array) $element : $element;
+
+        if (isset($element['type'])) {
             $type = (string) $element['type'];
             $mapped = self::LEGACY_FEATURE_TYPES[$type] ?? null;
 
-            if (! $mapped) {
-                return $element;
+            if ($mapped) {
+                $element['type'] = $mapped;
             }
+        }
 
-            $element['type'] = $mapped;
+        foreach ($element as $name => $value) {
+            if (is_array($value) || is_object($value)) {
+                $element[$name] = $this->normalizeLegacyContentType($value);
+            }
+        }
 
-            return $element;
-        }, $elements);
+        return $element;
     }
 
     /**
@@ -2370,16 +2389,24 @@ class AimeosImport extends Command
             $content = json_decode($content, true);
         }
 
-        if (! is_array($content) && ! is_object($content)) {
+        if (is_object($content)) {
+            $content = (array) $content;
+        }
+
+        if (! is_array($content)) {
             return false;
         }
 
         foreach ((array) $content as $element) {
-            if (! is_array($element) || ! isset($element['type'])) {
+            if (! is_array($element) && ! is_object($element)) {
                 continue;
             }
 
-            if (array_key_exists((string) $element['type'], self::LEGACY_FEATURE_TYPES)) {
+            if (is_object($element)) {
+                $element = (array) $element;
+            }
+
+            if (isset($element['type']) && array_key_exists((string) $element['type'], self::LEGACY_FEATURE_TYPES)) {
                 return true;
             }
         }
