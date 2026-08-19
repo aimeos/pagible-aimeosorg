@@ -53,8 +53,10 @@ class AimeosImport extends Command
 
     /** @var array<string, string> */
     protected const LEGACY_FEATURE_TYPES = [
-        'feature' => 'aimeos:feature',
-        'feature-list' => 'aimeos:feature-list',
+        'feature' => 'aimeos::feature',
+        'feature-list' => 'aimeos::feature-list',
+        'aimeos:feature' => 'aimeos::feature',
+        'aimeos:feature-list' => 'aimeos::feature-list',
     ];
 
     protected string $fileBase;
@@ -1022,7 +1024,7 @@ class AimeosImport extends Command
         return [
             'element' => [
                 'id' => Utils::uid(),
-                'type' => 'aimeos:feature',
+                'type' => 'aimeos::feature',
                 'group' => 'main',
                 'data' => $data,
             ],
@@ -1081,7 +1083,7 @@ class AimeosImport extends Command
         return [
             'element' => [
                 'id' => Utils::uid(),
-                'type' => 'aimeos:feature-list',
+                'type' => 'aimeos::feature-list',
                 'group' => 'main',
                 'data' => [
                     'title' => $title,
@@ -2401,17 +2403,18 @@ class AimeosImport extends Command
             return false;
         }
 
+        if (
+            isset($content['type'])
+            && array_key_exists((string) $content['type'], self::LEGACY_FEATURE_TYPES)
+        ) {
+            return true;
+        }
+
         foreach ((array) $content as $element) {
-            if (! is_array($element) && ! is_object($element)) {
-                continue;
-            }
-
-            if (is_object($element)) {
-                $element = (array) $element;
-            }
-
-            if (isset($element['type']) && array_key_exists((string) $element['type'], self::LEGACY_FEATURE_TYPES)) {
-                return true;
+            if (is_array($element) || is_object($element)) {
+                if ($this->contentHasLegacyFeatureTypes($element)) {
+                    return true;
+                }
             }
         }
 
