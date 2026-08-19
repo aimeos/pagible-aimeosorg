@@ -49,6 +49,12 @@ class AimeosImport extends Command
 
     protected string $theme = '';
 
+    /** @var array<string, string> */
+    protected const LEGACY_FEATURE_TYPES = [
+        'feature' => 'aimeos::feature',
+        'feature-list' => 'aimeos::feature-list',
+    ];
+
     protected string $fileBase;
 
     /** @var Collection<int|string, mixed> */
@@ -2295,6 +2301,7 @@ class AimeosImport extends Command
      */
     protected function createVersion(Page $page, array $pageData, array $contentElements, array $fileIds, array $elementIds = []): void
     {
+        $contentElements = $this->normalizeLegacyContentTypes($contentElements);
         $version = $page->versions()->forceCreate($this->buildVersionData($pageData, $contentElements));
 
         if (! empty($fileIds)) {
@@ -2305,8 +2312,63 @@ class AimeosImport extends Command
             $version->elements()->attach($elementIds);
         }
 
-        $page->forceFill(['latest_id' => $version->id])->saveQuietly();
+        $page->forceFill([
+            'content' => $contentElements,
+            'latest_id' => $version->id,
+        ])->saveQuietly();
         $page->publish($version);
+    }
+
+    /**
+     * Normalizes legacy Aimeos feature component types to namespaced types.
+     *
+     * @param  array<int, array<string, mixed>>  $elements
+     * @return array<int, array<string, mixed>>
+     */
+    protected function normalizeLegacyContentTypes(array $elements): array
+    {
+        return array_map(function (mixed $element): mixed {
+            if (! is_array($element) || ! isset($element['type'])) {
+                return $element;
+            }
+
+            $type = (string) $element['type'];
+            $mapped = self::LEGACY_FEATURE_TYPES[$type] ?? null;
+
+            if (! $mapped) {
+                return $element;
+            }
+
+            $element['type'] = $mapped;
+
+            return $element;
+        }, $elements);
+    }
+
+    /**
+     * Checks whether a page contains legacy Aimeos feature types.
+     *
+     * @param  Page  $page
+     */
+    protected function pageHasLegacyFeatureTypes(Page $page): bool
+    {
+        $content = $page->latest?->aux?->content ?? $page->content ?? [];
+
+        if (! is_array($content) && ! is_object($content)) {
+            return false;
+        }
+
+        foreach ((array) $content as $element) {
+            if (! is_array($element) || ! isset($element['type'])) {
+                continue;
+            }
+
+            if (array_key_exists((string) $element['type'], self::LEGACY_FEATURE_TYPES)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -3186,7 +3248,24 @@ class AimeosImport extends Command
                             $slug = $this->slugFromPath($t3Page->slug);
 
                             if ($page = $this->findPage($domain, $slug)) {
-                                return ['page' => $page, 'path' => $slug, 'reused' => true];
+                                if (! $this->pageHasLegacyFeatureTypes($page)) {
+                                    return ['page' => $page, 'path' => $slug, 'reused' => true, 'migrated' => false];
+                                }
+
+                                $to = $this->redirectTarget($t3Page, $pagesById);
+                                $pageData = $this->buildPageData($t3Page, $slug, $domain, $to);
+                                $records = $this->recordsForPage($t3Page, $contentElements);
+                                $pageData['theme'] = $this->theme;
+                                $content = $this->buildPageContent($t3Page, $records);
+                                $this->createVersion(
+                                    $page,
+                                    $pageData,
+                                    $content['elements'],
+                                    $content['fileIds'],
+                                    $content['elementIds'],
+                                );
+
+                                return ['page' => $page, 'path' => $slug, 'reused' => true, 'migrated' => true];
                             }
 
                             $to = $this->redirectTarget($t3Page, $pagesById);
@@ -3194,7 +3273,6 @@ class AimeosImport extends Command
                             $records = $this->recordsForPage($t3Page, $contentElements);
                             $pageData['theme'] = $this->theme;
                             $content = $this->buildPageContent($t3Page, $records);
-
                             $page = $this->createPage($pageData, $content['elements'], $parentPage);
                             $this->createVersion($page, $pageData, $content['elements'], $content['fileIds'], $content['elementIds']);
 
@@ -3218,8 +3296,12 @@ class AimeosImport extends Command
                 }
 
                 if ($result['reused']) {
-                    $reused++;
-                    $this->info("  Reused: {$t3Page->title} (/{$result['path']}) [{$domain}] (destination route already exists)");
+                    if ($result['migrated']) {
+                        $this->info("  Repaired legacy content: {$t3Page->title} (/{$result['path']}) [{$domain}]");
+                    } else {
+                        $reused++;
+                        $this->info("  Reused: {$t3Page->title} (/{$result['path']}) [{$domain}] (destination route already exists)");
+                    }
                 } else {
                     $imported++;
                     $this->info("  Imported: {$t3Page->title} (/{$result['path']}) [{$domain}]");
