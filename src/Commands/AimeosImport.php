@@ -49,6 +49,8 @@ class AimeosImport extends Command
 
     protected string $theme = '';
 
+    protected bool $themeProvided = false;
+
     /** @var array<string, string> */
     protected const LEGACY_FEATURE_TYPES = [
         'feature' => 'aimeos:feature',
@@ -108,6 +110,7 @@ class AimeosImport extends Command
         $this->lang = (string) $this->option('lang'); // @phpstan-ignore cast.string
         $this->editor = (string) $this->option('editor'); // @phpstan-ignore cast.string
         $this->theme = (string) ($this->option('theme') ?: ''); // @phpstan-ignore cast.string
+        $this->themeProvided = $this->input->hasParameterOption('--theme');
         $this->fileBase = rtrim((string) ($this->option('file-base') ?: ''), '/'); // @phpstan-ignore cast.string
         $this->createdFiles = Collection::make();
         $this->createdFileUrls = Collection::make();
@@ -2314,6 +2317,7 @@ class AimeosImport extends Command
 
         $page->forceFill([
             'content' => $contentElements,
+            'theme' => $this->themeProvided ? $this->theme : $page->theme,
             'latest_id' => $version->id,
         ])->saveQuietly();
         $page->publish($version);
@@ -3291,6 +3295,10 @@ class AimeosImport extends Command
                             $slug = $this->slugFromPath($t3Page->slug);
 
                             if ($page = $this->findPage($domain, $slug)) {
+                                if ($this->themeProvided && $page->theme !== $this->theme) {
+                                    $page->update(['theme' => $this->theme]);
+                                }
+
                                 if (! $this->pageHasLegacyFeatureTypes($page)) {
                                     return ['page' => $page, 'path' => $slug, 'reused' => true, 'migrated' => false];
                                 }
