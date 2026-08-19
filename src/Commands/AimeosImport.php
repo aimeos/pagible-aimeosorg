@@ -931,7 +931,7 @@ class AimeosImport extends Command
             fn ($record) => (string) ($record->CType ?? '') === 'accordion'
         )->values();
 
-        if (! $heading || $highlights->isEmpty() || $lists->isEmpty()) {
+        if (! $heading) {
             return null;
         }
 
@@ -945,27 +945,35 @@ class AimeosImport extends Command
             ],
         ]];
         $fileIds = [];
+        $hasHighlights = false;
+        $hasLists = false;
 
         foreach ($highlights as $record) {
             $result = $this->convertFeatureHighlight($record);
 
             if (! $result) {
-                return null;
+                continue;
             }
 
             $elements[] = $result['element'];
             $fileIds = array_merge($fileIds, $result['fileIds']);
+            $hasHighlights = true;
         }
 
         foreach ($lists as $record) {
             $result = $this->convertFeatureList($record);
 
             if (! $result) {
-                return null;
+                continue;
             }
 
             $elements[] = $result['element'];
             $fileIds = array_merge($fileIds, $result['fileIds']);
+            $hasLists = true;
+        }
+
+        if (! $hasHighlights || ! $hasLists) {
+            return null;
         }
 
         return [
@@ -985,27 +993,31 @@ class AimeosImport extends Command
         $body = trim((string) ($record->bodytext ?? ''));
         $fileId = $this->importFileForContent((int) ($record->uid ?? 0));
 
-        if ($title === '' || $body === '' || ! $fileId) {
+        if ($title === '' || $body === '') {
             return null;
         }
 
         $result = $this->rewriteHtmlFiles($body);
+        $data = [
+            'title' => $title,
+            'text' => $this->htmlToMarkdown($result['html']),
+            'position' => $this->imagePosition((int) ($record->imageorient ?? 0)) === 'end'
+                ? 'end'
+                : 'start',
+        ];
+
+        if ($fileId) {
+            $data['file'] = ['id' => $fileId, 'type' => 'file'];
+        }
 
         return [
             'element' => [
                 'id' => Utils::uid(),
                 'type' => 'aimeos::feature',
                 'group' => 'main',
-                'data' => [
-                    'title' => $title,
-                    'text' => $this->htmlToMarkdown($result['html']),
-                    'file' => ['id' => $fileId, 'type' => 'file'],
-                    'position' => $this->imagePosition((int) ($record->imageorient ?? 0)) === 'end'
-                        ? 'end'
-                        : 'start',
-                ],
+                'data' => $data,
             ],
-            'fileIds' => array_values(array_unique(array_merge($result['fileIds'], [$fileId]))),
+            'fileIds' => array_values(array_unique(array_filter(array_merge($result['fileIds'], [$fileId])))),
         ];
     }
 
@@ -1035,7 +1047,7 @@ class AimeosImport extends Command
         $items = [];
         $fileIds = [];
 
-        if ($title === '' || ! $icon) {
+        if ($title === '') {
             return null;
         }
 
