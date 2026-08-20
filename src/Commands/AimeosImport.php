@@ -1385,11 +1385,32 @@ class AimeosImport extends Command
             fn ($record) => (string) ($record->CType ?? '') === 'header'
                 && strcasecmp(trim((string) ($record->header ?? '')), 'Aimeos Showcases') === 0
         );
-        $images = $records->first(
+        $images = $records->filter(
             fn ($record) => (string) ($record->CType ?? '') === 'image'
                 && $this->fileRefs->has((int) ($record->uid ?? 0))
-        );
-        $showcases = $images ? $this->convertShowcases($images) : null;
+        )->values();
+        $showcases = null;
+
+        foreach ($images as $image) {
+            if (! $converted = $this->convertShowcases($image)) {
+                continue;
+            }
+
+            if ($showcases === null) {
+                $showcases = $converted;
+
+                continue;
+            }
+
+            $showcases['elements'][0]['data']['items'] = array_merge(
+                $showcases['elements'][0]['data']['items'],
+                $converted['elements'][0]['data']['items'],
+            );
+            $showcases['fileIds'] = array_values(array_unique(array_merge(
+                $showcases['fileIds'],
+                $converted['fileIds'],
+            )));
+        }
 
         if (! $showcases) {
             return null;
@@ -1437,7 +1458,7 @@ class AimeosImport extends Command
 
                 $lines = preg_split('/\R+/', trim((string) ($ref->description ?? ''))) ?: [];
                 $lines = array_values(array_filter(array_map('trim', $lines)));
-                $name = trim((string) ($ref->title ?? $ref->alternative ?? ''));
+                $name = $lines[0] ?? trim((string) ($ref->title ?? $ref->alternative ?? ''));
                 $text = count($lines) > 1 ? implode(' | ', array_slice($lines, 1)) : '';
                 $url = trim((string) ($ref->link ?? ''));
 
