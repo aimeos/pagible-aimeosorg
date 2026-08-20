@@ -2577,7 +2577,11 @@ class AimeosImport extends Command
             }
         }
 
-        if (($text = $this->htmlToMarkdown($html)) !== '') {
+        $text = preg_match('/<img\b/i', $html) === 1
+            ? $html
+            : $this->htmlToMarkdown($html);
+
+        if ($text !== '') {
             $card['text'] = $text;
         }
 

@@ -1228,9 +1228,15 @@ main .heading h2 {
     object-fit: contain;
 }
 
+.type-page main .cms-content > .aimeos-partnering {
+    background-color: #FFFFFF;
+}
+
 .partnering {
-    padding: clamp(2rem, 5vw, 3.5rem);
-    box-shadow: 0.25rem 1rem 1.5rem #1030501F;
+    margin: 0;
+    padding: 2.5rem;
+    background-color: #FFFFFF;
+    box-shadow: 4px 16px 20px 4px #E6EAEE;
 }
 
 .partnering .header,

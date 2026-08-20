@@ -207,11 +207,11 @@ footer.cms-content + footer.bottom {
 
 footer.cms-content,
 footer.cms-content > :nth-child(odd) {
-    background-color: var(--pico-secondary-background);
+    background-color: #CAD2D9;
 }
 
 footer.cms-content {
-    border-top: 1px solid var(--pico-primary);
+    border-top: 1px solid #E6EAEE;
 }
 
 footer.cms-content > .cards > .container {
