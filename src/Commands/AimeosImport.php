@@ -57,6 +57,18 @@ class AimeosImport extends Command
         'feature-list' => 'aimeos::feature-list',
         'aimeos:feature' => 'aimeos::feature',
         'aimeos:feature-list' => 'aimeos::feature-list',
+        'showcases' => 'aimeos::showcases',
+        'aimeos-showcases' => 'aimeos::showcases',
+        'aimeos:showcases' => 'aimeos::showcases',
+    ];
+
+    /** @var string[] */
+    protected const SHOWCASE_LIST_TYPES = [
+        'showcases',
+        'aimeos:showcases',
+        'aimeos_showcases',
+        'aimeos-showcases',
+        'aimeos::showcases',
     ];
 
     protected string $fileBase;
@@ -133,6 +145,7 @@ class AimeosImport extends Command
         }
 
         $pages = $this->fetchPages();
+        $showcasePageIds = $this->showcaseSourcePageIds($pages);
 
         if ($pages->isEmpty()) {
             $this->warn('No TYPO3 pages found.');
@@ -166,7 +179,7 @@ class AimeosImport extends Command
         $this->carouselItems = $this->fetchCarouselItems();
         $this->carouselFileRefs = $this->fetchCarouselFileReferences();
         $this->backendLayouts = $this->fetchBackendLayouts();
-        $contentElements = $this->fetchContentElements();
+        $contentElements = $this->fetchContentElements($showcasePageIds);
 
         if ($pageIds === null) {
             $this->importPages($pages, $contentElements);
@@ -327,12 +340,23 @@ class AimeosImport extends Command
             ];
         }
 
+        if ($showcases = $this->convertShowcasesPage($t3Page, $records)) {
+            $remaining = $this->buildContent($records->filter(
+                fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
+                    || ((string) ($record->CType ?? '') === 'shortcut' && empty($record->deleted))
+            ));
+
+            return [
+                'elements' => array_merge($showcases['elements'], $remaining['elements']),
+                'fileIds' => array_values(array_unique(array_merge($showcases['fileIds'], $remaining['fileIds']))),
+                'elementIds' => $remaining['elementIds'],
+            ];
+        }
+
         if ($features = $this->convertFeaturesPage($t3Page, $records)) {
             $remaining = $this->buildContent($records->filter(
-                fn ($record) => ! ((string) ($record->CType ?? '') === 'shortcut'
-                        && $this->isFeaturePartnerShortcut($record))
-                    && (($record->_pagible_group ?? 'main') === 'footer'
-                        || (string) ($record->CType ?? '') === 'shortcut')
+                fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
+                    || (string) ($record->CType ?? '') === 'shortcut'
             ));
 
             return [
@@ -357,8 +381,35 @@ class AimeosImport extends Command
 
         $records = $this->prepareB2bPageRecords($t3Page, $records);
         $records = $this->prepareMarketplacePageRecords($t3Page, $records);
+        $records = $this->prepareSaasPageRecords($t3Page, $records);
+        $records = $this->prepareLaravelEcommercePackageRecords($t3Page, $records);
 
         return $this->buildContent($records);
+    }
+
+    /**
+     * Marks the Laravel package feature rows for the Aimeos theme component.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return Collection<int|string, mixed>
+     */
+    protected function prepareLaravelEcommercePackageRecords(object $t3Page, Collection $records): Collection
+    {
+        if ($this->slugFromPath((string) ($t3Page->slug ?? '')) !== 'laravel-ecommerce-package') {
+            return $records;
+        }
+
+        return $records->map(function ($record) {
+            if (! in_array((string) ($record->CType ?? ''), ['textpic', 'textmedia'], true)
+                || ($record->_pagible_group ?? 'main') === 'footer') {
+                return $record;
+            }
+
+            $copy = clone $record;
+            $copy->_pagible_feature = true;
+
+            return $copy;
+        });
     }
 
     /**
@@ -377,6 +428,58 @@ class AimeosImport extends Command
         }
 
         return false;
+    }
+
+    /**
+     * Adds the structural markers used by the Laravel SaaS landing-page theme.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return Collection<int|string, mixed>
+     */
+    protected function prepareSaasPageRecords(object $t3Page, Collection $records): Collection
+    {
+        if ($this->slugFromPath((string) ($t3Page->slug ?? '')) !== 'laravel-ecommerce-saas') {
+            return $records;
+        }
+
+        return $records->map(function ($record) {
+            if (($record->_pagible_group ?? 'main') === 'footer') {
+                return $record;
+            }
+
+            $copy = clone $record;
+            $body = (string) ($copy->bodytext ?? '');
+
+            if ((string) ($copy->CType ?? '') === 'html'
+                && str_contains($body, 'class="landing welcome"')
+                && str_contains($body, 'Laravel eCommerce SaaS')) {
+                $body = (string) preg_replace(
+                    '/class=(["\'])landing\s+welcome\1/i',
+                    'class=$1landing welcome saas-welcome$1',
+                    $body,
+                    1,
+                );
+            } elseif ((string) ($copy->CType ?? '') === 'html'
+                && str_contains($body, 'marketplace.png')
+                && preg_match('/<img\b[^>]*class=(["\'])[^"\']*\blogo\b[^"\']*\1/i', $body)) {
+                $body = '<div class="saas-logo">'.$body.'</div>';
+            } elseif ((string) ($copy->CType ?? '') === 'text'
+                && stripos($body, 'Create your own feature rich') !== false) {
+                $body = '<div class="saas-intro">'.$body.'</div>';
+            } elseif ((string) ($copy->CType ?? '') === 'html'
+                && str_contains($body, 'Want to start?')) {
+                $body = (string) preg_replace(
+                    '/class=(["\'])container\1/i',
+                    'class=$1container saas-start$1',
+                    $body,
+                    1,
+                );
+            }
+
+            $copy->bodytext = $body;
+
+            return $copy;
+        });
     }
 
     /**
@@ -726,17 +829,134 @@ class AimeosImport extends Command
      */
     protected function convertContentElement(object $record): ?array
     {
+        if ($this->isPartneringHtml($record)) {
+            return $this->convertPartnering($record);
+        }
+
+        if (! empty($record->_pagible_feature)) {
+            return $this->convertFeatureContent($record);
+        }
+
         return match ((string) ($record->CType ?? '')) {
             'header' => $this->convertHeader($record),
             'text' => $this->convertText($record),
             'textpic', 'textmedia' => $this->convertTextpic($record),
             'image' => $this->convertImage($record),
-            'html' => $this->convertHtml($record),
+            'html' => $this->isQuestionsHtml($record) ? $this->convertQuestions($record) : $this->convertHtml($record),
+            'list' => $this->isShowcasesPlugin($record) ? $this->convertShowcases($record) : $this->convertDefault($record),
             'accordion' => $this->convertAccordion($record),
             'carousel' => $this->convertCarousel($record),
             'shortcut' => $this->convertShortcut($record),
             default => $this->convertDefault($record),
         };
+    }
+
+    /**
+     * Converts a marked text-with-image record into one Aimeos feature element.
+     *
+     * @return array{elements: array<int, array<string, mixed>>, fileIds: string[]}|null
+     */
+    protected function convertFeatureContent(object $record): ?array
+    {
+        $result = $this->convertFeatureHighlight($record);
+
+        return $result ? [
+            'elements' => [$result['element']],
+            'fileIds' => $result['fileIds'],
+        ] : null;
+    }
+
+    /**
+     * Returns whether an HTML record contains a schema.org FAQ collection.
+     */
+    protected function isQuestionsHtml(object $record): bool
+    {
+        $html = (string) ($record->bodytext ?? '');
+
+        return stripos($html, 'FAQPage') !== false
+            && stripos($html, 'mainEntity') !== false
+            && stripos($html, 'acceptedAnswer') !== false;
+    }
+
+    /**
+     * Converts schema.org FAQ HTML into the theme's questions component.
+     *
+     * @return array{elements: array<int, array<string, mixed>>, fileIds: string[]}|null
+     */
+    protected function convertQuestions(object $record): ?array
+    {
+        $document = new \DOMDocument('1.0', 'UTF-8');
+        $previous = libxml_use_internal_errors(true);
+
+        try {
+            $loaded = $document->loadHTML(
+                '<?xml encoding="UTF-8"><div>'.(string) ($record->bodytext ?? '').'</div>',
+                LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD,
+            );
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previous);
+        }
+
+        if (! $loaded) {
+            return null;
+        }
+
+        $xpath = new \DOMXPath($document);
+        $questions = $xpath->query(
+            "//*[contains(concat(' ', normalize-space(@itemprop), ' '), ' mainEntity ')]"
+        );
+        $items = [];
+        $fileIds = [];
+
+        if (! $questions) {
+            return null;
+        }
+
+        foreach ($questions as $question) {
+            $titleNode = $xpath->query(
+                ".//*[contains(concat(' ', normalize-space(@itemprop), ' '), ' name ')]",
+                $question,
+            )?->item(0);
+            $answerNode = $xpath->query(
+                ".//*[contains(concat(' ', normalize-space(@itemprop), ' '), ' acceptedAnswer ')]",
+                $question,
+            )?->item(0);
+            $title = trim((string) ($titleNode?->textContent ?? ''));
+            $html = '';
+
+            if (! $answerNode) {
+                continue;
+            }
+
+            foreach ($answerNode->childNodes as $child) {
+                $html .= $document->saveHTML($child) ?: '';
+            }
+
+            $result = $this->rewriteHtmlFiles($html);
+            $text = trim($this->htmlToMarkdown($result['html']));
+
+            if ($title === '' || $text === '') {
+                continue;
+            }
+
+            $items[] = ['title' => $title, 'text' => $text];
+            $fileIds = array_merge($fileIds, $result['fileIds']);
+        }
+
+        if ($items === []) {
+            return null;
+        }
+
+        return ['elements' => [[
+            'id' => Utils::uid(),
+            'type' => 'questions',
+            'group' => (string) ($record->_pagible_group ?? 'main'),
+            'data' => [
+                'title' => trim((string) ($record->header ?? '')) ?: 'Frequently asked questions',
+                'items' => $items,
+            ],
+        ]], 'fileIds' => array_values(array_unique($fileIds))];
     }
 
     /**
@@ -1096,6 +1316,419 @@ class AimeosImport extends Command
     }
 
     /**
+     * Converts the legacy showcase image collection into the Aimeos showcase grid.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return array{elements: array<int, array<string, mixed>>, fileIds: string[]}|null
+     */
+    protected function convertShowcasesPage(object $t3Page, Collection $records): ?array
+    {
+        if ($this->slugFromPath((string) ($t3Page->slug ?? '')) !== 'showcases') {
+            return null;
+        }
+
+        $records = $records->filter(
+            fn ($record) => empty($record->deleted) && ($record->_pagible_group ?? 'main') !== 'footer'
+        )->values();
+        $heading = $records->first(
+            fn ($record) => (string) ($record->CType ?? '') === 'header'
+                && strcasecmp(trim((string) ($record->header ?? '')), 'Aimeos Showcases') === 0
+        );
+        $images = $records->first(
+            fn ($record) => (string) ($record->CType ?? '') === 'image'
+                && $this->fileRefs->has((int) ($record->uid ?? 0))
+        );
+        $showcases = $images ? $this->convertShowcases($images) : null;
+
+        if (! $showcases) {
+            return null;
+        }
+
+        $elements = [];
+        if ($heading) {
+            $elements[] = [
+                'id' => Utils::uid(),
+                'type' => 'heading',
+                'group' => 'main',
+                'data' => [
+                    'level' => $this->headerLevel($heading->header_layout), // @phpstan-ignore property.notFound
+                    'title' => (string) $heading->header,
+                ],
+            ];
+        }
+
+        return [
+            'elements' => array_merge($elements, $showcases['elements']),
+            'fileIds' => $showcases['fileIds'],
+        ];
+    }
+
+    /**
+     * Converts a legacy showcases plugin into one showcases component.
+     *
+     * @return array{elements: array<int, array<string, mixed>>, fileIds: string[]}|null
+     */
+    protected function convertShowcases(object $record): ?array
+    {
+        $items = $this->extractShowcaseItems((string) ($record->pi_flexform ?? ''));
+        $fileRefs = ($this->fileRefs->get((int) ($record->uid ?? 0), Collection::make()))->values();
+        $filePos = 0;
+        $dataItems = [];
+        $fileIds = [];
+
+        if ($items === []) {
+            foreach ($fileRefs as $ref) {
+                $file = $this->importFileSafely(fn () => $this->importFileReference($ref));
+
+                if (! $file) {
+                    continue;
+                }
+
+                $lines = preg_split('/\R+/', trim((string) ($ref->description ?? ''))) ?: [];
+                $lines = array_values(array_filter(array_map('trim', $lines)));
+                $name = trim((string) ($ref->title ?? $ref->alternative ?? ''));
+                $text = count($lines) > 1 ? implode(' | ', array_slice($lines, 1)) : '';
+                $url = trim((string) ($ref->link ?? ''));
+
+                if ($url !== '' && ! str_starts_with($url, '/') && parse_url($url, PHP_URL_SCHEME) === null) {
+                    $url = 'https://'.$url;
+                }
+
+                $showcase = ['file' => ['id' => $file, 'type' => 'file']];
+                if ($name !== '') {
+                    $showcase['name'] = $name;
+                }
+                if ($text !== '') {
+                    $showcase['text'] = $text;
+                }
+                if ($url !== '') {
+                    $showcase['url'] = $url;
+                }
+
+                $dataItems[] = $showcase;
+                $fileIds[] = $file;
+            }
+        } else {
+            foreach ($items as $item) {
+                $file = $this->showcaseItemFileId($item['file'] ?? '', $fileRefs, $filePos);
+
+                if (! $file) {
+                    continue;
+                }
+
+                $showcase = [
+                    'file' => ['id' => $file, 'type' => 'file'],
+                ];
+
+                $name = $item['name'] ?? '';
+                $text = $item['text'] ?? '';
+                $url = $item['url'] ?? '';
+
+                if ($name !== '') {
+                    $showcase['name'] = $name;
+                }
+                if ($text !== '') {
+                    $showcase['text'] = $text;
+                }
+                if ($url !== '') {
+                    $showcase['url'] = $url;
+                }
+
+                $dataItems[] = $showcase;
+                $fileIds[] = $file;
+            }
+        }
+
+        if (empty($dataItems)) {
+            return null;
+        }
+
+        return ['elements' => [[
+            'id' => Utils::uid(),
+            'type' => 'aimeos::showcases',
+            'group' => 'main',
+            'data' => ['items' => $dataItems],
+        ]], 'fileIds' => array_values(array_unique($fileIds))];
+    }
+
+    /**
+     * Returns whether the record contains a legacy showcases plugin.
+     */
+    protected function isShowcasesPlugin(object $record): bool
+    {
+        $type = strtolower(trim((string) ($record->CType ?? '')));
+        $listType = strtolower(trim((string) ($record->list_type ?? '')));
+
+        return in_array($listType, self::SHOWCASE_LIST_TYPES, true)
+            || str_contains($listType, 'showcase')
+            || in_array($type, ['aimeos:showcases', 'aimeos::showcases', 'aimeos_showcases', 'showcases'], true);
+    }
+
+    /**
+     * Creates one showcase file from an inline reference or the next file reference.
+     *
+     * @param  Collection<int, mixed>  $fileRefs
+     */
+    protected function showcaseItemFileId(string $value, Collection $fileRefs, int &$position): ?string
+    {
+        $value = html_entity_decode(trim($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        if ($value !== '') {
+            $file = $this->importShowcaseFileValue($value);
+            if ($file) {
+                return $file;
+            }
+        }
+
+        while ($position < $fileRefs->count()) {
+            $ref = $fileRefs->get($position++);
+
+            if (! $ref) {
+                continue;
+            }
+
+            $file = $this->importFileSafely(fn () => $this->importFileReference($ref));
+
+            if ($file) {
+                return $file;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Imports a showcase file from an inline value.
+     */
+    protected function importShowcaseFileValue(string $value): ?string
+    {
+        if (ctype_digit($value)) {
+            $ref = DB::connection($this->t3Connection)
+                ->table('sys_file_reference')
+                ->where('uid', (int) $value)
+                ->first();
+
+            return $ref
+                ? $this->importFileSafely(fn () => $this->importFileReference((object) $ref))
+                : null;
+        }
+
+        if (str_starts_with((string) parse_url($value, PHP_URL_PATH), '/fileadmin/')) {
+            $file = $this->importFileSafely(fn () => $this->importHtmlFile($value));
+
+            return is_array($file) ? (string) ($file['id'] ?? '') : (string) ($file ?? '');
+        }
+
+        $path = parse_url($value, PHP_URL_PATH);
+        if (is_string($path) && str_starts_with($path, 'fileadmin/')) {
+            $file = $this->importFileSafely(fn () => $this->importHtmlFile($value));
+
+            return is_array($file) ? (string) ($file['id'] ?? '') : (string) ($file ?? '');
+        }
+
+        return null;
+    }
+
+    /**
+     * Extracts all legacy showcase items from the plugin flexform.
+     *
+     * @return list<array{name?:string, text?:string, url?:string, file?:string}>
+     */
+    protected function extractShowcaseItems(string $xml): array
+    {
+        $xml = trim($xml);
+        if ($xml === '') {
+            return [];
+        }
+
+        try {
+            $document = new \SimpleXMLElement($xml);
+        } catch (\Throwable) {
+            return [];
+        }
+
+        $items = [];
+        $nodes = $document->xpath('//el');
+
+        foreach ($nodes as $node) {
+            $item = [];
+            foreach ($node->xpath('./field') as $field) {
+                $name = (string) ($field['index'] ?? '');
+
+                if ($name === '') {
+                    continue;
+                }
+
+                $value = $this->collectFlexFieldValue($field);
+                if ($value !== '') {
+                    $item[$name] = $value;
+                }
+            }
+
+            $hasValue = false;
+
+            foreach ($item as $itemValue) {
+                if (is_string($itemValue)) {
+                    if ($itemValue !== '') {
+                        $hasValue = true;
+                        break;
+                    }
+                } elseif (is_array($itemValue) && $itemValue !== []) {
+                    $hasValue = true;
+                    break;
+                }
+            }
+
+            if ($item !== [] && $hasValue) {
+                $normalized = $this->normalizeShowcaseItem($item);
+                if ($normalized !== []) {
+                    $items[] = $normalized;
+                }
+            }
+        }
+
+        if ($items !== []) {
+            return $items;
+        }
+
+        $single = $this->normalizeShowcaseItem($this->collectFlexFieldValueMap($document));
+        return $single !== [] ? [$single] : [];
+    }
+
+    /**
+     * Builds a normalized item payload from flexform values.
+     *
+     * @param  array<string, mixed>  $values
+     * @return array{name?:string, text?:string, url?:string, file?:string}
+     */
+    protected function normalizeShowcaseItem(array $values): array
+    {
+        $name = $this->flexFieldValue($values, ['name', 'site', 'title', 'label', 'organization']);
+        $text = $this->flexFieldValue($values, ['text', 'segment', 'description']);
+        $url = $this->flexFieldValue($values, ['url', 'link', 'website', 'target']);
+        $file = $this->flexFieldValue($values, ['image', 'file', 'uid_local', 'file_reference', 'screenshot', 'media']);
+
+        $item = [];
+        if ($name !== '') {
+            $item['name'] = $name;
+        }
+        if ($text !== '') {
+            $item['text'] = $text;
+        }
+        if ($url !== '') {
+            $item['url'] = $url;
+        }
+        if ($file !== '') {
+            $item['file'] = $file;
+        }
+
+        return $item;
+    }
+
+    /**
+     * Reads a leaf or nested value from a legacy flexform value tree.
+     *
+     * @param  array<string, mixed>  $values
+     * @param  string[]  $keys
+     */
+    protected function flexFieldValue(array $values, array $keys): string
+    {
+        foreach ($keys as $key) {
+            if (! array_key_exists($key, $values)) {
+                continue;
+            }
+
+            $value = $values[$key];
+            if (is_string($value) && $value !== '') {
+                return trim(htmlspecialchars_decode($value, ENT_QUOTES | ENT_HTML5));
+            }
+            if (is_array($value)) {
+                $normalized = $this->flexFieldValue($value, $keys);
+                if ($normalized !== '') {
+                    return $normalized;
+                }
+            }
+        }
+
+        foreach ($values as $value) {
+            if (is_array($value)) {
+                $normalized = $this->flexFieldValue($value, $keys);
+                if ($normalized !== '') {
+                    return $normalized;
+                }
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Collects flexform values as a recursive array.
+     *
+     * @return array<string, mixed>
+     */
+    protected function collectFlexFieldValueMap(object $node): array
+    {
+        $result = [];
+
+        if (! ($node instanceof \SimpleXMLElement)) {
+            return $result;
+        }
+
+        foreach ($node->xpath('./field') as $field) {
+            $key = (string) ($field['index'] ?? '');
+            if ($key === '') {
+                continue;
+            }
+
+            $value = $this->collectFlexFieldValue($field);
+            if ($value !== '' && $value !== []) {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Reads one flexform field value.
+     *
+     * @return array<string, mixed>|string
+     */
+    protected function collectFlexFieldValue(object $node)
+    {
+        if (! ($node instanceof \SimpleXMLElement)) {
+            return '';
+        }
+
+        $value = $node->xpath('./value[@index="vDEF"]');
+        if ($value) {
+            return trim((string) $value[0]);
+        }
+
+        $value = $node->xpath('./value[@index="vDEFdefault"]');
+        if ($value) {
+            return trim((string) $value[0]);
+        }
+
+        $children = [];
+        foreach ($node->xpath('./field') as $field) {
+            $key = (string) ($field['index'] ?? '');
+            if ($key === '') {
+                continue;
+            }
+
+            $children[$key] = $this->collectFlexFieldValue($field);
+        }
+
+        if ($children !== []) {
+            return $children;
+        }
+
+        return '';
+    }
+
+    /**
      * Returns the Bootstrap Package accordion item expanded by default.
      */
     protected function accordionDefaultElement(object $record): int
@@ -1303,6 +1936,83 @@ class AimeosImport extends Command
      *
      * @return array{elements: array<int, array<string, mixed>>, fileIds: string[]}|null
      */
+    protected function convertPartnering(object $record): ?array
+    {
+        $body = (string) ($record->bodytext ?? '');
+
+        if (! $this->isPartneringHtml($record)
+            || ! preg_match('/<h2\b[^>]*>(.*?)<\/h2>/is', $body, $titleMatch)
+            || ! preg_match('/<p\b[^>]*>(.*?)<\/p>/is', $body, $textMatch)
+            || ! preg_match('/<(?:link|a)\b([^>]*)>(.*?)<\/(?:link|a)>/is', $body, $linkMatch)) {
+            return null;
+        }
+
+        $title = $this->plainText($titleMatch[1]);
+        $text = $this->plainText($textMatch[1]);
+        $label = $this->plainText($linkMatch[2]);
+        $url = $this->partneringUrl($linkMatch[1]);
+
+        if ($title === '' || $text === '' || $label === '' || $url === '') {
+            return null;
+        }
+
+        return [
+            'elements' => [[
+                'type' => 'aimeos::partnering',
+                'data' => [
+                    'title' => $title,
+                    'text' => $text,
+                    'label' => $label,
+                    'url' => $url,
+                ],
+            ]],
+            'fileIds' => [],
+        ];
+    }
+
+    /**
+     * Tests if a TYPO3 HTML record contains the shared partnering callout.
+     */
+    protected function isPartneringHtml(object $record): bool
+    {
+        $body = (string) ($record->bodytext ?? '');
+
+        return (string) ($record->CType ?? '') === 'html'
+            && stripos($body, 'Become an Aimeos Partner') !== false
+            && preg_match('/\bclass\s*=\s*(["\'])[^"\']*\bpartnering\b[^"\']*\1/is', $body) === 1;
+    }
+
+    /**
+     * Resolves the destination URL from a legacy TYPO3 link tag.
+     */
+    protected function partneringUrl(string $attributes): string
+    {
+        if (preg_match('/\bhref\s*=\s*(["\'])(.*?)\1/is', $attributes, $match)) {
+            return html_entity_decode(trim($match[2]), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        }
+
+        if (! preg_match('/(?:t3:\/\/page\?uid=)?\b(\d+)\b/i', $attributes, $match)
+            || ! ($page = $this->t3Pages?->get((int) $match[1]))) {
+            return '';
+        }
+
+        $path = $this->slugFromPath((string) ($page->slug ?? ''));
+
+        return $path === '' ? '/' : '/'.$path;
+    }
+
+    /**
+     * Converts a small legacy HTML fragment to plain Markdown-safe text.
+     */
+    protected function plainText(string $html): string
+    {
+        return trim((string) preg_replace(
+            '/\s+/u',
+            ' ',
+            html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8'),
+        ));
+    }
+
     protected function convertShortcut(object $record): ?array
     {
         preg_match_all('/\d+/', (string) ($record->records ?? ''), $matches);
@@ -1403,6 +2113,10 @@ class AimeosImport extends Command
         }
 
         $kind ??= (string) ($record->_pagible_shared ?? '');
+
+        if ($this->isPartneringHtml($record)) {
+            $kind = 'partnering';
+        }
 
         if ($kind === '' && (isset($referenced[$uid]) || isset($sourcePages[(int) ($record->pid ?? 0)]))) {
             $kind = 'reference';
@@ -2354,7 +3068,7 @@ class AimeosImport extends Command
 
         if (isset($element['type'])) {
             $type = (string) $element['type'];
-            $mapped = self::LEGACY_FEATURE_TYPES[$type] ?? null;
+            $mapped = $this->normalizeLegacyFeatureType($type);
 
             if ($mapped) {
                 $element['type'] = $mapped;
@@ -2405,7 +3119,7 @@ class AimeosImport extends Command
 
         if (
             isset($content['type'])
-            && array_key_exists((string) $content['type'], self::LEGACY_FEATURE_TYPES)
+            && $this->normalizeLegacyFeatureType((string) $content['type']) !== null
         ) {
             return true;
         }
@@ -2426,18 +3140,78 @@ class AimeosImport extends Command
      *
      * @return Collection<int|string, mixed>
      */
-    protected function fetchContentElements(): Collection
+    protected function fetchContentElements(array $showcasePageIds = []): Collection
     {
+        $deletedPidList = $showcasePageIds !== []
+            ? $showcasePageIds
+            : $this->showcaseSourcePageIds($this->t3Pages ?? Collection::make());
+        $activeLanguages = [0, -1];
+        $deletedLanguages = [0, -1, 1];
+
         $this->contentRecords = DB::connection($this->t3Connection)
             ->table('tt_content')
-            ->where('deleted', 0)
+            ->when(
+                $deletedPidList !== [],
+                fn ($query) => $query->where(function ($query) use ($deletedPidList, $activeLanguages, $deletedLanguages) {
+                    $query->where(function ($query) use ($activeLanguages) {
+                        $query->where('deleted', 0)->whereIn('sys_language_uid', $activeLanguages);
+                    })->orWhere(function ($query) use ($deletedPidList, $deletedLanguages) {
+                        $query->whereIn('pid', $deletedPidList)
+                            ->where('deleted', 1)
+                            ->whereIn('sys_language_uid', $deletedLanguages);
+                    });
+                }),
+                fn ($query) => $query->where('deleted', 0)->whereIn('sys_language_uid', $activeLanguages),
+            )
             ->where('hidden', 0)
-            ->whereIn('sys_language_uid', [0, -1])
             ->orderBy('sorting', 'asc')
             ->get()
             ->keyBy('uid');
 
         return $this->contentRecords->values()->groupBy('pid');
+    }
+
+    /**
+     * Normalizes legacy feature component types to namespaced schema types.
+     *
+     * @param  string  $type
+     */
+    protected function normalizeLegacyFeatureType(string $type): ?string
+    {
+        $type = strtolower(trim($type));
+
+        if ($type === '') {
+            return null;
+        }
+
+        $normalized = (string) preg_replace('/^aimeos:+/', 'aimeos:', $type);
+        $mapped = self::LEGACY_FEATURE_TYPES[$normalized] ?? null;
+
+        return $mapped;
+    }
+
+    /**
+     * Finds page UIDs for /showcases source pages so deleted content can be
+     * imported when it is still part of the legacy showcase grid.
+     *
+     * @param  Collection<int|string, mixed>  $pages
+     * @return int[]
+     */
+    protected function showcaseSourcePageIds(Collection $pages): array
+    {
+        $ids = [];
+
+        foreach ($pages as $page) {
+            if ((string) ($page->uid ?? '') === '') {
+                continue;
+            }
+
+            if ($this->slugFromPath((string) ($page->slug ?? '')) === 'showcases') {
+                $ids[] = (int) $page->uid;
+            }
+        }
+
+        return array_values(array_unique($ids));
     }
 
     /**
@@ -2699,15 +3473,13 @@ class AimeosImport extends Command
             ? $records
             : $this->markSharedRecords($records, 'reference', $contentPageUid);
 
-        if ($records->contains(fn ($record) => ($record->_pagible_group ?? 'main') === 'footer')
-            || ! $this->t3Pages) {
+        if (! $this->t3Pages) {
             return $records;
         }
 
         $root = $this->sourceRootPage($t3Page, $this->t3Pages);
-        $rootUid = (int) ($root->uid ?? 0);
 
-        if ($rootUid === 0 || $rootUid === $pageUid) {
+        if ((int) ($root->uid ?? 0) === 0) {
             return $records;
         }
 
@@ -2725,7 +3497,13 @@ class AimeosImport extends Command
             fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
         );
 
-        return $records->concat(
+        if ($footer->isEmpty()) {
+            return $records;
+        }
+
+        return $records->reject(
+            fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
+        )->concat(
             $this->markSharedRecords($footer, 'footer', $rootContentUid)
         )->values();
     }
