@@ -148,6 +148,11 @@ class AimeosImport extends Command
         }
 
         $pages = $this->fetchPages();
+
+        if ($this->rootPageUids !== []) {
+            $pages = $this->selectPageTrees($pages);
+        }
+
         $showcasePageIds = $this->showcaseSourcePageIds($pages);
 
         if ($pages->isEmpty()) {
@@ -4147,6 +4152,37 @@ class AimeosImport extends Command
     }
 
     /**
+     * Keeps only the explicitly selected TYPO3 page trees.
+     *
+     * @param  Collection<int|string, mixed>  $pages
+     * @return Collection<int|string, mixed>
+     */
+    protected function selectPageTrees(Collection $pages): Collection
+    {
+        $pageMap = $pages->groupBy('pid');
+        $pagesById = $pages->keyBy('uid');
+        $selected = Collection::make();
+
+        $collect = function (int $uid) use (&$collect, $pageMap, $pagesById, $selected): void {
+            if (! $page = $pagesById->get($uid)) {
+                return;
+            }
+
+            $selected->put($uid, $page);
+
+            foreach ($pageMap->get($uid, Collection::make()) as $child) {
+                $collect((int) $child->uid);
+            }
+        };
+
+        foreach (array_keys($this->rootPageUids) as $uid) {
+            $collect($uid);
+        }
+
+        return $selected->values();
+    }
+
+    /**
      * Imports all pages recursively following the TYPO3 page hierarchy.
      *
      * @param  Collection<int|string, mixed>  $pages
@@ -4176,7 +4212,7 @@ class AimeosImport extends Command
                                     $page->update(['theme' => $this->theme]);
                                 }
 
-                                if (! $this->pageHasLegacyFeatureTypes($page)) {
+                                if ($slug !== 'showcases' && ! $this->pageHasLegacyFeatureTypes($page)) {
                                     return ['page' => $page, 'path' => $slug, 'reused' => true, 'migrated' => false];
                                 }
 
@@ -4225,7 +4261,7 @@ class AimeosImport extends Command
 
                 if ($result['reused']) {
                     if ($result['migrated']) {
-                        $this->info("  Repaired legacy content: {$t3Page->title} (/{$result['path']}) [{$domain}]");
+                        $this->info("  Updated imported content: {$t3Page->title} (/{$result['path']}) [{$domain}]");
                     } else {
                         $reused++;
                         $this->info("  Reused: {$t3Page->title} (/{$result['path']}) [{$domain}] (destination route already exists)");
@@ -4241,13 +4277,9 @@ class AimeosImport extends Command
             }
         };
 
-        $rootPages = $pageMap->get(0, Collection::make());
-
-        if ($this->rootPageUids !== []) {
-            $rootPages = $rootPages->filter(
-                fn (object $page): bool => isset($this->rootPageUids[(int) $page->uid])
-            );
-        }
+        $rootPages = $this->rootPageUids === []
+            ? $pageMap->get(0, Collection::make())
+            : $pagesById->only(array_keys($this->rootPageUids))->values();
 
         foreach ($rootPages as $t3Root) {
             $domain = $this->domainMap[$t3Root->uid] ?? $this->domain;
