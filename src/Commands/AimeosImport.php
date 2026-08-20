@@ -245,6 +245,7 @@ class AimeosImport extends Command
     protected function buildContent(Collection $records): array
     {
         $records = $this->expandReferencedRecords($records);
+        $records = $this->groupFooterRecords($records);
         $elements = [];
         $fileIds = [];
         $elementIds = [];
@@ -317,6 +318,44 @@ class AimeosImport extends Command
             'fileIds' => array_values(array_unique($fileIds)),
             'elementIds' => array_values(array_unique($elementIds)),
         ];
+    }
+
+    /**
+     * Combines the TYPO3 footer records into one source record so it is stored
+     * as one reusable Pagible element instead of one element per footer column.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return Collection<int, mixed>
+     */
+    protected function groupFooterRecords(Collection $records): Collection
+    {
+        $footer = $records->filter(
+            fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
+        )->values();
+
+        if ($footer->isEmpty()) {
+            return $records->values();
+        }
+
+        $result = Collection::make();
+        $grouped = false;
+
+        foreach ($records as $record) {
+            if (($record->_pagible_group ?? 'main') !== 'footer') {
+                $result->push($record);
+
+                continue;
+            }
+
+            if (! $grouped) {
+                $record = clone $record;
+                $record->_pagible_footer_records = $footer;
+                $result->push($record);
+                $grouped = true;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -829,6 +868,10 @@ class AimeosImport extends Command
      */
     protected function convertContentElement(object $record): ?array
     {
+        if (isset($record->_pagible_footer_records)) {
+            return $this->convertFooterCards($record);
+        }
+
         if ($this->isPartneringHtml($record)) {
             return $this->convertPartnering($record);
         }
@@ -2380,10 +2423,6 @@ class AimeosImport extends Command
      */
     protected function convertText(object $record): ?array
     {
-        if (($record->_pagible_group ?? 'main') === 'footer') {
-            return $this->convertFooterText($record);
-        }
-
         $elements = [];
         $fileIds = [];
 
@@ -2421,48 +2460,102 @@ class AimeosImport extends Command
     }
 
     /**
-     * Converts a TYPO3 footer text record into one column block.
+     * Converts all TYPO3 footer records into one cards element. Each HTML
+     * section becomes one card; records without section tags form one card.
      *
      * @return array{elements: array<int, array<string, mixed>>, fileIds: string[]}|null
      */
-    protected function convertFooterText(object $record): ?array
+    protected function convertFooterCards(object $record): ?array
     {
-        $header = trim((string) ($record->header ?? ''));
-        $body = trim((string) ($record->bodytext ?? ''));
+        $cards = [];
+        $fileIds = [];
 
-        if ($header === '' && $body === '') {
+        foreach (Collection::make($record->_pagible_footer_records ?? [$record]) as $footer) {
+            $sections = $this->footerHtmlSections((string) ($footer->bodytext ?? ''));
+            $header = trim((string) ($footer->header ?? ''));
+
+            if ($sections === [] && $header !== '') {
+                $sections = [''];
+            }
+
+            foreach ($sections as $position => $html) {
+                if ($position === 0 && $header !== '' && ($footer->header_layout ?? '0') !== '100') {
+                    $level = $this->headerLevel($footer->header_layout); // @phpstan-ignore property.notFound
+                    $html = sprintf(
+                        '<h%d>%s</h%d>%s',
+                        $level,
+                        htmlspecialchars($header, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
+                        $level,
+                        $html,
+                    );
+                }
+
+                if ($result = $this->convertFooterCard($html)) {
+                    $cards[] = $result['card'];
+                    $fileIds = array_merge($fileIds, $result['fileIds']);
+                }
+            }
+        }
+
+        if ($cards === []) {
             return null;
         }
 
-        $fileIds = [];
-        $classes = ['footer-links'];
-        $html = '';
-
-        if ($header !== '' && ($record->header_layout ?? '0') !== '100') {
-            $level = $this->headerLevel($record->header_layout); // @phpstan-ignore property.notFound
-            $classes[] = 'footer-'.Utils::slugify($header);
-            $html .= sprintf(
-                '<h%d>%s</h%d>',
-                $level,
-                htmlspecialchars($header, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'),
-                $level,
-            );
-        }
-
-        if ($body !== '') {
-            $result = $this->rewriteHtmlFiles($body);
-            $html .= $result['html'];
-            $fileIds = $result['fileIds'];
-        }
-
-        $html = sprintf('<div class="%s">%s</div>', implode(' ', $classes), $html);
-
         return ['elements' => [[
             'id' => Utils::uid(),
-            'type' => 'html',
+            'type' => 'cards',
             'group' => 'footer',
-            'data' => ['text' => Utils::html($html)],
+            'data' => ['cards' => $cards],
         ]], 'fileIds' => array_values(array_unique($fileIds))];
+    }
+
+    /**
+     * Returns the inner HTML of each section or the complete fragment when the
+     * TYPO3 record does not contain section tags.
+     *
+     * @return list<string>
+     */
+    protected function footerHtmlSections(string $html): array
+    {
+        $html = trim($html);
+
+        if ($html === '') {
+            return [];
+        }
+
+        preg_match_all('/<section\b[^>]*>(.*?)<\/section\s*>/is', $html, $matches);
+
+        return $matches[1] === [] ? [$html] : array_values($matches[1]);
+    }
+
+    /**
+     * Converts one footer HTML section into cards data.
+     *
+     * @return array{card: array<string, string>, fileIds: string[]}|null
+     */
+    protected function convertFooterCard(string $html): ?array
+    {
+        $result = $this->rewriteHtmlFiles(trim($html));
+        $html = trim($result['html']);
+        $card = [];
+
+        if (preg_match('/<h([1-6])\b[^>]*>(.*?)<\/h\1\s*>/is', $html, $match, PREG_OFFSET_CAPTURE)) {
+            $title = $this->plainText($match[2][0]);
+            $html = trim(substr_replace($html, '', $match[0][1], strlen($match[0][0])));
+
+            if ($title !== '') {
+                $card['title'] = $title;
+            }
+        }
+
+        if (($text = $this->htmlToMarkdown($html)) !== '') {
+            $card['text'] = $text;
+        }
+
+        return $card === [] ? null : [
+            'card' => $card,
+            'fileIds' => $result['fileIds'],
+        ];
     }
 
     /**
