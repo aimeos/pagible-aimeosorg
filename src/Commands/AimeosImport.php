@@ -103,6 +103,9 @@ class AimeosImport extends Command
     /** @var array<int, string> */
     protected array $domainMap = [];
 
+    /** @var array<int, true> */
+    protected array $rootPageUids = [];
+
     /** @var Collection<int|string, mixed>|null */
     protected ?Collection $t3Pages = null;
 
@@ -4240,6 +4243,12 @@ class AimeosImport extends Command
 
         $rootPages = $pageMap->get(0, Collection::make());
 
+        if ($this->rootPageUids !== []) {
+            $rootPages = $rootPages->filter(
+                fn (object $page): bool => isset($this->rootPageUids[(int) $page->uid])
+            );
+        }
+
         foreach ($rootPages as $t3Root) {
             $domain = $this->domainMap[$t3Root->uid] ?? $this->domain;
             $root = $this->getRootPage($t3Root, $domain, $contentElements);
@@ -4382,6 +4391,7 @@ class AimeosImport extends Command
 
             if (! empty($parts[1])) {
                 $this->domainMap[(int) $parts[1]] = $parts[0];
+                $this->rootPageUids[(int) $parts[1]] = true;
             } else {
                 $default = $parts[0];
             }
