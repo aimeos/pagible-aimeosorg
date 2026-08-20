@@ -296,7 +296,11 @@ class AimeosImport extends Command
                             $elementIds[] = $id;
                         }
 
-                        return ['elements' => $references, 'fileIds' => [], 'elementIds' => $elementIds];
+                        return [
+                            'elements' => $references,
+                            'fileIds' => array_values(array_unique($result['fileIds'] ?? [])),
+                            'elementIds' => $elementIds,
+                        ];
                     } catch (\Throwable $e) {
                         $this->removeFilesCreatedAfter($filesBefore);
 
@@ -2619,7 +2623,9 @@ class AimeosImport extends Command
             $url = $this->partneringUrl($match[1]);
 
             if ($label !== '' && $url !== '') {
-                $label = str_replace(['\\', '[', ']'], ['\\\\', '\\[', '\\]'], $label);
+                $label = $label === 'X'
+                    ? '&#88;'
+                    : str_replace(['\\', '[', ']'], ['\\\\', '\\[', '\\]'], $label);
                 $links[] = sprintf('- [%s](%s)', $label, $url);
             }
         }
