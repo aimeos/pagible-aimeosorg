@@ -277,6 +277,7 @@ footer.cms-content .cards .cms-text h2 {
 }
 
 footer.cms-content .cards .card-item:last-child .title,
+footer.cms-content .cards .card-item:has(.card-image):not(:has(.cms-text ul)) .title,
 footer.cms-content .cards .card-item:has(.cms-text img):not(:has(.cms-text ul)) .title,
 footer.cms-content .cards .cms-text h2:has(+ p img) {
     display: none;

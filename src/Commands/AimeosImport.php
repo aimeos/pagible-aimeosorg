@@ -2560,7 +2560,7 @@ class AimeosImport extends Command
     /**
      * Converts one footer HTML section into cards data.
      *
-     * @return array{card: array<string, string>, fileIds: string[]}|null
+     * @return array{card: array<string, mixed>, fileIds: string[]}|null
      */
     protected function convertFooterCard(string $html): ?array
     {
@@ -2577,9 +2577,24 @@ class AimeosImport extends Command
             }
         }
 
-        $text = preg_match('/<img\b/i', $html) === 1
-            ? $html
-            : $this->htmlToMarkdown($html);
+        if ($fileId = $result['fileIds'][0] ?? null) {
+            $card['file'] = ['id' => $fileId, 'type' => 'file'];
+
+            if (preg_match('/<a\b([^>]*)>\s*<img\b[^>]*\/?\s*>\s*<\/a>/is', $html, $match)
+                && ($url = $this->partneringUrl($match[1])) !== '') {
+                $card['url'] = $url;
+            }
+        }
+
+        if (preg_match('/\bclass\s*=\s*(["\'])[^"\']*\bintouch\b[^"\']*\1/is', $html)) {
+            $text = $this->footerLinksMarkdown($html);
+        } else {
+            $html = (string) preg_replace([
+                '/<a\b[^>]*>\s*<img\b[^>]*\/?\s*>\s*<\/a>/is',
+                '/<img\b[^>]*\/?\s*>/is',
+            ], '', $html);
+            $text = $this->htmlToMarkdown($html);
+        }
 
         if ($text !== '') {
             $card['text'] = $text;
@@ -2589,6 +2604,27 @@ class AimeosImport extends Command
             'card' => $card,
             'fileIds' => $result['fileIds'],
         ];
+    }
+
+    /**
+     * Converts footer contact anchors into a Markdown list for icon styling.
+     */
+    protected function footerLinksMarkdown(string $html): string
+    {
+        preg_match_all('/<a\b([^>]*)>(.*?)<\/a>/is', $html, $matches, PREG_SET_ORDER);
+        $links = [];
+
+        foreach ($matches as $match) {
+            $label = $this->plainText($match[2]);
+            $url = $this->partneringUrl($match[1]);
+
+            if ($label !== '' && $url !== '') {
+                $label = str_replace(['\\', '[', ']'], ['\\\\', '\\[', '\\]'], $label);
+                $links[] = sprintf('- [%s](%s)', $label, $url);
+            }
+        }
+
+        return implode("\n", $links);
     }
 
     /**
