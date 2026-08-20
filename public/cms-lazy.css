@@ -216,7 +216,7 @@ footer.cms-content {
 
 footer.cms-content > .cards > .container {
     max-width: 1140px !important;
-    padding: 32px 0;
+    padding: 32px 20px;
 }
 
 footer.cms-content .cards .card-list {
@@ -238,11 +238,6 @@ footer.cms-content .cards .card-list {
     }
 }
 
-footer.cms-content .cards .card-list:has(.card-item:nth-child(4))
-    .card-item:not(:has(.cms-text img)):has(+ .card-item:not(:has(.cms-text img))) {
-    margin-bottom: 30px;
-}
-
 footer.cms-content .cards .card-item {
     width: min(100%, 240px);
     min-width: 0;
@@ -253,6 +248,10 @@ footer.cms-content .cards .card-item {
     border-radius: 0;
     padding: 0;
     text-align: start;
+}
+
+footer.cms-content .cards .card-item:has(.card-image):not(:has(.cms-text ul)) {
+    padding-block: 40px;
 }
 
 footer.cms-content .cards .card-item:hover {
@@ -269,7 +268,8 @@ footer.cms-content .cards :is(.title, .cms-text h2) {
 }
 
 footer.cms-content .cards .title {
-    margin: 10px 0 16px;
+    width: min(100%, 12em);
+    margin: 0.5em auto;
 }
 
 footer.cms-content .cards .cms-text h2 {
@@ -342,6 +342,9 @@ footer.cms-content .cards .cms-text p:has(img) {
 footer.cms-content .cards .card-image {
     width: min(160px, 100%);
     margin: 0 auto;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 footer.cms-content .cards .card-item picture {
@@ -349,6 +352,9 @@ footer.cms-content .cards .card-item picture {
     aspect-ratio: auto;
     margin: 0 auto;
     overflow: visible;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 footer.cms-content .cards .card-image picture {
@@ -361,6 +367,9 @@ footer.cms-content .cards .card-item picture img {
     height: auto;
     object-fit: contain;
     transform: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
 }
 
 footer.cms-content .cards .card-item:last-child .cms-text ul {
