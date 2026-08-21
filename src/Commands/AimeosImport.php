@@ -417,6 +417,10 @@ class AimeosImport extends Command
             ];
         }
 
+        if ($caseStudy = $this->convertCaseStudyPage($t3Page, $records)) {
+            return $caseStudy;
+        }
+
         if ($extensions = $this->convertExtensionsPage($t3Page, $records)) {
             $remaining = $this->buildContent($records->filter(
                 fn ($record) => ($record->_pagible_group ?? 'main') === 'footer'
@@ -1012,6 +1016,399 @@ class AimeosImport extends Command
                 'items' => $items,
             ],
         ]], 'fileIds' => array_values(array_unique($fileIds))];
+    }
+
+    /**
+     * Converts one TYPO3 case-study detail page into the native Aimeos component.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return array{elements: array<int, array<string, mixed>>, fileIds: string[], elementIds: string[]}|null
+     */
+    protected function convertCaseStudyPage(object $t3Page, Collection $records): ?array
+    {
+        $path = trim((string) ($t3Page->slug ?? ''), '/');
+        $parent = $this->t3Pages?->get((int) ($t3Page->pid ?? 0));
+
+        if (! preg_match('~^case-studies/[^/]+$~', $path)
+            && $this->slugFromPath((string) ($parent->slug ?? '')) !== 'case-studies') {
+            return null;
+        }
+
+        $stageRecord = $records->first(
+            fn ($record) => ($record->_pagible_group ?? 'main') === 'main'
+                && preg_match('/\bclass\s*=\s*(["\'])[^"\']*\bstage\b[^"\']*\1/is', (string) ($record->bodytext ?? '')),
+        );
+
+        if (! $stageRecord) {
+            return null;
+        }
+
+        $content = $this->buildContent($records);
+        $stageResult = $this->rewriteHtmlFiles((string) ($stageRecord->bodytext ?? ''));
+        $data = $this->caseStudyStageData($stageResult['html'], $stageResult['fileIds']);
+
+        if (! $data) {
+            return null;
+        }
+
+        $data['sections'] = [];
+        $data = array_merge($data, $this->caseStudyImplementerData($records));
+        $imageLinks = $this->caseStudyImageLinks($records);
+        $main = [];
+        $footer = [];
+
+        foreach ($content['elements'] as $element) {
+            if (($element['group'] ?? 'main') === 'footer') {
+                $footer[] = $element;
+            } else {
+                $main[] = $element;
+            }
+        }
+
+        $remaining = [];
+        $count = count($main);
+
+        for ($position = 0; $position < $count;) {
+            $element = $main[$position];
+            $type = (string) ($element['type'] ?? '');
+
+            if ($type === 'html'
+                && preg_match('/\bclass\s*=\s*(["\'])[^"\']*\bstage\b[^"\']*\1/is', (string) data_get($element, 'data.text', ''))) {
+                $position++;
+
+                continue;
+            }
+
+            if ($type === 'slideshow') {
+                $data['gallery_title'] = trim((string) data_get($element, 'data.title', '')) ?: 'Screenshots';
+                $data['screenshots'] = array_values((array) data_get($element, 'data.files', []));
+                $position++;
+
+                continue;
+            }
+
+            if ($type === 'html' && ($back = $this->caseStudyBackLink((string) data_get($element, 'data.text', '')))) {
+                $data = array_merge($data, $back);
+                $position++;
+
+                continue;
+            }
+
+            if ($type === 'heading'
+                && stripos((string) data_get($element, 'data.title', ''), 'implemented by') !== false
+                && ($main[$position + 1]['type'] ?? '') === 'image-text') {
+                $position += 2;
+
+                continue;
+            }
+
+            if ($type === 'image'
+                && ($main[$position + 1]['type'] ?? '') === 'heading'
+                && ($main[$position + 2]['type'] ?? '') === 'html') {
+                $data['sections'][] = $this->caseStudySection(
+                    $element,
+                    $main[$position + 1],
+                    $main[$position + 2],
+                    'start',
+                    $imageLinks,
+                );
+                $position += 3;
+
+                continue;
+            }
+
+            if ($type === 'heading'
+                && ($main[$position + 1]['type'] ?? '') === 'html'
+                && ($main[$position + 2]['type'] ?? '') === 'image') {
+                $data['sections'][] = $this->caseStudySection(
+                    $main[$position + 2],
+                    $element,
+                    $main[$position + 1],
+                    'end',
+                    $imageLinks,
+                );
+                $position += 3;
+
+                continue;
+            }
+
+            if ($type === 'heading' && ($main[$position + 1]['type'] ?? '') === 'html') {
+                $data['sections'][] = $this->caseStudySection(
+                    null,
+                    $element,
+                    $main[$position + 1],
+                    'start',
+                    $imageLinks,
+                );
+                $position += 2;
+
+                continue;
+            }
+
+            $remaining[] = $element;
+            $position++;
+        }
+
+        return [
+            'elements' => [[
+                'id' => Utils::uid(),
+                'type' => 'aimeos::case-study',
+                'group' => 'main',
+                'data' => $data,
+            ], ...$remaining, ...$footer],
+            'fileIds' => $content['fileIds'],
+            'elementIds' => $content['elementIds'],
+        ];
+    }
+
+    /**
+     * Extracts the case-study stage from its legacy HTML block.
+     *
+     * @param  string[]  $fileIds
+     * @return array<string, mixed>|null
+     */
+    protected function caseStudyStageData(string $html, array $fileIds): ?array
+    {
+        $document = new \DOMDocument('1.0', 'UTF-8');
+        $previous = libxml_use_internal_errors(true);
+
+        try {
+            $loaded = $document->loadHTML(
+                '<?xml encoding="UTF-8"><div>'.$html.'</div>',
+                LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD,
+            );
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previous);
+        }
+
+        if (! $loaded) {
+            return null;
+        }
+
+        $xpath = new \DOMXPath($document);
+        $stage = $xpath->query(
+            "//*[contains(concat(' ', normalize-space(@class), ' '), ' stage ')]",
+        )?->item(0);
+        $title = trim((string) ($stage ? $xpath->query('.//h1', $stage)?->item(0)?->textContent : ''));
+
+        if (! $stage || $title === '') {
+            return null;
+        }
+
+        $tags = [];
+        $tagNodes = $xpath->query(
+            ".//*[contains(concat(' ', normalize-space(@class), ' '), ' stage-tags ')]//li",
+            $stage,
+        );
+
+        foreach ($tagNodes ?: [] as $tag) {
+            if (($label = trim((string) $tag->textContent)) !== '') {
+                $tags[] = ['label' => $label];
+            }
+        }
+
+        $introNode = $xpath->query(
+            "(.//*[contains(concat(' ', normalize-space(@class), ' '), ' col-md-6 ')][not(.//img)])[1]",
+            $stage,
+        )?->item(0);
+        $intro = $introNode
+            ? trim($this->htmlToMarkdown($this->caseStudyNodeHtml($document, $introNode)))
+            : '';
+        $data = [
+            'title' => $title,
+            'tags' => $tags,
+            'intro' => $intro,
+        ];
+
+        if ($fileId = $fileIds[0] ?? null) {
+            $data['stage_file'] = ['id' => $fileId, 'type' => 'file'];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Extracts the implementer information from the legacy text-with-image record.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return array<string, mixed>
+     */
+    protected function caseStudyImplementerData(Collection $records): array
+    {
+        $record = $records->first(
+            fn ($record) => in_array((string) ($record->CType ?? ''), ['textpic', 'textmedia'], true)
+                && stripos((string) ($record->header ?? ''), 'implemented by') !== false,
+        );
+
+        if (! $record) {
+            return [];
+        }
+
+        $result = $this->rewriteHtmlFiles((string) ($record->bodytext ?? ''));
+        $document = new \DOMDocument('1.0', 'UTF-8');
+        $previous = libxml_use_internal_errors(true);
+
+        try {
+            $loaded = $document->loadHTML(
+                '<?xml encoding="UTF-8"><div>'.$result['html'].'</div>',
+                LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD,
+            );
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previous);
+        }
+
+        $data = ['implementer_title' => trim((string) ($record->header ?? ''))];
+
+        if ($loaded) {
+            $xpath = new \DOMXPath($document);
+            $heading = $xpath->query('//h3')?->item(0);
+            $anchor = $heading ? $xpath->query('.//a[@href]', $heading)?->item(0) : null;
+
+            if ($heading && ($name = trim((string) $heading->textContent)) !== '') {
+                $data['implementer_name'] = $name;
+            }
+            if ($anchor && ($url = $this->caseStudySourceUrl((string) $anchor->getAttribute('href'))) !== '') {
+                $data['implementer_url'] = $url;
+            }
+            if ($heading) {
+                $heading->parentNode?->removeChild($heading);
+            }
+
+            if ($root = $document->documentElement) {
+                $data['implementer_text'] = trim(
+                    $this->htmlToMarkdown($this->caseStudyNodeHtml($document, $root)),
+                );
+            }
+        }
+
+        if ($fileId = $this->importFileForContent((int) ($record->uid ?? 0))) {
+            $data['implementer_file'] = ['id' => $fileId, 'type' => 'file'];
+        }
+
+        return $data;
+    }
+
+    /**
+     * Maps imported case-study image IDs to their source links.
+     *
+     * @param  Collection<int|string, mixed>  $records
+     * @return array<string, string>
+     */
+    protected function caseStudyImageLinks(Collection $records): array
+    {
+        $links = [];
+
+        foreach ($records as $record) {
+            if ((string) ($record->CType ?? '') !== 'image') {
+                continue;
+            }
+
+            $fileId = $this->importFileForContent((int) ($record->uid ?? 0));
+            $ref = $this->fileRefs->get((int) ($record->uid ?? 0))?->first();
+            $url = $this->caseStudySourceUrl((string) ($ref->link ?? ''));
+
+            if ($fileId && $url !== '') {
+                $links[$fileId] = $url;
+            }
+        }
+
+        return $links;
+    }
+
+    /**
+     * Creates one native case-study section from converted image and text elements.
+     *
+     * @param  array<string, mixed>|null  $image
+     * @param  array<string, mixed>  $heading
+     * @param  array<string, mixed>  $html
+     * @param  array<string, string>  $imageLinks
+     * @return array<string, mixed>
+     */
+    protected function caseStudySection(?array $image, array $heading, array $html, string $position,
+        array $imageLinks): array
+    {
+        $file = $image ? data_get($image, 'data.file') : null;
+        $fileId = is_array($file) ? ($file['id'] ?? null) : data_get($file, 'id');
+        $section = [
+            'title' => trim((string) data_get($heading, 'data.title', '')),
+            'text' => trim($this->htmlToMarkdown((string) data_get($html, 'data.text', ''))),
+            'files' => $fileId ? [['id' => $fileId, 'type' => 'file']] : [],
+            'position' => $position,
+        ];
+
+        if ($fileId && isset($imageLinks[$fileId])) {
+            $section['url'] = $imageLinks[$fileId];
+        }
+
+        return $section;
+    }
+
+    /**
+     * Extracts the case-study return link from a converted HTML block.
+     *
+     * @return array{back_label: string, back_url: string}|null
+     */
+    protected function caseStudyBackLink(string $html): ?array
+    {
+        preg_match_all('/<a\b[^>]*\bhref\s*=\s*(["\'])(.*?)\1[^>]*>(.*?)<\/a>/is', $html, $matches, PREG_SET_ORDER);
+
+        foreach ($matches as $match) {
+            $url = $this->caseStudySourceUrl(html_entity_decode($match[2], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+
+            if (! str_contains((string) parse_url($url, PHP_URL_PATH), '/case-studies')) {
+                continue;
+            }
+
+            return [
+                'back_label' => trim(html_entity_decode(strip_tags($match[3]), ENT_QUOTES | ENT_HTML5, 'UTF-8')),
+                'back_url' => $url,
+            ];
+        }
+
+        return null;
+    }
+
+    /**
+     * Normalizes a URL stored in a TYPO3 link or file-reference field.
+     */
+    protected function caseStudySourceUrl(string $value): string
+    {
+        $url = html_entity_decode(trim($value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        if ($url === '') {
+            return '';
+        }
+
+        if (preg_match('/^(\S+)/u', $url, $match)) {
+            $url = $match[1];
+        }
+
+        if ($rewritten = $this->rewriteTypo3Url($url)) {
+            return $rewritten;
+        }
+
+        if (! str_starts_with($url, '/') && ! str_starts_with($url, '#')
+            && parse_url($url, PHP_URL_SCHEME) === null) {
+            $url = 'https://'.$url;
+        }
+
+        return $url;
+    }
+
+    /**
+     * Returns the HTML inside a DOM node.
+     */
+    protected function caseStudyNodeHtml(\DOMDocument $document, \DOMNode $node): string
+    {
+        $html = '';
+
+        foreach ($node->childNodes as $child) {
+            $html .= $document->saveHTML($child) ?: '';
+        }
+
+        return $html;
     }
 
     /**
@@ -2656,11 +3053,13 @@ class AimeosImport extends Command
         }
 
         $fileId = $this->importFileForContent($record->uid); // @phpstan-ignore property.notFound
-        $text = ! empty($record->bodytext) ? trim($record->bodytext) : '';
+        $html = ! empty($record->bodytext) ? trim($record->bodytext) : '';
+        $text = '';
 
-        if ($text !== '') {
-            $result = $this->rewriteHtmlFiles($text);
-            $text = $result['html'];
+        if ($html !== '') {
+            $result = $this->rewriteHtmlFiles($html);
+            $html = $result['html'];
+            $text = trim($this->htmlToMarkdown($html));
             $fileIds = array_merge($fileIds, $result['fileIds']);
         }
 
@@ -2685,12 +3084,12 @@ class AimeosImport extends Command
                 'data' => ['file' => ['id' => $fileId, 'type' => 'file']],
             ];
             $fileIds[] = $fileId;
-        } elseif (! empty($text)) {
+        } elseif ($html !== '') {
             $elements[] = [
                 'id' => Utils::uid(),
                 'type' => 'html',
                 'group' => 'main',
-                'data' => ['text' => Utils::html($text)],
+                'data' => ['text' => Utils::html($html)],
             ];
         }
 
