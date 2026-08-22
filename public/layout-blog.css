@@ -10,3 +10,17 @@ main .cms-content {
 main .container {
     padding: 0 min(5%, 2rem);
 }
+
+.type-blog main .cms-content picture,
+.type-blog main .cms-content img {
+    border: 0;
+}
+
+.type-blog main .article > .container {
+    padding-inline: 0;
+}
+
+.type-blog main .article > .container > .title,
+.type-blog main .article > .container > .cms-text {
+    padding: 0 min(5%, 2rem);
+}
