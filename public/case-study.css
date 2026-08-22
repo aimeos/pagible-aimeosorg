@@ -203,6 +203,14 @@
     .case-study-implementer-visual {
         padding-inline: 20px;
     }
+
+    .case-study-implementer-copy {
+        order: 2;
+    }
+
+    .case-study-implementer-visual {
+        order: 1;
+    }
 }
 
 .case-study-implementer-visual picture,
