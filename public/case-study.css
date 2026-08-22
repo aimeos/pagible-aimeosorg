@@ -187,6 +187,7 @@
 .case-study-implementer-copy {
     text-align: start;
     line-height: 1.65;
+    white-space: normal;
 }
 
 .case-study-implementer-copy h3 {
@@ -202,14 +203,6 @@
     .case-study-implementer-copy,
     .case-study-implementer-visual {
         padding-inline: 20px;
-    }
-
-    .case-study-implementer-copy {
-        order: 2;
-    }
-
-    .case-study-implementer-visual {
-        order: 1;
     }
 }
 

@@ -90,6 +90,21 @@
     @if(($data->implementer_title ?? null) || ($data->implementer_name ?? null) || ($data->implementer_text ?? null))
         <section class="case-study-implementer">
             <div class="case-study-implementer-inner">
+                @if($file = cms($files, $data->implementer_file?->id ?? null))
+                    <div class="case-study-implementer-visual">
+                        @if($url = cmslink($data->implementer_url ?? null))
+                            <a href="{{ $url }}" target="_blank" rel="noreferrer noopener">
+                        @endif
+                            @include('cms::pic', [
+                                'file' => $file,
+                                'sizes' => '(max-width: 767px) 100vw, 380px',
+                            ])
+                        @if($url)
+                            </a>
+                        @endif
+                    </div>
+                @endif
+
                 <div class="case-study-implementer-copy cms-text">
                     @if($data->implementer_title ?? null)
                         <h2>{{ $data->implementer_title }}</h2>
@@ -105,21 +120,6 @@
                     @endif
                     @markdown($data->implementer_text ?? '')
                 </div>
-
-                @if($file = cms($files, $data->implementer_file?->id ?? null))
-                    <div class="case-study-implementer-visual">
-                        @if($url = cmslink($data->implementer_url ?? null))
-                            <a href="{{ $url }}" target="_blank" rel="noreferrer noopener">
-                        @endif
-                            @include('cms::pic', [
-                                'file' => $file,
-                                'sizes' => '(max-width: 767px) 100vw, 380px',
-                            ])
-                        @if($url)
-                            </a>
-                        @endif
-                    </div>
-                @endif
             </div>
         </section>
     @endif
